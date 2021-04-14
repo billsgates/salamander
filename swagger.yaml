@@ -266,7 +266,7 @@ paths:
         - rooms 
       summary: create a new room
       description: ''
-      operationId: postrooms
+      operationId: postRooms
       requestBody:
         content:
           application/json:
@@ -314,13 +314,33 @@ paths:
           description: user does not have a currently joined room
         "403":
           $ref: '#/components/responses/Forbidden'
+  /rooms/pendings:
+    get:
+      tags:
+        - rooms 
+      summary: get rooms the user is being invited to
+      description: ''
+      operationId: getPendingRooms
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/roomWithHostInfo'
+        "403":
+          $ref: '#/components/responses/Forbidden'
   /rooms/{id}:
     put:
       tags:
         - rooms 
       summary: update a room
       description: ''
-      operationId: putroom
+      operationId: putRoom
       parameters:
         - in: path
           name: id
@@ -374,7 +394,7 @@ paths:
         - rooms 
       summary: get the info of a room
       description: "user can view a room (s)he's already in or the rooms (s)he's been invited to"
-      operationId: getroom
+      operationId: getRoom
       parameters:
         - in: path
           name: id
@@ -403,7 +423,7 @@ paths:
         - rooms 
       summary: invite a user to the room
       description: ''
-      operationId: putInviteToroom
+      operationId: putInviteToRoom
       parameters:
         - in: path
           name: id
@@ -441,7 +461,7 @@ paths:
         - rooms 
       summary: cancel a invitation to the room
       description: ''
-      operationId: putCancelInvitationToroom
+      operationId: putCancelInvitationToRoom
       parameters:
         - in: path
           name: id
@@ -479,7 +499,7 @@ paths:
         - rooms 
       summary: accept an invitation to the room
       description: ''
-      operationId: putAcceptInvitationToroom
+      operationId: putAcceptInvitationToRoom
       parameters:
         - in: path
           name: id
@@ -506,7 +526,7 @@ paths:
         - rooms 
       summary: reject an invitation to the room
       description: ''
-      operationId: putRejectInvitationToroom
+      operationId: putRejectInvitationToRoom
       parameters:
         - in: path
           name: id
@@ -533,7 +553,7 @@ paths:
         - rooms 
       summary: leave a room
       description: ''
-      operationId: putLeaveroom
+      operationId: putLeaveRoom
       parameters:
         - in: path
           name: id
@@ -622,9 +642,9 @@ paths:
     get:
       tags:
         - services 
-      summary: get all services
+      summary: get supported services
       description: ''
-      operationId: getServices
+      operationId: getAllServices
       security:
         - APIKeyQueryParam: []
       responses:
@@ -637,7 +657,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Service'
         "204":
-          description: user does not have a currently joined room
+          description: no available services for now
         "403":
           $ref: '#/components/responses/Forbidden'
   /services/{service_id}:
@@ -646,7 +666,7 @@ paths:
         - services 
       summary: get service detail
       description: ''
-      operationId: getServices
+      operationId: getService
       security:
         - APIKeyQueryParam: []
       responses:
@@ -657,7 +677,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ServiceWithPlan'
         "204":
-          description: user does not have a currently joined room
+          description: services not available
         "403":
           $ref: '#/components/responses/Forbidden'
   /logs:
@@ -804,6 +824,15 @@ components:
           type: array
           items: 
             $ref: '#/components/schemas/participationInfo'
+    roomWithHostInfo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BasicObject'
+        - $ref: '#/components/schemas/roomInfo'
+      properties:
+        host_name:
+          type: string
+          example: Jane Doe
     Participation:
       type: object
       allOf:
@@ -819,4 +848,3 @@ components:
           type: string
         message:
           type: string
-

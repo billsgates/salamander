@@ -1,0 +1,108 @@
+openapi: 3.0.0
+info:
+  description: This is a sample server of HermitCrab app.
+  version: 1.0.1
+  title: HermitCrab api server
+servers:
+  - url: http://localhost:5000/api/v1
+tags:
+  - name: users
+    description: Users of HermitCrab
+paths:
+  /users:
+    post:
+      tags:
+        - users
+      summary: create a new user
+      description: ''
+      operationId: postUser
+      requestBody:
+        required: true
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        "201":
+          description: successfully created
+        "400":
+          description: Missing Parameters
+        "422":
+          description: Usually indicates a duplicated email or unsafe password
+      
+  /users/{id}:
+    get:
+      tags:
+        - users
+      summary: get a user by id
+      description: ''
+      operationId: getUser
+      parameters:
+        - in: path
+          name: id
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+    put:
+      tags:
+        - users
+      summary: update a user
+      description: ''
+      operationId: putUser
+      parameters:
+        - in: path
+          name: id
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: 'user info to update'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        "200":
+          description: updated successfully
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "422":
+          description: cannot update user with the given info
+components:
+  responses:
+    Forbidden:
+      description: not logged in
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          maxLength: 50
+          example: kevin yu
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        rating:
+          type: integer
+          example: 5
+      required:
+        - id
+        - name
+        - email
