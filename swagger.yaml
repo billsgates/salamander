@@ -1,0 +1,822 @@
+openapi: 3.0.0
+info:
+  description: This is a sample server of HermitCrab app.
+  version: 1.0.0
+  title: HermitCrab api server
+servers:
+  - url: http://localhost:5000/api/v1
+tags:
+  - name: sessions
+    description: Sessions of HermitCrab (login / logout)
+  - name: users
+    description: Users of HermitCrab
+  - name: rooms
+    description: Room which users can share the subscription services together
+  - name: participations
+    description: Participations (of users) to the rooms
+  - name: services
+    description: Service providers (Netflix, Spotify, ...)
+  - name: logs
+    description: Send logs to developers, for debugging
+paths:
+  /sessions:
+    post:
+      tags:
+        - sessions
+      summary: signin an account
+      description: ''
+      operationId: postSessions
+      responses:
+        "201":
+          description: signin success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  remember_token:
+                    type: string
+        "403":
+          description: incorrect signin credentials
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+              - session
+              properties:
+                session:
+                  type: object
+                  required:
+                    - email
+                    - password
+                  properties:
+                    email:
+                      type: string
+                      format: email
+                    password:
+                      type: string
+                      format: password
+        description: user signin info
+        required: true
+  /sessions/signout:
+    delete:
+      tags:
+        - sessions
+      summary: sign out an account
+      description: ''
+      operationId: deleteSession
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "200":
+          description: signin success
+  /users:
+    post:
+      tags:
+        - users
+      summary: create a user
+      description: ''
+      operationId: postUsers
+      responses:
+        "201":
+          description: successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Missing Parameters
+        "422":
+          description: Usually indicates a duplicated email or unsafe password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user
+              properties:
+                user:
+                  type: object
+                  required:
+                    - name
+                    - email
+                    - password
+                    - password_confirmation
+                    - platform
+                  properties:
+                    name:
+                      type: string
+                      maxLength: 50
+                    email:
+                      type: string
+                      format: email
+                    password:
+                      type: string
+                      format: password
+                    password_confirmation:
+                      type: string
+                      format: password
+        description: user registration info
+        required: true
+  /users/{id}:
+    get:
+      tags:
+        - users
+      summary: get a user
+      description: ''
+      operationId: getUser
+      security:
+        - APIKeyQueryParam: []
+      parameters:
+        - in: path
+          name: id
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+    put:
+      tags:
+        - users
+      summary: update a user
+      description: ''
+      operationId: putUser
+      security:
+        - APIKeyQueryParam: []
+      parameters:
+        - in: path
+          name: id
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      maxLength: 50
+                    email:
+                      type: string
+                      format: email
+        description: user info to update
+        required: true
+      responses:
+        "200":
+          description: updated successfully
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "422":
+          description: cannot update user with the given info
+  /users/{id}/password:
+    put:
+      tags:
+        - users
+      summary: change user password
+      description: ''
+      operationId: putUserPassword
+      security:
+        - APIKeyQueryParam: []
+      parameters:
+        - in: path
+          name: id
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old_password:
+                  type: string
+                new_password:
+                  type: string
+        description: user password to update
+        required: true
+      responses:
+        "200":
+          description: updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/User'
+        "400":
+          description: parameter missing
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "422":
+          description: cannot update user with the given info
+  /users/{id}/authenticate:
+    put:
+      tags:
+        - users
+      summary: authenticate if the client is the user
+      description: ''
+      operationId: authenticateUser
+      security:
+        - APIKeyQueryParam: []
+      parameters:
+        - in: path
+          name: id
+          description: User ID
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: password
+          description: User password
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: parameter missing
+        "403":
+          $ref: '#/components/responses/Forbidden'
+  /rooms:
+    post:
+      tags:
+        - rooms 
+      summary: create a new room
+      description: ''
+      operationId: postrooms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room:
+                  type: object
+                  $ref: '#/components/schemas/Room'
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "201":
+          description: success
+          content:
+            application/json:
+              schema:
+                properties:
+                  room:
+                    $ref: '#/components/schemas/Room'
+        "400":
+          description: parameter missing or bad format
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "422":
+          description: something's wrong
+    get:
+      tags:
+        - rooms 
+      summary: get user's rooms
+      description: ''
+      operationId: getRooms
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+        "204":
+          description: user does not have a currently joined room
+        "403":
+          $ref: '#/components/responses/Forbidden'
+  /rooms/{id}:
+    put:
+      tags:
+        - rooms 
+      summary: update a room
+      description: ''
+      operationId: putroom
+      parameters:
+        - in: path
+          name: id
+          description: ''
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room:
+                  type: object
+                  properties:
+                    account_name:
+                      type: string
+                    account_password:
+                      type: string
+                    title:
+                      type: string
+                    starting_time:
+                      type: string
+                      format: date-time
+                    ending_time:
+                      type: string
+                      format: date-time
+                    interval:
+                      type: integer
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+        "400":
+          description: parameter missing or bad format
+        "403":
+          #$ref: '#/components/responses/Forbidden'
+          description: not logged in or not the host of this room
+        "404":
+          description: room not found or user not in room
+        "422":
+          description: something's wrong
+    get:
+      tags:
+        - rooms 
+      summary: get the info of a room
+      description: "user can view a room (s)he's already in or the rooms (s)he's been invited to"
+      operationId: getroom
+      parameters:
+        - in: path
+          name: id
+          description: ''
+          schema:
+            type: integer
+          required: true
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          description: room not found or user cannot view the room
+        "422":
+          description: something's wrong
+  /rooms/{id}/invite:
+    put:
+      tags:
+        - rooms 
+      summary: invite a user to the room
+      description: ''
+      operationId: putInviteToroom
+      parameters:
+        - in: path
+          name: id
+          description: 'room id'
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "200":
+          description: success
+        "400":
+          description: parameter missing or bad format
+        "403":
+          #$ref: '#/components/responses/Forbidden'
+          description: not logged in or not the host of this room
+        "404":
+          description: room not found or user not found
+        "410":
+          description: user is already in the room
+        "422":
+          description: something's wrong
+  /rooms/{id}/cancel:
+    put:
+      tags:
+        - rooms 
+      summary: cancel a invitation to the room
+      description: ''
+      operationId: putCancelInvitationToroom
+      parameters:
+        - in: path
+          name: id
+          description: 'room id'
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                participation_id:
+                  type: integer
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "200":
+          description: success
+        "400":
+          description: parameter missing or bad format
+        "403":
+          #$ref: '#/components/responses/Forbidden'
+          description: not logged in or not the host of this room
+        "404":
+          description: room not found 
+        "410":
+          description: user is not being invited to this room
+        "422":
+          description: something's wrong
+  /rooms/{id}/accept:
+    put:
+      tags:
+        - rooms 
+      summary: accept an invitation to the room
+      description: ''
+      operationId: putAcceptInvitationToroom
+      parameters:
+        - in: path
+          name: id
+          description: 'room id'
+          schema:
+            type: integer
+          required: true
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "200":
+          description: success
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          description: room not found 
+        "410":
+          description: user is not being invited to this room
+        "422":
+          description: something's wrong
+  /rooms/{id}/reject:
+    put:
+      tags:
+        - rooms 
+      summary: reject an invitation to the room
+      description: ''
+      operationId: putRejectInvitationToroom
+      parameters:
+        - in: path
+          name: id
+          description: 'room id'
+          schema:
+            type: integer
+          required: true
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "200":
+          description: success
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          description: room not found 
+        "410":
+          description: user is not being invited to this room
+        "422":
+          description: something's wrong
+  /rooms/{id}/leave:
+    put:
+      tags:
+        - rooms 
+      summary: leave a room
+      description: ''
+      operationId: putLeaveroom
+      parameters:
+        - in: path
+          name: id
+          description: 'room id'
+          schema:
+            type: integer
+          required: true
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "200":
+          description: success
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          description: room not found 
+        "410":
+          description: user is not being invited to this room
+        "422":
+          description: something's wrong
+
+  /rooms/{room_id}/participations:
+    get:
+      tags:
+        - participations 
+      summary: get participations of the room
+      description: 'only invited and joined participations are rendered'
+      operationId: getParticipations
+      parameters:
+        - in: path
+          name: room_id
+          description: 'room id'
+          schema:
+            type: integer
+          required: true
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Participation'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          description: room not found 
+        "410":
+          description: user is not in this room
+  /services:
+#     post:
+#       tags:
+#         - services 
+#       summary: create a new service
+#       description: ''
+#       operationId: postServices
+#       requestBody:
+#         content:
+#           application/json:
+#             schema:
+#               type: object
+#               properties:
+#                 room:
+#                   type: object
+#                   $ref: '#/components/schemas/Service'
+#       security:
+#         - APIKeyQueryParam: []
+#       responses:
+#         "201":
+#           description: success
+#           content:
+#             application/json:
+#               schema:
+#                 properties:
+#                   room:
+#                     $ref: '#/components/schemas/Service'
+#         "400":
+#           description: parameter missing or bad format
+#         "403":
+#           $ref: '#/components/responses/Forbidden'
+#         "422":
+#           description: something's wrong
+    get:
+      tags:
+        - services 
+      summary: get all services
+      description: ''
+      operationId: getServices
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+        "204":
+          description: user does not have a currently joined room
+        "403":
+          $ref: '#/components/responses/Forbidden'
+  /services/{service_id}:
+    get:
+      tags:
+        - services 
+      summary: get service detail
+      description: ''
+      operationId: getServices
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceWithPlan'
+        "204":
+          description: user does not have a currently joined room
+        "403":
+          $ref: '#/components/responses/Forbidden'
+  /logs:
+    put:
+      tags:
+        - logs
+      summary: send log to developers. the system sends the log to developers via email.
+      description: ''
+      operationId: putSendLogs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+              - log
+              properties:
+                log:
+                  type: string
+        required: true
+      security:
+        - APIKeyQueryParam: []
+      responses:
+        "200":
+          description: success
+        "400":
+          description: missing parameter
+        "403":
+          $ref: '#/components/responses/Forbidden'
+
+components:
+  responses:
+    Forbidden:
+      description: not logged in
+  securitySchemes:
+    APIKeyQueryParam:
+      type: apiKey
+      in: query
+      name: authenticate_token
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+  schemas:
+    BasicObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Service:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BasicObject'
+      properties:
+        name:
+          type: string
+    Plan:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BasicObject'
+      properties:
+        cost:
+          type: integer
+          example: 30
+        detail:
+          type: string
+    ServiceWithPlan:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Service'
+      properties:
+        plans:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Plan'
+    User:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BasicObject'
+      properties:
+        name:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        rating:
+          type: integer
+          example: 5
+    roomInfo:
+      type: object
+      properties:
+        title:
+          type: string
+        account_name:
+          type: string
+        account_password:
+          type: string
+        starting_time:
+          type: string
+          format: date-time
+        ending_time:
+          type: string
+          format: date-time
+        interval:
+          type: integer
+          example: 6
+    participationInfo:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        joined_at:
+          type: string
+          format: date-time
+        left_at:
+          type: string
+          format: date-time
+        is_host:
+          type: boolean
+        name:
+          type: string
+          example: Jane Doe
+    Room:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BasicObject'
+        - $ref: '#/components/schemas/roomInfo'
+    roomWithParticipations:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BasicObject'
+        - $ref: '#/components/schemas/roomInfo'
+      properties:
+        participations:
+          type: array
+          items: 
+            $ref: '#/components/schemas/participationInfo'
+    Participation:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BasicObject'
+        - $ref: '#/components/schemas/participationInfo'
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+
