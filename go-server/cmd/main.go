@@ -16,12 +16,13 @@ import (
 	_userUsecase "go-server/user/usecase"
 	"log"
 	"net/url"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 
-	_ "github.com/lib/pq"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func init() {
@@ -60,8 +61,10 @@ func main() {
 
 	r := gin.Default()
 
+	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
+
 	userRepo := _userRepo.NewmysqlUserRepository(db)
-	userUsecase := _userUsecase.NewUserUsecase(userRepo)
+	userUsecase := _userUsecase.NewUserUsecase(userRepo, timeoutContext)
 
 	_userHandlerHttpDelivery.NewUserHandler(r, userUsecase)
 

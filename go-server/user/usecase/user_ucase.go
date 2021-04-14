@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/hermit-crabs/hermit-crab/domain"
+	"go-server/domain"
 )
 
 type userUsecase struct {
@@ -27,13 +27,13 @@ func (u *userUsecase) Create(c context.Context, user *domain.User) (err error) {
 	return u.userRepo.Create(ctx, user)
 }
 
-func (u *userUsecase) GetByID(c context.Context, id int64) (res domain.User, err error) {
+func (u *userUsecase) GetByID(c context.Context, id string) (res domain.User, err error) {
 	ctx, cancel := context.WithTimeout(c, u.contextTimeout)
 	defer cancel()
 
 	res, err = u.userRepo.GetByID(ctx, id)
 	if err != nil {
-		return nil, err
+		return
 	}
 	return res, nil
 }

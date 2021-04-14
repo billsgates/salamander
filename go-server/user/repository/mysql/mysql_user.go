@@ -7,7 +7,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/hermit-crabs/hermit-crab/domain"
+	"go-server/domain"
 )
 
 type mysqlUserRepository struct {
@@ -71,7 +71,7 @@ func (m *mysqlUserRepository) Create(ctx context.Context, u *domain.User) (err e
 	return
 }
 
-func (m *mysqlUserRepository) GetByID(ctx context.Context, id int64) (res domain.Article, err error) {
+func (m *mysqlUserRepository) GetByID(ctx context.Context, id string) (res domain.User, err error) {
 	query := `SELECT user_id, name, email, rating, created_at, updated_at
   						FROM users WHERE ID = ?`
 
