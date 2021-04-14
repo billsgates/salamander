@@ -1,9 +1,21 @@
 version: '3.1'
 
 services:
+  # backend:
+  #   image: golang:1.16.2-alpine
+  #   volums:
+  #     - .:/server
+  #   working_dir: /server/go-server
+  #   ports:
+  #     - 5000:5000
+  #   entrypoint: go run cmd/main.go
+  #   depends_on:
+  #     mysql:
+  #       condition: service_healthy
+
   mysql:
     image: mysql
-    container_name: hermit_crab_mysql
+    container_name: hermitcrab_mysql
     environment:
       - MYSQL_ROOT_PASSWORD=hermitcrab5566
     volumes:
@@ -19,7 +31,7 @@ services:
   mysql-adminer:
     image: adminer
     restart: always
-    container_name: hermit_crab_mysql_adminer
+    container_name: hermitcrab_mysql_adminer
     ports:
       - 8080:8080
     depends_on:
