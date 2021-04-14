@@ -1,15 +1,21 @@
-CREATE DATABASE hermit_crab_db;
-USE hermit_crab_db;
+CREATE DATABASE hermitcrab_db;
+USE hermitcrab_db;
+
+CREATE USER 'hermitcrab-admin'@'%' IDENTIFIED BY 'admin-password';
+CREATE USER 'hermitcrab-user'@'%' IDENTIFIED BY 'user-password';
+
+GRANT ALL PRIVILEGES ON hermitcrab_db.* TO 'hermitcrab-admin'@'%';
+GRANT SELECT, INSERT, DELETE ON hermitcrab_db.* TO 'hermitcrab-user'@'%';
  
-DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS room;
-DROP TABLE IF EXISTS service_provider;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS rooms;
+DROP TABLE IF EXISTS service_providers;
 DROP TABLE IF EXISTS participation;
 DROP TABLE IF EXISTS invitation;
-DROP TABLE IF EXISTS plan;
+DROP TABLE IF EXISTS plans;
  
-CREATE TABLE user (
- user_id INT AUTO_INCREMENT,
+CREATE TABLE users (
+ user_id INT NOT NULL AUTO_INCREMENT,
  name VARCHAR(255) NOT NULL,
  email VARCHAR(200) NOT NULL,
  rating INT,
@@ -17,10 +23,31 @@ CREATE TABLE user (
  updated_at TIMESTAMP NOT NULL,
 
  PRIMARY KEY (user_id)
-)
+);
+
+CREATE TABLE service_providers (
+ service_id INT NOT NULL AUTO_INCREMENT,
+ name VARCHAR(255) NOT NULL,
+ created_at TIMESTAMP NOT NULL,
+ updated_at TIMESTAMP NOT NULL,
+
+ PRIMARY KEY (service_id)
+);
  
-CREATE TABLE room (
- room_id INT AUTO_INCREMENT,
+CREATE TABLE plans (
+ service_id INT,
+ plan_name VARCHAR(255) NOT NULL,
+ cost INT NOT NULL,
+ detail VARCHAR(255) NOT NULL,
+ created_at TIMESTAMP NOT NULL,
+ updated_at TIMESTAMP NOT NULL,
+
+ PRIMARY KEY (service_id, plan_name),
+ FOREIGN KEY (service_id) REFERENCES service_providers(service_id)
+);
+
+CREATE TABLE rooms (
+ room_id INT NOT NULL AUTO_INCREMENT,
  title VARCHAR(255) NOT NULL,
  account_name VARCHAR(255) NOT NULL,
  account_password VARCHAR(1000) NOT NULL,
@@ -28,25 +55,16 @@ CREATE TABLE room (
  ending_time TIMESTAMP NOT NULL,
  created_at TIMESTAMP NOT NULL,
  updated_at TIMESTAMP NOT NULL,
- interval INT NOT NULL,
+ payment_interval INT NOT NULL,
  admin_id INT NOT NULL,
  service_id INT NOT NULL,
- plan_id INT NOT NULL,
+ plan_name VARCHAR(255) NOT NULL,
 
  PRIMARY KEY (room_id),
- FOREIGN KEY (admin_id) REFERENCES user(user_id),
- FOREIGN KEY (service_id) REFERENCES service_provider(service_id),
- FOREIGN KEY (service_id, plan_id) REFERENCES plan(service_id, plan_id)
-)
-
-CREATE TABLE service_provider (
- service_id INT AUTO_INCREMENT,
- name VARCHAR(255) NOT NULL,
- created_at TIMESTAMP NOT NULL,
- updated_at TIMESTAMP NOT NULL,
-
- PRIMARY KEY (service_id)
-)
+ FOREIGN KEY (admin_id) REFERENCES users(user_id),
+ FOREIGN KEY (service_id) REFERENCES service_providers(service_id),
+ FOREIGN KEY (service_id, plan_name) REFERENCES plans(service_id, plan_name)
+);
 
 CREATE TABLE participation (
  user_id INT,
@@ -58,9 +76,9 @@ CREATE TABLE participation (
  is_host BOOLEAN NOT NULL,
 
  PRIMARY KEY (user_id, room_id),
- FOREIGN KEY (user_id) REFERENCES user(user_id),
- FOREIGN KEY (room_id) REFERENCES room(room_id)
-)
+ FOREIGN KEY (user_id) REFERENCES users(user_id),
+ FOREIGN KEY (room_id) REFERENCES rooms(room_id)
+);
 
 CREATE TABLE invitation (
  user_id INT,
@@ -68,18 +86,6 @@ CREATE TABLE invitation (
  is_accepted BOOLEAN NOT NULL,
 
  PRIMARY KEY (user_id, room_id),
- FOREIGN KEY (user_id) REFERENCES user(user_id),
- FOREIGN KEY (room_id) REFERENCES user(room_id)
-)
-
-CREATE TABLE plan (
- plan_id INT AUTO_INCREMENT,
- service_id INT,
- cost INT NOT NULL,
- detail VARCHAR(255) NOT NULL,
- created_at TIMESTAMP NOT NULL,
- updated_at TIMESTAMP NOT NULL,
-
- PRIMARY KEY (service_id, plan_id),
- FOREIGN KEY (service_id) REFERENCES service_provider(service_id)
-)
+ FOREIGN KEY (user_id) REFERENCES users(user_id),
+ FOREIGN KEY (room_id) REFERENCES rooms(room_id)
+);
