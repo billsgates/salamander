@@ -10,10 +10,27 @@ tags:
     description: Users of HermitCrab
 paths:
   /users:
+    get:
+      tags:
+        - users
+      summary: get users
+      description: ''
+      operationId: getUsers
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        "403":
+          $ref: '#/components/responses/Forbidden'
     post:
       tags:
         - users
-      summary: create a new user
+      summary: create new user
       description: ''
       operationId: postUser
       requestBody:
@@ -35,7 +52,7 @@ paths:
     get:
       tags:
         - users
-      summary: get a user by id
+      summary: get user by id
       description: ''
       operationId: getUser
       parameters:
@@ -102,7 +119,13 @@ components:
         rating:
           type: integer
           example: 5
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          
       required:
-        - id
         - name
         - email
