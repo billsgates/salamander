@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  description: This is a sample server of HermitCrab app.
+  description: Salamander is the backend api server for HermitCrab.
   version: 1.0.1
-  title: HermitCrab api server
+  title: Salamander api server
 servers:
   - url: http://localhost:5000/api/v1
 tags:
@@ -25,8 +25,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-        "403":
-          $ref: '#/components/responses/Forbidden'
     post:
       tags:
         - users
@@ -39,15 +37,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
       responses:
         "201":
           description: successfully created
-        "400":
-          description: Missing Parameters
-        "422":
-          description: Usually indicates a duplicated email or unsafe password
-      
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
   /users/{id}:
     get:
       tags:
@@ -69,8 +66,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        "403":
-          $ref: '#/components/responses/Forbidden'
     put:
       tags:
         - users
@@ -90,32 +85,25 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
       responses:
         "200":
           description: updated successfully
-        "403":
-          $ref: '#/components/responses/Forbidden'
-        "422":
-          description: cannot update user with the given info
 components:
-  responses:
-    Forbidden:
-      description: not logged in
   schemas:
     User:
       type: object
       properties:
         id:
           type: integer
+          example: 1
         name:
           type: string
-          maxLength: 50
           example: kevin yu
         email:
           type: string
           format: email
-          example: user@example.com
+          example: kevin@ntu.im
         rating:
           type: integer
           example: 5
@@ -125,7 +113,17 @@ components:
         updated_at:
           type: string
           format: date-time
-          
-      required:
+    UserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        required:
         - name
         - email
+      example:
+        name: kevin yu
+        email: kevin@ntu.im
