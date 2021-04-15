@@ -9,12 +9,12 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	_userHandlerHttpDelivery "go-server/user/delivery/http"
 	_userRepo "go-server/user/repository/mysql"
 	_userUsecase "go-server/user/usecase"
 	"log"
+	"net/http"
 	"net/url"
 	"time"
 
@@ -22,7 +22,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 
-	_ "github.com/go-sql-driver/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func init() {
@@ -35,6 +36,16 @@ func init() {
 	if viper.GetBool(`debug`) {
 		log.Println("Service RUN on DEBUG mode")
 	}
+}
+
+func sayHello(c *gin.Context) {
+	c.String(http.StatusOK, "Hello")
+}
+
+func sayPongJSON(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"message": "pong",
+	})
 }
 
 func main() {
@@ -50,16 +61,15 @@ func main() {
 	val.Add("parseTime", "1")
 	val.Add("loc", "Asia/Jakarta")
 	dsn := fmt.Sprintf("%s?%s", connection, val.Encode())
-	db, err := sql.Open(`mysql`, dsn)
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	if err = db.Ping(); err != nil {
-		logrus.Fatal(err)
-	}
 
 	r := gin.Default()
+	r.GET("/", sayHello)
+	r.GET("/ping", sayPongJSON)
 
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 

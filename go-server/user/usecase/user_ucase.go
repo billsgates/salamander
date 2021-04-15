@@ -19,12 +19,15 @@ func NewUserUsecase(userRepo domain.UserRepository, timeout time.Duration) domai
 	}
 }
 
-func (u *userUsecase) Create(c context.Context, user *domain.User) (err error) {
+func (u *userUsecase) Fetch(c context.Context) (res []domain.User, err error) {
 	ctx, cancel := context.WithTimeout(c, u.contextTimeout)
 	defer cancel()
 
-	user.CreatedAt = time.Now()
-	return u.userRepo.Create(ctx, user)
+	res, err = u.userRepo.Fetch(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return
 }
 
 func (u *userUsecase) GetByID(c context.Context, id string) (res domain.User, err error) {
@@ -36,12 +39,4 @@ func (u *userUsecase) GetByID(c context.Context, id string) (res domain.User, er
 		return
 	}
 	return res, nil
-}
-
-func (u *userUsecase) Update(c context.Context, user *domain.User) (err error) {
-	ctx, cancel := context.WithTimeout(c, u.contextTimeout)
-	defer cancel()
-
-	user.UpdatedAt = time.Now()
-	return u.userRepo.Update(ctx, user)
 }

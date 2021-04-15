@@ -6,7 +6,7 @@ import (
 )
 
 type User struct {
-	ID        int32     `json:"user_id"`
+	ID        int32     `json:"id" gorm:"primary_key"`
 	Name      string    `json:"name"`
 	Email     string    `json:"email"`
 	Rating    int32     `json:"rating"`
@@ -15,13 +15,11 @@ type User struct {
 }
 
 type UserRepository interface {
-	Create(ctx context.Context, user *User) error
+	Fetch(ctx context.Context) ([]User, error)
 	GetByID(ctx context.Context, id string) (User, error)
-	Update(ctx context.Context, user *User) error
 }
 
 type UserUsecase interface {
-	Create(ctx context.Context, user *User) error
+	Fetch(ctx context.Context) ([]User, error)
 	GetByID(ctx context.Context, id string) (User, error)
-	Update(ctx context.Context, user *User) error
 }

@@ -15,23 +15,23 @@ DROP TABLE IF EXISTS invitation;
 DROP TABLE IF EXISTS plans;
  
 CREATE TABLE users (
- user_id INT NOT NULL AUTO_INCREMENT,
+ id INT NOT NULL AUTO_INCREMENT,
  name VARCHAR(255) NOT NULL,
  email VARCHAR(200) NOT NULL,
  rating INT,
  created_at TIMESTAMP NOT NULL,
  updated_at TIMESTAMP NOT NULL,
 
- PRIMARY KEY (user_id)
+ PRIMARY KEY (id)
 );
 
 CREATE TABLE service_providers (
- service_id INT NOT NULL AUTO_INCREMENT,
+ id INT NOT NULL AUTO_INCREMENT,
  name VARCHAR(255) NOT NULL,
  created_at TIMESTAMP NOT NULL,
  updated_at TIMESTAMP NOT NULL,
 
- PRIMARY KEY (service_id)
+ PRIMARY KEY (id)
 );
  
 CREATE TABLE plans (
@@ -43,7 +43,7 @@ CREATE TABLE plans (
  updated_at TIMESTAMP NOT NULL,
 
  PRIMARY KEY (service_id, plan_name),
- FOREIGN KEY (service_id) REFERENCES service_providers(service_id)
+ FOREIGN KEY (service_id) REFERENCES service_providers(id)
 );
 
 CREATE TABLE rooms (
@@ -61,8 +61,8 @@ CREATE TABLE rooms (
  plan_name VARCHAR(255) NOT NULL,
 
  PRIMARY KEY (room_id),
- FOREIGN KEY (admin_id) REFERENCES users(user_id),
- FOREIGN KEY (service_id) REFERENCES service_providers(service_id),
+ FOREIGN KEY (admin_id) REFERENCES users(id),
+ FOREIGN KEY (service_id) REFERENCES service_providers(id),
  FOREIGN KEY (service_id, plan_name) REFERENCES plans(service_id, plan_name)
 );
 
@@ -76,7 +76,7 @@ CREATE TABLE participation (
  is_host BOOLEAN NOT NULL,
 
  PRIMARY KEY (user_id, room_id),
- FOREIGN KEY (user_id) REFERENCES users(user_id),
+ FOREIGN KEY (user_id) REFERENCES users(id),
  FOREIGN KEY (room_id) REFERENCES rooms(room_id)
 );
 
@@ -86,6 +86,10 @@ CREATE TABLE invitation (
  is_accepted BOOLEAN NOT NULL,
 
  PRIMARY KEY (user_id, room_id),
- FOREIGN KEY (user_id) REFERENCES users(user_id),
+ FOREIGN KEY (user_id) REFERENCES users(id),
  FOREIGN KEY (room_id) REFERENCES rooms(room_id)
 );
+
+INSERT INTO users (name, email, rating, created_at, updated_at) VALUES ('Kevin Yu', 'kevin@ntu.im', 3, NOW(), NOW());
+INSERT INTO users (name, email, rating, created_at, updated_at) VALUES ('Frank Chen', 'frank@ntu.im', 5, NOW(), NOW());
+INSERT INTO users (name, email, rating, created_at, updated_at) VALUES ('Paul Liu', 'paul@ntu.im', 4, NOW(), NOW());
