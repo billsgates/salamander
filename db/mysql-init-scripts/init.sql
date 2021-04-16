@@ -54,7 +54,7 @@ CREATE TABLE rooms (
  ending_time TIMESTAMP,
  created_at TIMESTAMP NOT NULL,
  updated_at TIMESTAMP NOT NULL,
- payment_interval INT NOT NULL,
+ max_count INT NOT NULL,
  admin_id INT,
  service_id INT,
  plan_name VARCHAR(255),
