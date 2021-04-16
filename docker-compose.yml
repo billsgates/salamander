@@ -3,7 +3,7 @@ version: '3.1'
 services:
   backend:
     image: golang:1.16.2-alpine
-    # restart: always
+    restart: always
     volumes:
       - .:/server
     working_dir: /server/go-server
@@ -31,7 +31,7 @@ services:
 
   mysql-adminer:
     image: adminer
-    # restart: always
+    restart: always
     container_name: hermitcrab_mysql_adminer
     ports:
       - 8080:8080

@@ -51,3 +51,14 @@ func (u *userUsecase) GetByID(c context.Context, id string) (res *domain.User, e
 	}
 	return res, nil
 }
+
+func (u *userUsecase) GetByEmailPassword(c context.Context, email string, password string) (res *domain.User, err error) {
+	ctx, cancel := context.WithTimeout(c, u.contextTimeout)
+	defer cancel()
+
+	res, err = u.userRepo.GetByEmailPassword(ctx, email, password)
+	if err != nil {
+		return
+	}
+	return res, nil
+}

@@ -55,6 +55,20 @@ var routes = Routes{
 	},
 
 	Route{
+		"SignIn",
+		strings.ToUpper("Post"),
+		"/api/v1/auth/signin",
+		SignIn,
+	},
+
+	Route{
+		"SignUp",
+		strings.ToUpper("Post"),
+		"/api/v1/auth/signup",
+		SignUp,
+	},
+
+	Route{
 		"GetUser",
 		strings.ToUpper("Get"),
 		"/api/v1/users/{id}",
@@ -66,13 +80,6 @@ var routes = Routes{
 		strings.ToUpper("Get"),
 		"/api/v1/users",
 		GetUsers,
-	},
-
-	Route{
-		"PostUser",
-		strings.ToUpper("Post"),
-		"/api/v1/users",
-		PostUser,
 	},
 
 	Route{

@@ -34,3 +34,13 @@ func (m *mysqlUserRepository) GetByID(ctx context.Context, id string) (res *doma
 
 	return user, nil
 }
+
+func (m *mysqlUserRepository) GetByEmailPassword(ctx context.Context, email string, password string) (res *domain.User, err error) {
+	var user *domain.User
+
+	if err := m.Conn.Where("email = ? AND password_digest = ?", email, password).First(&user).Error; err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}

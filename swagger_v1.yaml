@@ -6,9 +6,53 @@ info:
 servers:
   - url: http://localhost:5000/api/v1
 tags:
+  - name: auth
+    description: Authentication
   - name: users
     description: Users of HermitCrab
 paths:
+  /auth/signup:
+    post:
+      tags:
+        - auth
+      summary: sign up
+      description: ''
+      operationId: signUp
+      requestBody:
+        required: true
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        "201":
+          description: successfully createds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /auth/signin:
+    post:
+      tags:
+        - auth
+      summary: sign in
+      description: ''
+      operationId: signIn
+      requestBody:
+        required: true
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        "200":
+          description: successfully logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
   /users:
     get:
       tags:
@@ -25,26 +69,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-    post:
-      tags:
-        - users
-      summary: create new user
-      description: ''
-      operationId: postUser
-      requestBody:
-        required: true
-        description: ''
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserRequest'
-      responses:
-        "201":
-          description: successfully created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
   /users/{id}:
     get:
       tags:
@@ -104,6 +128,9 @@ components:
           type: string
           format: email
           example: kevin@ntu.im
+        password_digest:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzEwMzgyMjQuNzQ0MzI0MiwidXNlciI6eyJJRCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIlVzZXJuYW1lIjoiemhhc2hrZXZ5Y2giLCJQYXNzd29yZCI6IjQyODYwMTc5ZmFiMTQ2YzZiZDAyNjlkMDViZTM0ZWNmYmY5Zjk3YjUifX0.3dsyKJQ-HZJxdvBMui0Mzgw6yb6If9aB8imGhxMOjsk
         rating:
           type: integer
           example: 5
@@ -127,3 +154,41 @@ components:
       example:
         name: kevin yu
         email: kevin@ntu.im
+    SignupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        required:
+        - name
+        - email
+        - password
+      example:
+        name: kevin yu
+        email: kevin@ntu.im
+        password: mypassword
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        required:
+        - email
+        - password
+      example:
+        email: kevin@ntu.im
+        password: mypassword
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzEwMzgyMjQuNzQ0MzI0MiwidXNlciI6eyJJRCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIlVzZXJuYW1lIjoiemhhc2hrZXZ5Y2giLCJQYXNzd29yZCI6IjQyODYwMTc5ZmFiMTQ2YzZiZDAyNjlkMDViZTM0ZWNmYmY5Zjk3YjUifX0.3dsyKJQ-HZJxdvBMui0Mzgw6yb6If9aB8imGhxMOjsk

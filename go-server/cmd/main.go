@@ -10,6 +10,8 @@ package main
 
 import (
 	"fmt"
+	_authHandlerHttpDelivery "go-server/auth/delivery/http"
+	_authUsecase "go-server/auth/usecase"
 	_userHandlerHttpDelivery "go-server/user/delivery/http"
 	_userRepo "go-server/user/repository/mysql"
 	_userUsecase "go-server/user/usecase"
@@ -75,8 +77,18 @@ func main() {
 
 	userRepo := _userRepo.NewmysqlUserRepository(db)
 	userUsecase := _userUsecase.NewUserUsecase(userRepo, timeoutContext)
+	authUsecase := _authUsecase.NewAuthUseCase(
+		userRepo,
+		viper.GetString("auth.hash_salt"),
+		[]byte(viper.GetString("auth.signing_key")),
+		viper.GetDuration("auth.token_ttl"),
+	)
+	authMiddleware := _authHandlerHttpDelivery.NewAuthMiddleware(authUsecase)
 
 	_userHandlerHttpDelivery.NewUserHandler(r, userUsecase)
+	_authHandlerHttpDelivery.NewAuthHandler(r, authUsecase)
+
+	r.Group("/api", authMiddleware)
 
 	logrus.Fatal(r.Run(":" + viper.GetString("server.address")))
 }

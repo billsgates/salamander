@@ -19,7 +19,7 @@ CREATE TABLE users (
  name VARCHAR(255) NOT NULL,
  email VARCHAR(200) NOT NULL,
  password_digest VARCHAR(1000) NOT NULL,
- rating INT,
+ rating INT DEFAULT 5 NOT NULL,
  created_at TIMESTAMP NOT NULL,
  updated_at TIMESTAMP NOT NULL,
 
@@ -39,7 +39,6 @@ CREATE TABLE plans (
  service_id INT,
  plan_name VARCHAR(255) NOT NULL,
  cost INT NOT NULL,
- detail VARCHAR(255) NOT NULL,
  created_at TIMESTAMP NOT NULL,
  updated_at TIMESTAMP NOT NULL,
 
@@ -49,17 +48,16 @@ CREATE TABLE plans (
 
 CREATE TABLE rooms (
  room_id INT NOT NULL AUTO_INCREMENT,
- title VARCHAR(255) NOT NULL,
- account_name VARCHAR(255) NOT NULL,
- account_password VARCHAR(1000) NOT NULL,
- starting_time TIMESTAMP NOT NULL,
- ending_time TIMESTAMP NOT NULL,
+ account_name VARCHAR(255),
+ account_password VARCHAR(1000),
+ starting_time TIMESTAMP,
+ ending_time TIMESTAMP,
  created_at TIMESTAMP NOT NULL,
  updated_at TIMESTAMP NOT NULL,
  payment_interval INT NOT NULL,
- admin_id INT NOT NULL,
- service_id INT NOT NULL,
- plan_name VARCHAR(255) NOT NULL,
+ admin_id INT,
+ service_id INT,
+ plan_name VARCHAR(255),
 
  PRIMARY KEY (room_id),
  FOREIGN KEY (admin_id) REFERENCES users(id),
@@ -91,6 +89,17 @@ CREATE TABLE invitation (
  FOREIGN KEY (room_id) REFERENCES rooms(room_id)
 );
 
-INSERT INTO users (name, email, email, rating, created_at, updated_at) VALUES ('Kevin Yu', 'kevin@ntu.im', '$2a$10$gVtjNk4YL.O4I//ZBtvfN.YEebwR1Ci3.5OBHan4PWFzniSFqpzce', 3, NOW(), NOW());
-INSERT INTO users (name, email, email, rating, created_at, updated_at) VALUES ('Frank Chen', 'frank@ntu.im', '$2a$10$6tsb.2dRzV5gSTEJmtwkgeKpPIMO0VbMv2E6hP9xuAytwFlf0trVm', 5, NOW(), NOW());
-INSERT INTO users (name, email, email, rating, created_at, updated_at) VALUES ('Paul Liu', 'paul@ntu.im', '$2a$10$WkWwIpCbMyB1A2OuMC9LI.4LtQZtxNb1djcYqzeP0IayazJQgVkH', 4, NOW(), NOW());
+-- password = 'passworda'
+INSERT INTO users (name, email, password_digest, rating, created_at, updated_at) VALUES ('Kevin Yu', 'kevin@ntu.im', '945b49fe4bd2e575c860b01e0e7d1edbeb0d9cdf', 3, NOW(), NOW());
+-- password = 'passwordb'
+INSERT INTO users (name, email, password_digest, rating, created_at, updated_at) VALUES ('Frank Chen', 'frank@ntu.im', '07a39ab6f7caf13cc9a9426f1b8fe6048f6c1708', 4, NOW(), NOW());
+-- password = 'passwordc'
+INSERT INTO users (name, email, password_digest, rating, created_at, updated_at) VALUES ('Paul Liu', 'paul@ntu.im', 'a908c4a44c85cc33a1a5ea74bce2948c89318d52', 5, NOW(), NOW());
+
+INSERT INTO service_providers (name, created_at, updated_at) VALUES ('Neflix', NOW(), NOW());
+INSERT INTO service_providers (name, created_at, updated_at) VALUES ('Youtube Premium', NOW(), NOW());
+INSERT INTO service_providers (name, created_at, updated_at) VALUES ('Spotify', NOW(), NOW());
+
+INSERT INTO plans (service_id, plan_name, cost, created_at, updated_at) VALUES ('1', 'Basic', 270, NOW(), NOW());
+INSERT INTO plans (service_id, plan_name, cost, created_at, updated_at) VALUES ('1', 'Standard', 330, NOW(), NOW());
+INSERT INTO plans (service_id, plan_name, cost, created_at, updated_at) VALUES ('1', 'Premium', 390, NOW(), NOW());
