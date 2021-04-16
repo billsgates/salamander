@@ -8,20 +8,9 @@
  */
 package swagger
 
-import (
-	"time"
-)
-
-type User struct {
-	Id int32 `json:"id,omitempty"`
+type UserRequest struct {
 
 	Name string `json:"name,omitempty"`
 
 	Email string `json:"email,omitempty"`
-
-	Rating int32 `json:"rating,omitempty"`
-
-	CreatedAt time.Time `json:"created_at,omitempty"`
-
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }

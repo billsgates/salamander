@@ -15,15 +15,21 @@ func NewmysqlUserRepository(Conn *gorm.DB) domain.UserRepository {
 	return &mysqlUserRepository{Conn}
 }
 
-func (m *mysqlUserRepository) Fetch(ctx context.Context) (res []domain.User, err error) {
+func (m *mysqlUserRepository) Create(ctx context.Context, user *domain.User) (res *domain.User, err error) {
+	m.Conn.Create(&user)
+
+	return user, nil
+}
+
+func (m *mysqlUserRepository) FetchAll(ctx context.Context) (res []domain.User, err error) {
 	var users []domain.User
 	m.Conn.Find(&users)
 
 	return users, nil
 }
 
-func (m *mysqlUserRepository) GetByID(ctx context.Context, id string) (res domain.User, err error) {
-	var user domain.User
+func (m *mysqlUserRepository) GetByID(ctx context.Context, id string) (res *domain.User, err error) {
+	var user *domain.User
 	m.Conn.First(&user, id)
 
 	return user, nil

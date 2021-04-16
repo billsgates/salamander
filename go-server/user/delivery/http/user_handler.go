@@ -18,12 +18,44 @@ func NewUserHandler(e *gin.Engine, userUsecase domain.UserUsecase) {
 		UserUsecase: userUsecase,
 	}
 
+	e.POST("/api/v1/users", handler.CreateUser)
 	e.GET("/api/v1/users", handler.GetAllUsers)
 	e.GET("/api/v1/users/:userID", handler.GetUserByUserID)
 }
 
+func (u *UserHandler) CreateUser(c *gin.Context) {
+	var body swagger.UserRequest
+	if err := c.BindJSON(&body); err != nil {
+		logrus.Error(err)
+		// c.JSON(500, &swagger.ModelError{
+		// 	Code:    3000,
+		// 	Message: "Internal error. Parsing failed",
+		// })
+		return
+	}
+
+	aUser := domain.User{
+		Name:  body.Name,
+		Email: body.Email,
+	}
+
+	_, err := u.UserUsecase.Create(c, &aUser)
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	c.JSON(200, swagger.User{
+		Id:        aUser.Id,
+		Name:      aUser.Name,
+		Email:     aUser.Email,
+		Rating:    aUser.Rating,
+		CreatedAt: aUser.CreatedAt,
+		UpdatedAt: aUser.UpdatedAt,
+	})
+}
+
 func (u *UserHandler) GetAllUsers(c *gin.Context) {
-	users, err := u.UserUsecase.Fetch(c)
+	users, err := u.UserUsecase.FetchAll(c)
 	if err != nil {
 		logrus.Error(err)
 		return
@@ -46,7 +78,7 @@ func (u *UserHandler) GetUserByUserID(c *gin.Context) {
 	}
 
 	c.JSON(200, swagger.User{
-		Id:     anUser.ID,
+		Id:     anUser.Id,
 		Name:   anUser.Name,
 		Email:  anUser.Email,
 		Rating: anUser.Rating,

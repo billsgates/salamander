@@ -18,6 +18,7 @@ CREATE TABLE users (
  id INT NOT NULL AUTO_INCREMENT,
  name VARCHAR(255) NOT NULL,
  email VARCHAR(200) NOT NULL,
+ password_digest VARCHAR(1000) NOT NULL,
  rating INT,
  created_at TIMESTAMP NOT NULL,
  updated_at TIMESTAMP NOT NULL,
@@ -90,6 +91,6 @@ CREATE TABLE invitation (
  FOREIGN KEY (room_id) REFERENCES rooms(room_id)
 );
 
-INSERT INTO users (name, email, rating, created_at, updated_at) VALUES ('Kevin Yu', 'kevin@ntu.im', 3, NOW(), NOW());
-INSERT INTO users (name, email, rating, created_at, updated_at) VALUES ('Frank Chen', 'frank@ntu.im', 5, NOW(), NOW());
-INSERT INTO users (name, email, rating, created_at, updated_at) VALUES ('Paul Liu', 'paul@ntu.im', 4, NOW(), NOW());
+INSERT INTO users (name, email, email, rating, created_at, updated_at) VALUES ('Kevin Yu', 'kevin@ntu.im', '$2a$10$gVtjNk4YL.O4I//ZBtvfN.YEebwR1Ci3.5OBHan4PWFzniSFqpzce', 3, NOW(), NOW());
+INSERT INTO users (name, email, email, rating, created_at, updated_at) VALUES ('Frank Chen', 'frank@ntu.im', '$2a$10$6tsb.2dRzV5gSTEJmtwkgeKpPIMO0VbMv2E6hP9xuAytwFlf0trVm', 5, NOW(), NOW());
+INSERT INTO users (name, email, email, rating, created_at, updated_at) VALUES ('Paul Liu', 'paul@ntu.im', '$2a$10$WkWwIpCbMyB1A2OuMC9LI.4LtQZtxNb1djcYqzeP0IayazJQgVkH', 4, NOW(), NOW());

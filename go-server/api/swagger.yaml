@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: HermitCrab api server
-  description: This is a sample server of HermitCrab app.
+  title: Salamander api server
+  description: Salamander is the backend api server for HermitCrab.
   version: 1.0.1
 servers:
 - url: http://localhost:5000/api/v1
@@ -25,8 +25,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/User'
                 x-content-type: application/json
-        "403":
-          description: not logged in
     post:
       tags:
       - users
@@ -36,15 +34,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
         required: true
       responses:
         "201":
           description: successfully created
-        "400":
-          description: Missing Parameters
-        "422":
-          description: Usually indicates a duplicated email or unsafe password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
   /users/{id}:
     get:
       tags:
@@ -67,8 +65,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        "403":
-          description: not logged in
     put:
       tags:
       - users
@@ -88,33 +84,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
         required: true
       responses:
         "200":
           description: updated successfully
-        "403":
-          description: not logged in
-        "422":
-          description: cannot update user with the given info
 components:
   schemas:
     User:
-      required:
-      - email
-      - name
       type: object
       properties:
         id:
           type: integer
+          example: 1
         name:
-          maxLength: 50
           type: string
           example: kevin yu
         email:
           type: string
           format: email
-          example: user@example.com
+          example: kevin@ntu.im
         rating:
           type: integer
           example: 5
@@ -129,8 +118,16 @@ components:
         name: kevin yu
         rating: 5
         created_at: 2000-01-23T04:56:07.000+00:00
-        id: 0
-        email: user@example.com
-  responses:
-    Forbidden:
-      description: not logged in
+        id: 1
+        email: kevin@ntu.im
+    UserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+      example:
+        name: kevin yu
+        email: kevin@ntu.im
