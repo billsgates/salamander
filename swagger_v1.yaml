@@ -9,7 +9,9 @@ tags:
   - name: auth
     description: Authentication
   - name: users
-    description: Users of HermitCrab
+    description: Users
+  - name: rooms
+    description: Rooms
 paths:
   /auth/signup:
     post:
@@ -113,6 +115,27 @@ paths:
       responses:
         "200":
           description: updated successfully
+  /rooms:
+    post:
+      tags:
+        - rooms
+      summary: create a room
+      description: ''
+      operationId: createRoom
+      requestBody:
+        required: true
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomCreateRequest'
+      responses:
+        "200":
+          description: successfully logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Room'
 components:
   schemas:
     User:
@@ -226,3 +249,24 @@ components:
         plan_name:
           type: string
           example: Netflix
+    RoomCreateRequest:
+      type: object
+      properties:
+        max_count:
+          type: integer
+        admin_id:
+          type: integer
+        service_id:
+          type: integer
+        plan_name:
+          type: string
+        required:
+        - max_count
+        - admin_id
+        - service_id
+        - plan_name
+      example:
+        max_count: 5
+        admin_id: 1
+        service_id: 1
+        plan_name: Netflix

@@ -20,6 +20,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -70,6 +71,7 @@ func main() {
 	}
 
 	r := gin.Default()
+	r.Use(cors.Default())
 	r.GET("/", sayHello)
 	r.GET("/ping", sayPongJSON)
 
