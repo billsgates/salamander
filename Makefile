@@ -2,10 +2,8 @@ run:
 	docker-compose up --build
 stop:
 	docker-compose down -v
-log:
-	docker-compose logs --follow --tail 1
-swagger_v1:
+swagger:
 	docker run --rm -v ${PWD}:/local swaggerapi/swagger-codegen-cli-v3 generate \
-    -i /local/swagger_v1.yaml \
+    -i /local/swagger.yaml \
     -l go-server \
     -o /local/go-server

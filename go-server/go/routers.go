@@ -88,11 +88,4 @@ var routes = Routes{
 		"/api/v1/users",
 		GetUsers,
 	},
-
-	Route{
-		"PutUser",
-		strings.ToUpper("Put"),
-		"/api/v1/users/{id}",
-		PutUser,
-	},
 }

@@ -89,30 +89,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-    put:
-      tags:
-      - users
-      summary: update a user
-      operationId: putUser
-      parameters:
-      - name: id
-        in: path
-        description: User ID
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-      requestBody:
-        description: user info to update
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserRequest'
-        required: true
-      responses:
-        "200":
-          description: updated successfully
   /rooms:
     post:
       tags:
@@ -167,17 +143,6 @@ components:
         id: 1
         password_digest: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzEwMzgyMjQuNzQ0MzI0MiwidXNlciI6eyJJRCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIlVzZXJuYW1lIjoiemhhc2hrZXZ5Y2giLCJQYXNzd29yZCI6IjQyODYwMTc5ZmFiMTQ2YzZiZDAyNjlkMDViZTM0ZWNmYmY5Zjk3YjUifX0.3dsyKJQ-HZJxdvBMui0Mzgw6yb6If9aB8imGhxMOjsk
         email: kevin@ntu.im
-    UserRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        email:
-          type: string
-          format: email
-      example:
-        name: kevin yu
-        email: kevin@ntu.im
     SignupRequest:
       type: object
       properties:
@@ -191,7 +156,7 @@ components:
       example:
         name: kevin yu
         email: kevin@ntu.im
-        password: mypassword
+        password: passworda
     LoginRequest:
       type: object
       properties:
@@ -272,4 +237,4 @@ components:
         max_count: 5
         admin_id: 1
         service_id: 1
-        plan_name: Netflix
+        plan_name: Premium

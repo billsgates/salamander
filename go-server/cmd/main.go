@@ -12,6 +12,9 @@ import (
 	"fmt"
 	_authHandlerHttpDelivery "go-server/auth/delivery/http"
 	_authUsecase "go-server/auth/usecase"
+	_roomHandlerHttpDelivery "go-server/room/delivery/http"
+	_roomRepo "go-server/room/repository/mysql"
+	_roomUsecase "go-server/room/usecase"
 	_userHandlerHttpDelivery "go-server/user/delivery/http"
 	_userRepo "go-server/user/repository/mysql"
 	_userUsecase "go-server/user/usecase"
@@ -79,6 +82,8 @@ func main() {
 
 	userRepo := _userRepo.NewmysqlUserRepository(db)
 	userUsecase := _userUsecase.NewUserUsecase(userRepo, timeoutContext)
+	roomRepo := _roomRepo.NewmysqlRoomRepository(db)
+	roomUsecase := _roomUsecase.NewRoomUsecase(roomRepo, timeoutContext)
 	authUsecase := _authUsecase.NewAuthUseCase(
 		userRepo,
 		viper.GetString("auth.hash_salt"),
@@ -89,6 +94,7 @@ func main() {
 
 	_userHandlerHttpDelivery.NewUserHandler(r, userUsecase)
 	_authHandlerHttpDelivery.NewAuthHandler(r, authUsecase)
+	_roomHandlerHttpDelivery.NewRoomHandler(r, roomUsecase)
 
 	r.Group("/api", authMiddleware)
 
