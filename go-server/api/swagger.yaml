@@ -12,6 +12,8 @@ tags:
   description: Users
 - name: rooms
   description: Rooms
+- name: services
+  description: Services
 paths:
   /auth/signup:
     post:
@@ -114,6 +116,22 @@ paths:
                 $ref: '#/components/schemas/Room'
       security:
       - BearerAuth: []
+  /services:
+    get:
+      tags:
+      - services
+      summary: get services
+      operationId: getServices
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+                x-content-type: application/json
 components:
   schemas:
     User:
@@ -215,7 +233,7 @@ components:
           example: 1
         plan_name:
           type: string
-          example: Netflix
+          example: Premium
       example:
         max_count: 5
         account_password: account_password
@@ -227,7 +245,7 @@ components:
         created_at: 2000-01-23T04:56:07.000+00:00
         starting_time: 2000-01-23T04:56:07.000+00:00
         id: 1
-        plan_name: Netflix
+        plan_name: Premium
     RoomCreateRequest:
       type: object
       properties:
@@ -241,6 +259,26 @@ components:
         max_count: 5
         service_id: 1
         plan_name: Premium
+    Service:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Netflix
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      example:
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        name: Netflix
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: 1
   securitySchemes:
     BearerAuth:
       type: http

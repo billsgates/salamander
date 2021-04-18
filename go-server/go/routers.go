@@ -76,6 +76,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"GetServices",
+		strings.ToUpper("Get"),
+		"/api/v1/services",
+		GetServices,
+	},
+
+	Route{
 		"GetUser",
 		strings.ToUpper("Get"),
 		"/api/v1/users/{id}",

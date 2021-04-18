@@ -8,11 +8,11 @@
  */
 package swagger
 
-type RoomCreateRequest struct {
+import (
+	"net/http"
+)
 
-	MaxCount int32 `json:"max_count,omitempty"`
-
-	ServiceId int32 `json:"service_id,omitempty"`
-
-	PlanName string `json:"plan_name,omitempty"`
+func GetServices(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
 }
