@@ -15,12 +15,15 @@ type RoomHandler struct {
 	RoomUsecase domain.RoomUsecase
 }
 
-func NewRoomHandler(e *gin.Engine, RoomUsecase domain.RoomUsecase) {
+func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, RoomUsecase domain.RoomUsecase) {
 	handler := &RoomHandler{
 		RoomUsecase: RoomUsecase,
 	}
 
-	e.POST("/api/v1/rooms", handler.CreateRoom)
+	roomEndpoints := e.Group("rooms", authMiddleware)
+	{
+		roomEndpoints.POST("", handler.CreateRoom)
+	}
 }
 
 func (u *RoomHandler) CreateRoom(c *gin.Context) {

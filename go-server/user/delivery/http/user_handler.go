@@ -13,13 +13,16 @@ type UserHandler struct {
 	UserUsecase domain.UserUsecase
 }
 
-func NewUserHandler(e *gin.Engine, userUsecase domain.UserUsecase) {
+func NewUserHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, userUsecase domain.UserUsecase) {
 	handler := &UserHandler{
 		UserUsecase: userUsecase,
 	}
 
-	e.GET("/api/v1/users", handler.GetAllUsers)
-	e.GET("/api/v1/users/:userID", handler.GetUserByUserID)
+	userEndpoints := e.Group("users", authMiddleware)
+	{
+		userEndpoints.GET("", handler.GetAllUsers)
+		userEndpoints.GET("/:userID", handler.GetUserByUserID)
+	}
 }
 
 func (u *UserHandler) GetAllUsers(c *gin.Context) {

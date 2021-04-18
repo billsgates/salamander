@@ -92,11 +92,12 @@ func main() {
 	)
 	authMiddleware := _authHandlerHttpDelivery.NewAuthMiddleware(authUsecase)
 
-	_userHandlerHttpDelivery.NewUserHandler(r, userUsecase)
-	_authHandlerHttpDelivery.NewAuthHandler(r, authUsecase)
-	_roomHandlerHttpDelivery.NewRoomHandler(r, roomUsecase)
-
-	r.Group("/api", authMiddleware)
+	v1Router := r.Group("/api/v1/")
+	{
+		_authHandlerHttpDelivery.NewAuthHandler(v1Router, authUsecase)
+		_userHandlerHttpDelivery.NewUserHandler(v1Router, authMiddleware, userUsecase)
+		_roomHandlerHttpDelivery.NewRoomHandler(v1Router, authMiddleware, roomUsecase)
+	}
 
 	logrus.Fatal(r.Run(":" + viper.GetString("server.address")))
 }

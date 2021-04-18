@@ -62,6 +62,8 @@ paths:
       summary: get users
       description: ''
       operationId: getUsers
+      security:
+        - BearerAuth: []
       responses:
         "200":
           description: OK
@@ -78,6 +80,8 @@ paths:
       summary: get user by id
       description: ''
       operationId: getUser
+      security:
+        - BearerAuth: []
       parameters:
         - in: path
           name: id
@@ -99,6 +103,8 @@ paths:
       summary: create a room
       description: ''
       operationId: createRoom
+      security:
+        - BearerAuth: []
       requestBody:
         required: true
         description: ''
@@ -114,6 +120,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Room'
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
   schemas:
     User:
       type: object

@@ -67,6 +67,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/User'
                 x-content-type: application/json
+      security:
+      - BearerAuth: []
   /users/{id}:
     get:
       tags:
@@ -89,6 +91,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+      security:
+      - BearerAuth: []
   /rooms:
     post:
       tags:
@@ -108,6 +112,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Room'
+      security:
+      - BearerAuth: []
 components:
   schemas:
     User:
@@ -238,3 +244,7 @@ components:
         admin_id: 1
         service_id: 1
         plan_name: Premium
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

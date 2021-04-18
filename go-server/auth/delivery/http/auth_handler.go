@@ -15,13 +15,16 @@ type AuthHandler struct {
 	AuthUsecase domain.AuthUsecase
 }
 
-func NewAuthHandler(e *gin.Engine, authUsecase domain.AuthUsecase) {
+func NewAuthHandler(e *gin.RouterGroup, authUsecase domain.AuthUsecase) {
 	handler := &AuthHandler{
 		AuthUsecase: authUsecase,
 	}
 
-	e.POST("/api/v1/auth/signup", handler.SignUp)
-	e.POST("/api/v1/auth/signin", handler.SignIn)
+	authEndpoints := e.Group("auth")
+	{
+		authEndpoints.POST("/signup", handler.SignUp)
+		authEndpoints.POST("/signin", handler.SignIn)
+	}
 }
 
 func (h *AuthHandler) SignUp(c *gin.Context) {
