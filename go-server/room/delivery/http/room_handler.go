@@ -37,9 +37,11 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 		return
 	}
 
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
 	room, err := u.RoomUsecase.Create(c.Request.Context(), &domain.Room{
 		MaxCount:     body.MaxCount,
-		AdminId:      body.AdminId,
+		AdminId:      user.Id,
 		ServiceId:    body.ServiceId,
 		PlanName:     body.PlanName,
 		StartingTime: time.Now(),

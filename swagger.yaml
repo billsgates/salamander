@@ -227,19 +227,15 @@ components:
       properties:
         max_count:
           type: integer
-        admin_id:
-          type: integer
         service_id:
           type: integer
         plan_name:
           type: string
         required:
         - max_count
-        - admin_id
         - service_id
         - plan_name
       example:
         max_count: 5
-        admin_id: 1
         service_id: 1
         plan_name: Premium
