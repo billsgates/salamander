@@ -251,6 +251,8 @@ components:
       properties:
         max_count:
           type: integer
+        admin_id:
+          type: integer
         service_id:
           type: integer
         plan_name:
@@ -259,6 +261,7 @@ components:
         max_count: 5
         service_id: 1
         plan_name: Premium
+<<<<<<< HEAD
     Service:
       type: object
       properties:
@@ -279,6 +282,21 @@ components:
         name: Netflix
         created_at: 2000-01-23T04:56:07.000+00:00
         id: 1
+=======
+    ParticipationCreateRequest:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        room_id:
+          type: integer
+        is_host:
+          type: boolean
+      example:
+        max_count: 1
+        service_id: 1
+        plan_name: true
+>>>>>>> master
   securitySchemes:
     BearerAuth:
       type: http

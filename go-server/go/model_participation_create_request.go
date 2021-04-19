@@ -8,13 +8,11 @@
  */
 package swagger
 
-type RoomCreateRequest struct {
+type ParticipationCreateRequest struct {
 
-	MaxCount int32 `json:"max_count,omitempty"`
+	UserId int32 `json:"user_id,omitempty"`
 
-	AdminId int32 `json:"admin_id,omitempty"`
+	RoomId int32 `json:"room_id,omitempty"`
 
-	ServiceId int32 `json:"service_id,omitempty"`
-
-	PlanName string `json:"plan_name,omitempty"`
+	IsHost bool `json:"is_host,omitempty"`
 }

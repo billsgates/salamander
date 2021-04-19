@@ -16,7 +16,7 @@ func NewmysqlRoomRepository(Conn *gorm.DB) domain.RoomRepository {
 }
 
 func (m *mysqlRoomRepository) Create(ctx context.Context, room *domain.Room) (res *domain.Room, err error) {
-	m.Conn.Create(&room)
+	m.Conn.Select("max_count", "admin_id", "service_id", "plan_name").Create(&room)
 
 	return room, nil
 }
