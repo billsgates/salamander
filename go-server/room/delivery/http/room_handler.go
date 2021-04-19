@@ -5,8 +5,6 @@ import (
 
 	swagger "go-server/go"
 
-	"time"
-
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
@@ -40,17 +38,17 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 	user := c.Value(domain.CtxUserKey).(*domain.User)
 
 	room, err := u.RoomUsecase.Create(c.Request.Context(), &domain.Room{
-		MaxCount:     body.MaxCount,
-		AdminId:      user.Id,
-		ServiceId:    body.ServiceId,
-		PlanName:     body.PlanName,
-		StartingTime: time.Now(),
-		EndingTime:   time.Now(),
+		MaxCount:  body.MaxCount,
+		AdminId:   user.Id,
+		ServiceId: body.ServiceId,
+		PlanName:  body.PlanName,
 	})
 	if err != nil {
 		logrus.Error(err)
 		return
 	}
+	logrus.Debug("room created!", room)
+
 	c.JSON(200, swagger.Room{
 		Id:              room.Id,
 		AccountName:     room.AccountName,

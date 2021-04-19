@@ -8,14 +8,16 @@ import (
 )
 
 type roomUsecase struct {
-	roomRepo       domain.RoomRepository
-	contextTimeout time.Duration
+	roomRepo          domain.RoomRepository
+	participationRepo domain.ParticipationRepository
+	contextTimeout    time.Duration
 }
 
-func NewRoomUsecase(roomRepo domain.RoomRepository, timeout time.Duration) domain.RoomUsecase {
+func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.ParticipationRepository, timeout time.Duration) domain.RoomUsecase {
 	return &roomUsecase{
-		roomRepo:       roomRepo,
-		contextTimeout: timeout,
+		roomRepo:          roomRepo,
+		participationRepo: participationRepo,
+		contextTimeout:    timeout,
 	}
 }
 
@@ -27,5 +29,15 @@ func (r *roomUsecase) Create(c context.Context, room *domain.Room) (res *domain.
 	if err != nil {
 		return
 	}
+
+	_, err = r.participationRepo.Create(ctx, &domain.Participation{
+		UserId: room.AdminId,
+		RoomId: room.Id,
+		IsHost: true,
+	})
+	if err != nil {
+		return
+	}
+
 	return res, nil
 }

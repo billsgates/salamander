@@ -227,6 +227,8 @@ components:
       properties:
         max_count:
           type: integer
+        admin_id:
+          type: integer
         service_id:
           type: integer
         plan_name:
@@ -239,3 +241,20 @@ components:
         max_count: 5
         service_id: 1
         plan_name: Premium
+    ParticipationCreateRequest:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        room_id:
+          type: integer
+        is_host:
+          type: boolean
+        required:
+        - user_id
+        - room_id
+        - is_host
+      example:
+        max_count: 1
+        service_id: 1
+        plan_name: true

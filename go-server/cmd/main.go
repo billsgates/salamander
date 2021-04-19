@@ -12,6 +12,7 @@ import (
 	"fmt"
 	_authHandlerHttpDelivery "go-server/auth/delivery/http"
 	_authUsecase "go-server/auth/usecase"
+	_participationRepo "go-server/participation/repository/mysql"
 	_roomHandlerHttpDelivery "go-server/room/delivery/http"
 	_roomRepo "go-server/room/repository/mysql"
 	_roomUsecase "go-server/room/usecase"
@@ -65,7 +66,7 @@ func main() {
 	connection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
 	val := url.Values{}
 	val.Add("parseTime", "1")
-	val.Add("loc", "Asia/Jakarta")
+	val.Add("loc", "Asia/Taipei")
 	dsn := fmt.Sprintf("%s?%s", connection, val.Encode())
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
@@ -81,9 +82,10 @@ func main() {
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
 	userRepo := _userRepo.NewmysqlUserRepository(db)
-	userUsecase := _userUsecase.NewUserUsecase(userRepo, timeoutContext)
 	roomRepo := _roomRepo.NewmysqlRoomRepository(db)
-	roomUsecase := _roomUsecase.NewRoomUsecase(roomRepo, timeoutContext)
+	participationRepo := _participationRepo.NewmysqlParticipationRepository(db)
+	userUsecase := _userUsecase.NewUserUsecase(userRepo, timeoutContext)
+	roomUsecase := _roomUsecase.NewRoomUsecase(roomRepo, participationRepo, timeoutContext)
 	authUsecase := _authUsecase.NewAuthUseCase(
 		userRepo,
 		viper.GetString("auth.hash_salt"),
