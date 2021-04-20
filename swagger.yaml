@@ -137,6 +137,27 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Service'
+  /services/{id}:
+    get:
+      tags:
+        - services
+      summary: get service plans by id
+      description: ''
+      operationId: getServicesPlan
+      parameters:
+        - in: path
+          name: id
+          description: Service ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
 components:
   securitySchemes:
     BearerAuth:

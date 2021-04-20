@@ -132,6 +132,28 @@ paths:
                 items:
                   $ref: '#/components/schemas/Service'
                 x-content-type: application/json
+  /services/{id}:
+    get:
+      tags:
+      - services
+      summary: get service plans by id
+      operationId: getServicesPlan
+      parameters:
+      - name: id
+        in: path
+        description: Service ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
 components:
   schemas:
     User:
@@ -261,7 +283,6 @@ components:
         max_count: 5
         service_id: 1
         plan_name: Premium
-<<<<<<< HEAD
     Service:
       type: object
       properties:
@@ -282,7 +303,6 @@ components:
         name: Netflix
         created_at: 2000-01-23T04:56:07.000+00:00
         id: 1
-=======
     ParticipationCreateRequest:
       type: object
       properties:
@@ -296,7 +316,6 @@ components:
         max_count: 1
         service_id: 1
         plan_name: true
->>>>>>> master
   securitySchemes:
     BearerAuth:
       type: http

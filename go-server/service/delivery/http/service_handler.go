@@ -16,9 +16,10 @@ func NewServiceHandler(e *gin.RouterGroup, serviceUsecase domain.ServiceUsecase)
 		serviceUsecase: serviceUsecase,
 	}
 
-	userEndpoints := e.Group("services")
+	serviceEndpoints := e.Group("services")
 	{
-		userEndpoints.GET("", handler.GetAllServices)
+		serviceEndpoints.GET("", handler.GetAllServices)
+		serviceEndpoints.GET("/:serviceID", handler.GetServicePlans)
 	}
 }
 
@@ -26,6 +27,22 @@ func (s *ServiceHandler) GetAllServices(c *gin.Context) {
 	services, err := s.serviceUsecase.FetchAll(c)
 	if err != nil {
 		logrus.Error(err)
+		return
+	}
+	c.JSON(200, gin.H{"data": services})
+}
+
+func (s *ServiceHandler) GetServicePlans(c *gin.Context) {
+	serviceID := c.Param("serviceID")
+	logrus.Debug("serviceID:", serviceID)
+
+	services, err := s.serviceUsecase.GetDetailByID(c, serviceID)
+	if err != nil {
+		logrus.Error(err)
+		// c.JSON(500, &swagger.ModelError{
+		// 	Code:    3000,
+		// 	Message: "Internal error. Query digimon error",
+		// })
 		return
 	}
 	c.JSON(200, gin.H{"data": services})

@@ -29,3 +29,14 @@ func (s *serviceUsecase) FetchAll(c context.Context) (res []domain.Service, err 
 	}
 	return
 }
+
+func (s *serviceUsecase) GetDetailByID(c context.Context, id string) (res []domain.Service, err error) {
+	ctx, cancel := context.WithTimeout(c, s.contextTimeout)
+	defer cancel()
+
+	res, err = s.serviceRepo.GetDetailByID(ctx, id)
+	if err != nil {
+		return
+	}
+	return res, nil
+}
