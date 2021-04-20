@@ -14,7 +14,7 @@ type AuthClaims struct {
 }
 
 type AuthUsecase interface {
-	SignUp(ctx context.Context, name, email, password string) (*User, error)
-	SignIn(ctx context.Context, email, password string) (string, error)
+	SignUp(ctx context.Context, name string, email string, password string) (*User, error)
+	SignIn(ctx context.Context, email string, password string) (string, error)
 	ParseToken(ctx context.Context, accessToken string) (*User, error)
 }

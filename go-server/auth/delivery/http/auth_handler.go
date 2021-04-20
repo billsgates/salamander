@@ -31,19 +31,17 @@ func (h *AuthHandler) SignUp(c *gin.Context) {
 	var body swagger.SignupRequest
 	if err := c.BindJSON(&body); err != nil {
 		logrus.Error(err)
-		// c.JSON(500, &swagger.ModelError{
-		// 	Code:    3000,
-		// 	Message: "Internal error. Parsing failed",
-		// })
+		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
 	anUser, err := h.AuthUsecase.SignUp(c.Request.Context(), body.Name, body.Email, body.Password)
 	if err != nil {
 		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	c.JSON(201, swagger.User{
+	c.JSON(http.StatusCreated, swagger.User{
 		Id:             anUser.Id,
 		Name:           anUser.Name,
 		Email:          anUser.Email,
@@ -58,10 +56,7 @@ func (h *AuthHandler) SignIn(c *gin.Context) {
 	var body swagger.LoginRequest
 	if err := c.BindJSON(&body); err != nil {
 		logrus.Error(err)
-		// c.JSON(500, &swagger.ModelError{
-		// 	Code:    3000,
-		// 	Message: "Internal error. Parsing failed",
-		// })
+		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
@@ -76,5 +71,5 @@ func (h *AuthHandler) SignIn(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, swagger.LoginResponse{Token: token})
+	c.JSON(http.StatusOK, swagger.LoginResponse{Token: token})
 }
