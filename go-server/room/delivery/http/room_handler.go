@@ -2,6 +2,7 @@ package http
 
 import (
 	"go-server/domain"
+	"net/http"
 
 	swagger "go-server/go"
 
@@ -13,9 +14,9 @@ type RoomHandler struct {
 	RoomUsecase domain.RoomUsecase
 }
 
-func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, RoomUsecase domain.RoomUsecase) {
+func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsecase domain.RoomUsecase) {
 	handler := &RoomHandler{
-		RoomUsecase: RoomUsecase,
+		RoomUsecase: roomUsecase,
 	}
 
 	roomEndpoints := e.Group("rooms", authMiddleware)
@@ -28,10 +29,7 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 	var body swagger.RoomCreateRequest
 	if err := c.BindJSON(&body); err != nil {
 		logrus.Error(err)
-		// c.JSON(500, &swagger.ModelError{
-		// 	Code:    3000,
-		// 	Message: "Internal error. Parsing failed",
-		// })
+		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
@@ -45,11 +43,11 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 	})
 	if err != nil {
 		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	logrus.Debug("room created!", room)
 
-	c.JSON(200, swagger.Room{
+	c.JSON(http.StatusCreated, swagger.Room{
 		Id:              room.Id,
 		AccountName:     room.AccountName,
 		AccountPassword: room.AccountPassword,

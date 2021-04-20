@@ -27,7 +27,7 @@ func (r *roomUsecase) Create(c context.Context, room *domain.Room) (res *domain.
 
 	res, err = r.roomRepo.Create(ctx, room)
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	_, err = r.participationRepo.Create(ctx, &domain.Participation{
@@ -36,7 +36,7 @@ func (r *roomUsecase) Create(c context.Context, room *domain.Room) (res *domain.
 		IsHost: true,
 	})
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	return res, nil
