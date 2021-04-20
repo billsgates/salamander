@@ -25,7 +25,7 @@ func (u *userUsecase) Create(c context.Context, user *domain.User) (res *domain.
 
 	res, err = u.userRepo.Create(ctx, user)
 	if err != nil {
-		return
+		return nil, err
 	}
 	return res, nil
 }
@@ -38,7 +38,7 @@ func (u *userUsecase) FetchAll(c context.Context) (res []domain.User, err error)
 	if err != nil {
 		return nil, err
 	}
-	return
+	return res, nil
 }
 
 func (u *userUsecase) GetByID(c context.Context, id string) (res *domain.User, err error) {
@@ -47,7 +47,7 @@ func (u *userUsecase) GetByID(c context.Context, id string) (res *domain.User, e
 
 	res, err = u.userRepo.GetByID(ctx, id)
 	if err != nil {
-		return
+		return nil, err
 	}
 	return res, nil
 }
@@ -58,7 +58,7 @@ func (u *userUsecase) GetByEmailPassword(c context.Context, email string, passwo
 
 	res, err = u.userRepo.GetByEmailPassword(ctx, email, password)
 	if err != nil {
-		return
+		return nil, err
 	}
 	return res, nil
 }
