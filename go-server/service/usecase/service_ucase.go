@@ -27,7 +27,7 @@ func (s *serviceUsecase) FetchAll(c context.Context) (res []domain.Service, err 
 	if err != nil {
 		return nil, err
 	}
-	return
+	return res, nil
 }
 
 func (s *serviceUsecase) GetDetailByID(c context.Context, id string) (res []domain.Service, err error) {
@@ -36,7 +36,7 @@ func (s *serviceUsecase) GetDetailByID(c context.Context, id string) (res []doma
 
 	res, err = s.serviceRepo.GetDetailByID(ctx, id)
 	if err != nil {
-		return
+		return nil, err
 	}
 	return res, nil
 }

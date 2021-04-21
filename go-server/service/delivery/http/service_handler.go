@@ -2,6 +2,7 @@ package http
 
 import (
 	"go-server/domain"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -29,7 +30,7 @@ func (s *ServiceHandler) GetAllServices(c *gin.Context) {
 		logrus.Error(err)
 		return
 	}
-	c.JSON(200, gin.H{"data": services})
+	c.JSON(http.StatusOK, gin.H{"data": services})
 }
 
 func (s *ServiceHandler) GetServicePlans(c *gin.Context) {
@@ -39,11 +40,8 @@ func (s *ServiceHandler) GetServicePlans(c *gin.Context) {
 	services, err := s.serviceUsecase.GetDetailByID(c, serviceID)
 	if err != nil {
 		logrus.Error(err)
-		// c.JSON(500, &swagger.ModelError{
-		// 	Code:    3000,
-		// 	Message: "Internal error. Query digimon error",
-		// })
+		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
-	c.JSON(200, gin.H{"data": services})
+	c.JSON(http.StatusOK, gin.H{"data": services})
 }

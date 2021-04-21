@@ -17,13 +17,17 @@ func NewmysqlServiceRepository(Conn *gorm.DB) domain.ServiceRepository {
 
 func (m *mysqlServiceRepository) FetchAll(ctx context.Context) (res []domain.Service, err error) {
 	var services []domain.Service
-	m.Conn.Table("service_providers").Find(&services)
+	if err := m.Conn.Table("service_providers").Find(&services).Error; err != nil {
+		return nil, err
+	}
 	return services, nil
 }
 
 func (m *mysqlServiceRepository) GetDetailByID(ctx context.Context, id string) (res []domain.Service, err error) {
 	var services []domain.Service
-	m.Conn.Table("service_providers").Select("service_providers.id, service_providers.name, plans.plan_name").Joins("left join plans on plans.service_id = service_providers.id").Where("service_providers.id = ?", id).Scan(&services)
+	if err := m.Conn.Table("service_providers").Select("service_providers.id, service_providers.name, plans.plan_name").Joins("left join plans on plans.service_id = service_providers.id").Where("service_providers.id = ?", id).Scan(&services).Error; err != nil {
+		return nil, err
+	}
 
 	return services, nil
 }
