@@ -28,6 +28,7 @@ func (s *ServiceHandler) GetAllServices(c *gin.Context) {
 	services, err := s.serviceUsecase.FetchAll(c)
 	if err != nil {
 		logrus.Error(err)
+		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": services})
