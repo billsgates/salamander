@@ -32,7 +32,7 @@ func NewAuthUseCase(
 	}
 }
 
-func (a *authUsecase) SignUp(ctx context.Context, name, email, password string) (res *domain.User, err error) {
+func (a *authUsecase) SignUp(ctx context.Context, name string, email string, password string) (res *domain.User, err error) {
 	pwd := sha1.New()
 	pwd.Write([]byte(password))
 	pwd.Write([]byte(a.hashSalt))
@@ -46,7 +46,7 @@ func (a *authUsecase) SignUp(ctx context.Context, name, email, password string) 
 	return a.userRepo.Create(ctx, user)
 }
 
-func (a *authUsecase) SignIn(ctx context.Context, email, password string) (string, error) {
+func (a *authUsecase) SignIn(ctx context.Context, email string, password string) (string, error) {
 	pwd := sha1.New()
 	pwd.Write([]byte(password))
 	pwd.Write([]byte(a.hashSalt))
@@ -72,7 +72,7 @@ func (a *authUsecase) SignIn(ctx context.Context, email, password string) (strin
 func (a *authUsecase) ParseToken(ctx context.Context, accessToken string) (*domain.User, error) {
 	token, err := jwt.ParseWithClaims(accessToken, &domain.AuthClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 		return a.signingKey, nil
 	})

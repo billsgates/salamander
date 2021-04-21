@@ -2,6 +2,7 @@ package http
 
 import (
 	"go-server/domain"
+	"net/http"
 
 	swagger "go-server/go"
 
@@ -29,26 +30,23 @@ func (u *UserHandler) GetAllUsers(c *gin.Context) {
 	users, err := u.UserUsecase.FetchAll(c)
 	if err != nil {
 		logrus.Error(err)
+		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
-	c.JSON(200, gin.H{"data": users})
+	c.JSON(http.StatusOK, gin.H{"data": users})
 }
 
 func (u *UserHandler) GetUserByUserID(c *gin.Context) {
 	userID := c.Param("userID")
-	logrus.Debug("userID:", userID)
 
 	anUser, err := u.UserUsecase.GetByID(c, userID)
 	if err != nil {
 		logrus.Error(err)
-		// c.JSON(500, &swagger.ModelError{
-		// 	Code:    3000,
-		// 	Message: "Internal error. Query digimon error",
-		// })
+		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
 
-	c.JSON(200, swagger.User{
+	c.JSON(http.StatusOK, swagger.User{
 		Id:     anUser.Id,
 		Name:   anUser.Name,
 		Email:  anUser.Email,

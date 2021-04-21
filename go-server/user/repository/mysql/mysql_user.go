@@ -16,21 +16,27 @@ func NewmysqlUserRepository(Conn *gorm.DB) domain.UserRepository {
 }
 
 func (m *mysqlUserRepository) Create(ctx context.Context, user *domain.User) (res *domain.User, err error) {
-	m.Conn.Create(&user)
+	if err := m.Conn.Select("name", "email", "password_digest").Create(&user).Error; err != nil {
+		return nil, err
+	}
 
 	return user, nil
 }
 
 func (m *mysqlUserRepository) FetchAll(ctx context.Context) (res []domain.User, err error) {
 	var users []domain.User
-	m.Conn.Find(&users)
+	if err := m.Conn.Find(&users).Error; err != nil {
+		return nil, err
+	}
 
 	return users, nil
 }
 
 func (m *mysqlUserRepository) GetByID(ctx context.Context, id string) (res *domain.User, err error) {
 	var user *domain.User
-	m.Conn.First(&user, id)
+	if err := m.Conn.First(&user, id).Error; err != nil {
+		return nil, err
+	}
 
 	return user, nil
 }
