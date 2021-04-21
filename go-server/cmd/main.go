@@ -75,7 +75,14 @@ func main() {
 	}
 
 	r := gin.Default()
-	r.Use(cors.Default())
+	r.Use(cors.New(cors.Config{
+		AllowAllOrigins: true,
+		AllowMethods:    []string{"GET", "POST", "DELETE", "OPTIONS", "PUT"},
+		AllowHeaders: []string{"Authorization", "Content-Type", "Upgrade", "Origin",
+			"Connection", "Accept-Encoding", "Accept-Language", "Host",
+			"Access-Control-Request-Method", "Access-Control-Request-Headers"},
+		AllowCredentials: true,
+	}))
 	r.GET("/", sayHello)
 	r.GET("/ping", sayPongJSON)
 
