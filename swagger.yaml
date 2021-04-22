@@ -160,10 +160,10 @@ components:
           format: email
         password:
           type: string
-        required:
-        - name
-        - email
-        - password
+      required:
+      - name
+      - email
+      - password
       example:
         name: kevin yu
         email: kevin@ntu.im
@@ -176,9 +176,9 @@ components:
           format: email
         password:
           type: string
-        required:
-        - email
-        - password
+      required:
+      - email
+      - password
       example:
         email: kevin@ntu.im
         password: mypassword
@@ -233,10 +233,10 @@ components:
           type: integer
         plan_name:
           type: string
-        required:
-        - max_count
-        - service_id
-        - plan_name
+      required:
+      - max_count
+      - service_id
+      - plan_name
       example:
         max_count: 5
         service_id: 1
@@ -250,10 +250,10 @@ components:
           type: integer
         is_host:
           type: boolean
-        required:
-        - user_id
-        - room_id
-        - is_host
+      required:
+      - user_id
+      - room_id
+      - is_host
       example:
         max_count: 1
         service_id: 1

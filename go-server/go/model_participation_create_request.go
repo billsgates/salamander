@@ -10,9 +10,9 @@ package swagger
 
 type ParticipationCreateRequest struct {
 
-	UserId int32 `json:"user_id,omitempty"`
+	UserId int32 `json:"user_id"`
 
-	RoomId int32 `json:"room_id,omitempty"`
+	RoomId int32 `json:"room_id"`
 
-	IsHost bool `json:"is_host,omitempty"`
+	IsHost bool `json:"is_host"`
 }
