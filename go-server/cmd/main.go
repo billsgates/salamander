@@ -16,6 +16,9 @@ import (
 	_roomHandlerHttpDelivery "go-server/room/delivery/http"
 	_roomRepo "go-server/room/repository/mysql"
 	_roomUsecase "go-server/room/usecase"
+	_serviceHandlerHttpDelivery "go-server/service/delivery/http"
+	_serviceRepo "go-server/service/repository/mysql"
+	_serviceUsecase "go-server/service/usecase"
 	_userHandlerHttpDelivery "go-server/user/delivery/http"
 	_userRepo "go-server/user/repository/mysql"
 	_userUsecase "go-server/user/usecase"
@@ -100,12 +103,15 @@ func main() {
 		viper.GetDuration("auth.token_ttl"),
 	)
 	authMiddleware := _authHandlerHttpDelivery.NewAuthMiddleware(authUsecase)
+	serviceRepo := _serviceRepo.NewmysqlServiceRepository(db)
+	serviceUsecase := _serviceUsecase.NewServiceUsecase(serviceRepo, timeoutContext)
 
 	v1Router := r.Group("/api/v1/")
 	{
 		_authHandlerHttpDelivery.NewAuthHandler(v1Router, authUsecase)
 		_userHandlerHttpDelivery.NewUserHandler(v1Router, authMiddleware, userUsecase)
 		_roomHandlerHttpDelivery.NewRoomHandler(v1Router, authMiddleware, roomUsecase)
+		_serviceHandlerHttpDelivery.NewServiceHandler(v1Router, serviceUsecase)
 	}
 
 	logrus.Fatal(r.Run(":" + viper.GetString("server.address")))
