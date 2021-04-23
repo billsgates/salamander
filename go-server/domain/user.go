@@ -16,14 +16,14 @@ type User struct {
 }
 
 type UserRepository interface {
-	Create(ctx context.Context, user *User) (*User, error)
+	Create(ctx context.Context, user *User) error
 	FetchAll(ctx context.Context) ([]User, error)
 	GetByID(ctx context.Context, id string) (*User, error)
 	GetByEmailPassword(ctx context.Context, email string, password string) (*User, error)
 }
 
 type UserUsecase interface {
-	Create(ctx context.Context, user *User) (*User, error)
+	Create(ctx context.Context, user *User) error
 	FetchAll(ctx context.Context) ([]User, error)
 	GetByID(ctx context.Context, id string) (*User, error)
 	GetByEmailPassword(ctx context.Context, email string, password string) (*User, error)

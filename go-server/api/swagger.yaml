@@ -29,11 +29,7 @@ paths:
         required: true
       responses:
         "201":
-          description: successfully createds
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
+          description: successfully created
   /auth/signin:
     post:
       tags:
@@ -220,7 +216,7 @@ components:
           type: string
       example:
         email: kevin@ntu.im
-        password: mypassword
+        password: kevin
     LoginResponse:
       type: object
       properties:

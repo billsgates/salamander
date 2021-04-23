@@ -35,21 +35,13 @@ func (h *AuthHandler) SignUp(c *gin.Context) {
 		return
 	}
 
-	anUser, err := h.AuthUsecase.SignUp(c.Request.Context(), body.Name, body.Email, body.Password)
+	err := h.AuthUsecase.SignUp(c.Request.Context(), body.Name, body.Email, body.Password)
 	if err != nil {
 		logrus.Error(err)
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	c.JSON(http.StatusCreated, swagger.User{
-		Id:             anUser.Id,
-		Name:           anUser.Name,
-		Email:          anUser.Email,
-		PasswordDigest: anUser.PasswordDigest,
-		Rating:         anUser.Rating,
-		CreatedAt:      anUser.CreatedAt,
-		UpdatedAt:      anUser.UpdatedAt,
-	})
+	c.Status(http.StatusCreated)
 }
 
 func (h *AuthHandler) SignIn(c *gin.Context) {

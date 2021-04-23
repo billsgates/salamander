@@ -32,7 +32,7 @@ func NewAuthUseCase(
 	}
 }
 
-func (a *authUsecase) SignUp(ctx context.Context, name string, email string, password string) (res *domain.User, err error) {
+func (a *authUsecase) SignUp(ctx context.Context, name string, email string, password string) (err error) {
 	pwd := sha1.New()
 	pwd.Write([]byte(password))
 	pwd.Write([]byte(a.hashSalt))
