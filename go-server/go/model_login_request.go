@@ -10,7 +10,7 @@ package swagger
 
 type LoginRequest struct {
 
-	Email string `json:"email,omitempty"`
+	Email string `json:"email"`
 
-	Password string `json:"password,omitempty"`
+	Password string `json:"password"`
 }

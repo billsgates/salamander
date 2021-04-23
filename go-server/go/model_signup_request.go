@@ -10,9 +10,9 @@ package swagger
 
 type SignupRequest struct {
 
-	Name string `json:"name,omitempty"`
+	Name string `json:"name"`
 
-	Email string `json:"email,omitempty"`
+	Email string `json:"email"`
 
-	Password string `json:"password,omitempty"`
+	Password string `json:"password"`
 }

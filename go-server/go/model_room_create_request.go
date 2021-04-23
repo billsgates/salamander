@@ -10,11 +10,11 @@ package swagger
 
 type RoomCreateRequest struct {
 
-	MaxCount int32 `json:"max_count,omitempty"`
+	MaxCount int32 `json:"max_count"`
 
 	AdminId int32 `json:"admin_id,omitempty"`
 
-	ServiceId int32 `json:"service_id,omitempty"`
+	ServiceId int32 `json:"service_id"`
 
-	PlanName string `json:"plan_name,omitempty"`
+	PlanName string `json:"plan_name"`
 }
