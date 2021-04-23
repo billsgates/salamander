@@ -28,7 +28,7 @@ func NewAuthHandler(e *gin.RouterGroup, authUsecase domain.AuthUsecase) {
 }
 
 func (h *AuthHandler) SignUp(c *gin.Context) {
-	var body swagger.SignupRequest
+	var body domain.SignupRequest
 	if err := c.BindJSON(&body); err != nil {
 		logrus.Error(err)
 		c.AbortWithStatus(http.StatusBadRequest)
@@ -53,7 +53,7 @@ func (h *AuthHandler) SignUp(c *gin.Context) {
 }
 
 func (h *AuthHandler) SignIn(c *gin.Context) {
-	var body swagger.LoginRequest
+	var body domain.LoginRequest
 	if err := c.BindJSON(&body); err != nil {
 		logrus.Error(err)
 		c.AbortWithStatus(http.StatusBadRequest)
