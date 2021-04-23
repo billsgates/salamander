@@ -35,29 +35,18 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 
 	user := c.Value(domain.CtxUserKey).(*domain.User)
 
-	room, err := u.RoomUsecase.Create(c.Request.Context(), &domain.Room{
+	err := u.RoomUsecase.Create(c.Request.Context(), &domain.Room{
 		MaxCount:  body.MaxCount,
 		AdminId:   user.Id,
 		ServiceId: body.ServiceId,
 		PlanName:  body.PlanName,
 	})
+
 	if err != nil {
 		logrus.Error(err)
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	c.JSON(http.StatusCreated, swagger.Room{
-		Id:              room.Id,
-		AccountName:     room.AccountName,
-		AccountPassword: room.AccountPassword,
-		StartingTime:    room.StartingTime,
-		EndingTime:      room.EndingTime,
-		CreatedAt:       room.CreatedAt,
-		UpdatedAt:       room.UpdatedAt,
-		MaxCount:        room.MaxCount,
-		AdminId:         room.AdminId,
-		ServiceId:       room.ServiceId,
-		PlanName:        room.PlanName,
-	})
+	c.Status(http.StatusCreated)
 }

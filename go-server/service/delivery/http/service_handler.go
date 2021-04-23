@@ -20,7 +20,7 @@ func NewServiceHandler(e *gin.RouterGroup, serviceUsecase domain.ServiceUsecase)
 	serviceEndpoints := e.Group("services")
 	{
 		serviceEndpoints.GET("", handler.GetAllServices)
-		serviceEndpoints.GET("/:serviceID", handler.GetServicePlans)
+		serviceEndpoints.GET("/:serviceID", handler.GetServiceDetails)
 	}
 }
 
@@ -34,15 +34,15 @@ func (s *ServiceHandler) GetAllServices(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": services})
 }
 
-func (s *ServiceHandler) GetServicePlans(c *gin.Context) {
+func (s *ServiceHandler) GetServiceDetails(c *gin.Context) {
 	serviceID := c.Param("serviceID")
 	logrus.Debug("serviceID:", serviceID)
 
-	services, err := s.serviceUsecase.GetDetailByID(c, serviceID)
+	serviceDetails, err := s.serviceUsecase.GetDetailByID(c, serviceID)
 	if err != nil {
 		logrus.Error(err)
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": services})
+	c.JSON(http.StatusOK, gin.H{"data": serviceDetails})
 }

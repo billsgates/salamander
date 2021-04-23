@@ -15,12 +15,12 @@ func NewmysqlUserRepository(Conn *gorm.DB) domain.UserRepository {
 	return &mysqlUserRepository{Conn}
 }
 
-func (m *mysqlUserRepository) Create(ctx context.Context, user *domain.User) (res *domain.User, err error) {
+func (m *mysqlUserRepository) Create(ctx context.Context, user *domain.User) (err error) {
 	if err := m.Conn.Select("name", "email", "password_digest").Create(&user).Error; err != nil {
-		return nil, err
+		return err
 	}
 
-	return user, nil
+	return nil
 }
 
 func (m *mysqlUserRepository) FetchAll(ctx context.Context) (res []domain.User, err error) {
