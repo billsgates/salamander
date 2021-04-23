@@ -16,5 +16,5 @@ type Participation struct {
 }
 
 type ParticipationRepository interface {
-	Create(ctx context.Context, participation *Participation) (*Participation, error)
+	Create(ctx context.Context, participation *Participation) error
 }

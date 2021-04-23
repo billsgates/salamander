@@ -20,9 +20,9 @@ type Room struct {
 }
 
 type RoomRepository interface {
-	Create(ctx context.Context, room *Room) (*Room, error)
+	Create(ctx context.Context, room *Room) error
 }
 
 type RoomUsecase interface {
-	Create(ctx context.Context, room *Room) (*Room, error)
+	Create(ctx context.Context, room *Room) error
 }

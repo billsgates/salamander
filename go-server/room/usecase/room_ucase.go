@@ -21,23 +21,23 @@ func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.Par
 	}
 }
 
-func (r *roomUsecase) Create(c context.Context, room *domain.Room) (res *domain.Room, err error) {
+func (r *roomUsecase) Create(c context.Context, room *domain.Room) (err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 
-	res, err = r.roomRepo.Create(ctx, room)
+	err = r.roomRepo.Create(ctx, room)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	_, err = r.participationRepo.Create(ctx, &domain.Participation{
+	err = r.participationRepo.Create(ctx, &domain.Participation{
 		UserId: room.AdminId,
 		RoomId: room.Id,
 		IsHost: true,
 	})
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return res, nil
+	return nil
 }
