@@ -30,7 +30,7 @@ func (s *serviceUsecase) FetchAll(c context.Context) (res []domain.Service, err 
 	return res, nil
 }
 
-func (s *serviceUsecase) GetDetailByID(c context.Context, id string) (res []domain.Service, err error) {
+func (s *serviceUsecase) GetDetailByID(c context.Context, id string) (res []domain.ServiceDetail, err error) {
 	ctx, cancel := context.WithTimeout(c, s.contextTimeout)
 	defer cancel()
 

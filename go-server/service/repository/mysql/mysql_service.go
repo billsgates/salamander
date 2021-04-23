@@ -23,11 +23,11 @@ func (m *mysqlServiceRepository) FetchAll(ctx context.Context) (res []domain.Ser
 	return services, nil
 }
 
-func (m *mysqlServiceRepository) GetDetailByID(ctx context.Context, id string) (res []domain.Service, err error) {
-	var services []domain.Service
-	if err := m.Conn.Table("service_providers").Select("service_providers.id, service_providers.name, plans.plan_name").Joins("left join plans on plans.service_id = service_providers.id").Where("service_providers.id = ?", id).Scan(&services).Error; err != nil {
+func (m *mysqlServiceRepository) GetDetailByID(ctx context.Context, id string) (res []domain.ServiceDetail, err error) {
+	var serviceDetails []domain.ServiceDetail
+	if err := m.Conn.Table("service_providers").Select("service_providers.id, service_providers.name, plans.plan_name, plans.cost, plans.max_count").Joins("left join plans on plans.service_id = service_providers.id").Where("service_providers.id = ?", id).Scan(&serviceDetails).Error; err != nil {
 		return nil, err
 	}
 
-	return services, nil
+	return serviceDetails, nil
 }
