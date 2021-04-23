@@ -22,3 +22,12 @@ func (m *mysqlParticipationRepository) Create(ctx context.Context, participation
 
 	return nil
 }
+
+func (m *mysqlParticipationRepository) GetJoinedRooms(ctx context.Context, id int32) (res []domain.RoomInfo, err error) {
+	var rooms []domain.RoomInfo
+	if err := m.Conn.Table("participation").Select("service_providers.name, rooms.plan_name, participation.is_host").Joins("JOIN rooms ON rooms.room_id = participation.room_id").Joins("JOIN service_providers ON service_providers.id = rooms.service_id").Where("participation.user_id = ?", id).Scan(&rooms).Error; err != nil {
+		return nil, err
+	}
+
+	return rooms, nil
+}

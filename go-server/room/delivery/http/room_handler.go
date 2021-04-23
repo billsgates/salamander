@@ -20,6 +20,7 @@ func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsec
 	roomEndpoints := e.Group("rooms", authMiddleware)
 	{
 		roomEndpoints.POST("", handler.CreateRoom)
+		roomEndpoints.GET("", handler.GetJoinedRooms)
 	}
 }
 
@@ -47,4 +48,17 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 	}
 
 	c.Status(http.StatusCreated)
+}
+
+func (u *RoomHandler) GetJoinedRooms(c *gin.Context) {
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	rooms, err := u.RoomUsecase.GetJoinedRooms(c.Request.Context(), user.Id)
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": rooms})
 }
