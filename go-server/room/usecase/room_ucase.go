@@ -42,7 +42,7 @@ func (r *roomUsecase) Create(c context.Context, room *domain.Room) (err error) {
 	return nil
 }
 
-func (r *roomUsecase) GetJoinedRooms(c context.Context, id int32) (res []domain.Participation, err error) {
+func (r *roomUsecase) GetJoinedRooms(c context.Context, id int32) (res []domain.RoomInfo, err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 

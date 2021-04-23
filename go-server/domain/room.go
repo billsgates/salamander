@@ -19,11 +19,17 @@ type Room struct {
 	PlanName        string    `json:"plan_name,omitempty"`
 }
 
+type RoomInfo struct {
+	Name     string `json:"name"`
+	PlanName string `json:"plan_name"`
+	IsHost   bool   `json:"is_host"`
+}
+
 type RoomRepository interface {
 	Create(ctx context.Context, room *Room) error
 }
 
 type RoomUsecase interface {
 	Create(ctx context.Context, room *Room) error
-	GetJoinedRooms(ctx context.Context, id int32) ([]Participation, error)
+	GetJoinedRooms(ctx context.Context, id int32) ([]RoomInfo, error)
 }

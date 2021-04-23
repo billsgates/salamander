@@ -55,12 +55,12 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 func (u *RoomHandler) GetJoinedRooms(c *gin.Context) {
 	user := c.Value(domain.CtxUserKey).(*domain.User)
 
-	participations, err := u.RoomUsecase.GetJoinedRooms(c.Request.Context(), user.Id)
+	rooms, err := u.RoomUsecase.GetJoinedRooms(c.Request.Context(), user.Id)
 	if err != nil {
 		logrus.Error(err)
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": participations})
+	c.JSON(http.StatusOK, gin.H{"data": rooms})
 }
