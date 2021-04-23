@@ -113,6 +113,23 @@ paths:
       responses:
         "201":
           description: successfully created a room
+    get:
+      tags:
+        - rooms
+      summary: get all joined rooms
+      description: ''
+      operationId: getJoinedRooms
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Participation'
   /services:
     get:
       tags:
@@ -287,7 +304,7 @@ components:
         updated_at:
           type: string
           format: date-time
-    ParticipationCreateRequest:
+    Participation:
       type: object
       properties:
         user_id:

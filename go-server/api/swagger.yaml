@@ -92,6 +92,23 @@ paths:
       security:
       - BearerAuth: []
   /rooms:
+    get:
+      tags:
+      - rooms
+      summary: get all joined rooms
+      operationId: getJoinedRooms
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Participation'
+                x-content-type: application/json
+      security:
+      - BearerAuth: []
     post:
       tags:
       - rooms
@@ -294,7 +311,7 @@ components:
         name: Netflix
         created_at: 2000-01-23T04:56:07.000+00:00
         id: 1
-    ParticipationCreateRequest:
+    Participation:
       required:
       - is_host
       - room_id
