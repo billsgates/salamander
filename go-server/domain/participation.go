@@ -17,4 +17,5 @@ type Participation struct {
 
 type ParticipationRepository interface {
 	Create(ctx context.Context, participation *Participation) error
+	GetJoinedRooms(ctx context.Context, id int32) ([]Participation, error)
 }
