@@ -31,3 +31,12 @@ func (m *mysqlServiceRepository) GetDetailByID(ctx context.Context, id string) (
 
 	return serviceDetails, nil
 }
+
+func (m *mysqlServiceRepository) GetPlanByKey(ctx context.Context, planName string, serviceId string) (res *domain.Plan, err error) {
+	var plan *domain.Plan
+	if err := m.Conn.Table("plans").Where("plans.plan_name = ? AND plans.service_id = ?", planName, serviceId).Find(&plan).Error; err != nil {
+		return nil, err
+	}
+
+	return plan, nil
+}

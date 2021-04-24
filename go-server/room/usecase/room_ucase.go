@@ -2,6 +2,8 @@ package usecase
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"time"
 
 	"go-server/domain"
@@ -10,13 +12,15 @@ import (
 type roomUsecase struct {
 	roomRepo          domain.RoomRepository
 	participationRepo domain.ParticipationRepository
+	serviceRepo       domain.ServiceRepository
 	contextTimeout    time.Duration
 }
 
-func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.ParticipationRepository, timeout time.Duration) domain.RoomUsecase {
+func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.ParticipationRepository, serviceRepo domain.ServiceRepository, timeout time.Duration) domain.RoomUsecase {
 	return &roomUsecase{
 		roomRepo:          roomRepo,
 		participationRepo: participationRepo,
+		serviceRepo:       serviceRepo,
 		contextTimeout:    timeout,
 	}
 }
@@ -24,6 +28,15 @@ func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.Par
 func (r *roomUsecase) Create(c context.Context, room *domain.Room) (err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
+
+	plan, err := r.serviceRepo.GetPlanByKey(ctx, room.PlanName, fmt.Sprintf("%d", room.ServiceId))
+	if err != nil {
+		return err
+	}
+
+	if plan.MaxCount < room.MaxCount {
+		return errors.New("max count exceed")
+	}
 
 	err = r.roomRepo.Create(ctx, room)
 	if err != nil {

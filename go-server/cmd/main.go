@@ -93,18 +93,20 @@ func main() {
 
 	userRepo := _userRepo.NewmysqlUserRepository(db)
 	roomRepo := _roomRepo.NewmysqlRoomRepository(db)
+	serviceRepo := _serviceRepo.NewmysqlServiceRepository(db)
 	participationRepo := _participationRepo.NewmysqlParticipationRepository(db)
+
 	userUsecase := _userUsecase.NewUserUsecase(userRepo, timeoutContext)
-	roomUsecase := _roomUsecase.NewRoomUsecase(roomRepo, participationRepo, timeoutContext)
+	roomUsecase := _roomUsecase.NewRoomUsecase(roomRepo, participationRepo, serviceRepo, timeoutContext)
+	serviceUsecase := _serviceUsecase.NewServiceUsecase(serviceRepo, timeoutContext)
 	authUsecase := _authUsecase.NewAuthUseCase(
 		userRepo,
 		viper.GetString("auth.hash_salt"),
 		[]byte(viper.GetString("auth.signing_key")),
 		viper.GetDuration("auth.token_ttl"),
 	)
+
 	authMiddleware := _authHandlerHttpDelivery.NewAuthMiddleware(authUsecase)
-	serviceRepo := _serviceRepo.NewmysqlServiceRepository(db)
-	serviceUsecase := _serviceUsecase.NewServiceUsecase(serviceRepo, timeoutContext)
 
 	v1Router := r.Group("/api/v1/")
 	{
