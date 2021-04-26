@@ -19,6 +19,13 @@ type Room struct {
 	PlanName        string    `json:"plan_name,omitempty"`
 }
 
+type RoomCreateRequest struct {
+	MaxCount  int32  `json:"max_count" binding:"required"`
+	AdminId   int32  `json:"admin_id,omitempty"`
+	ServiceId int32  `json:"service_id" binding:"required"`
+	PlanName  string `json:"plan_name" binding:"required"`
+}
+
 type RoomRepository interface {
 	Create(ctx context.Context, room *Room) error
 }

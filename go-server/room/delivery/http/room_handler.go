@@ -26,7 +26,7 @@ func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsec
 }
 
 func (u *RoomHandler) CreateRoom(c *gin.Context) {
-	var body swagger.RoomCreateRequest
+	var body domain.RoomCreateRequest
 	if err := c.BindJSON(&body); err != nil {
 		logrus.Error(err)
 		c.AbortWithStatus(http.StatusBadRequest)
