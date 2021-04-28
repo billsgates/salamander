@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS rooms;
 DROP TABLE IF EXISTS service_providers;
 DROP TABLE IF EXISTS participation;
-DROP TABLE IF EXISTS invitation;
+DROP TABLE IF EXISTS invitation_codes;
 DROP TABLE IF EXISTS plans;
  
 CREATE TABLE users (
@@ -80,13 +80,14 @@ CREATE TABLE participation (
  FOREIGN KEY (room_id) REFERENCES rooms(room_id)
 );
 
-CREATE TABLE invitation (
- user_id INT,
+CREATE TABLE invitation_codes (
  room_id INT,
- is_accepted BOOLEAN NOT NULL,
+ invitation_code VARCHAR(255) NOT NULL,
+ is_valid BOOLEAN NOT NULL DEFAULT true,
+ created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+ updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 
- PRIMARY KEY (user_id, room_id),
- FOREIGN KEY (user_id) REFERENCES users(id),
+ PRIMARY KEY (room_id, invitation_code),
  FOREIGN KEY (room_id) REFERENCES rooms(room_id)
 );
 
