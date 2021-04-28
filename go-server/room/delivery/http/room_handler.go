@@ -4,8 +4,6 @@ import (
 	"go-server/domain"
 	"net/http"
 
-	swagger "go-server/go"
-
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
