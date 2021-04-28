@@ -69,7 +69,7 @@ func main() {
 	connection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
 	val := url.Values{}
 	val.Add("parseTime", "1")
-	val.Add("loc", "Asia/Taipei")
+	// val.Add("loc", "Asia/Taipei")
 	dsn := fmt.Sprintf("%s?%s", connection, val.Encode())
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
