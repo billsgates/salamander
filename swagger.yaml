@@ -130,6 +130,32 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Participation'
+  /rooms/{id}/invitation:
+    post:
+      tags:
+        - rooms
+      summary: generate invitation code
+      description: ''
+      operationId: postInvitationCode
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: Room ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
   /services:
     get:
       tags:
@@ -213,9 +239,9 @@ components:
       - email
       - password
       example:
-        name: kevin yu
-        email: kevin@ntu.im
-        password: passworda
+        name: test
+        email: test@ntu.im
+        password: test
     LoginRequest:
       type: object
       properties:

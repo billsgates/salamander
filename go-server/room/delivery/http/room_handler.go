@@ -3,6 +3,7 @@ package http
 import (
 	"go-server/domain"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -21,6 +22,7 @@ func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsec
 	{
 		roomEndpoints.POST("", handler.CreateRoom)
 		roomEndpoints.GET("", handler.GetJoinedRooms)
+		roomEndpoints.POST("/:roomID/invitation", handler.GenerateInvitationCode)
 	}
 }
 
@@ -61,4 +63,17 @@ func (u *RoomHandler) GetJoinedRooms(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": rooms})
+}
+
+func (u *RoomHandler) GenerateInvitationCode(c *gin.Context) {
+	roomID, err := strconv.ParseInt(c.Param("roomID"), 10, 32)
+	if err != nil {
+
+	}
+
+	logrus.Debug("roomID", roomID)
+
+	code, err := u.RoomUsecase.GenerateInvitationCode(c.Request.Context(), int32(roomID))
+
+	c.JSON(http.StatusOK, gin.H{"data": code})
 }

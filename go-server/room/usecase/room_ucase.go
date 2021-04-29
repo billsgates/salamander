@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"crypto/sha1"
 	"errors"
 	"fmt"
 	"time"
@@ -13,14 +14,16 @@ type roomUsecase struct {
 	roomRepo          domain.RoomRepository
 	participationRepo domain.ParticipationRepository
 	serviceRepo       domain.ServiceRepository
+	invitationRepo    domain.InvitationRepository
 	contextTimeout    time.Duration
 }
 
-func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.ParticipationRepository, serviceRepo domain.ServiceRepository, timeout time.Duration) domain.RoomUsecase {
+func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.ParticipationRepository, serviceRepo domain.ServiceRepository, invitationRepo domain.InvitationRepository, timeout time.Duration) domain.RoomUsecase {
 	return &roomUsecase{
 		roomRepo:          roomRepo,
 		participationRepo: participationRepo,
 		serviceRepo:       serviceRepo,
+		invitationRepo:    invitationRepo,
 		contextTimeout:    timeout,
 	}
 }
@@ -65,4 +68,21 @@ func (r *roomUsecase) GetJoinedRooms(c context.Context, id int32) (res []domain.
 	}
 
 	return res, nil
+}
+
+func (r *roomUsecase) GenerateInvitationCode(c context.Context, roomId int32) (res string, err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	code := sha1.New()
+	code.Write([]byte(time.Now().String()))
+	code.Write([]byte(fmt.Sprint(roomId)))
+	invitationCode := fmt.Sprintf("%x", code.Sum(nil))[0:7]
+
+	err = r.invitationRepo.GenerateInvitationCode(ctx, roomId, invitationCode)
+	if err != nil {
+		return "", err
+	}
+
+	return invitationCode, nil
 }
