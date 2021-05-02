@@ -24,3 +24,17 @@ func (m *mysqlInvitationRepository) GenerateInvitationCode(ctx context.Context, 
 
 	return nil
 }
+
+func (m *mysqlInvitationRepository) ConsumeInvitationCode(ctx context.Context, code string) (roomId int32, err error) {
+	var invitation *domain.Invitation
+
+	if err := m.Conn.Table("invitation_codes").Where("invitation_code = ?", code).First(&invitation).Error; err != nil {
+		return -1, err
+	}
+
+	if err := m.Conn.Table("invitation_codes").Where("invitation_code = ?", code).Update("is_valid", false).Error; err != nil {
+		return -1, err
+	}
+
+	return invitation.RoomId, nil
+}

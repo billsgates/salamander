@@ -156,6 +156,25 @@ paths:
                 properties:
                   code:
                     type: string
+  /rooms/join:
+    post:
+      tags:
+        - rooms
+      summary: join room by invitation code
+      description: ''
+      operationId: joinRoom
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomJoinRequest'
+      responses:
+        "200":
+          description: OK
   /services:
     get:
       tags:
@@ -315,6 +334,13 @@ components:
         max_count: 5
         service_id: 1
         plan_name: Premium
+    RoomJoinRequest:
+      type: object
+      properties:
+        invitation_code:
+          type: string
+      required:
+      - invitation_code
     Service:
       type: object
       properties:

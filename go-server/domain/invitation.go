@@ -12,4 +12,5 @@ type Invitation struct {
 
 type InvitationRepository interface {
 	GenerateInvitationCode(ctx context.Context, roomId int32, code string) error
+	ConsumeInvitationCode(ctx context.Context, code string) (roomId int32, err error)
 }

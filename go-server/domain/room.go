@@ -26,6 +26,10 @@ type RoomCreateRequest struct {
 	PlanName  string `json:"plan_name" binding:"required"`
 }
 
+type RoomJoinRequest struct {
+	InvitationCode string `json:"invitation_code" binding:"required"`
+}
+
 type RoomInfo struct {
 	Name     string `json:"name"`
 	PlanName string `json:"plan_name"`
@@ -40,4 +44,5 @@ type RoomUsecase interface {
 	Create(ctx context.Context, room *Room) error
 	GetJoinedRooms(ctx context.Context, id int32) ([]RoomInfo, error)
 	GenerateInvitationCode(ctx context.Context, roomId int32) (string, error)
+	JoinRoom(ctx context.Context, code string) error
 }

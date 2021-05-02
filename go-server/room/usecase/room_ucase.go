@@ -86,3 +86,26 @@ func (r *roomUsecase) GenerateInvitationCode(c context.Context, roomId int32) (r
 
 	return invitationCode, nil
 }
+
+func (r *roomUsecase) JoinRoom(c context.Context, code string) (err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	roomId, err := r.invitationRepo.ConsumeInvitationCode(ctx, code)
+	if err != nil {
+		return err
+	}
+
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	err = r.participationRepo.Create(ctx, &domain.Participation{
+		UserId: user.Id,
+		RoomId: roomId,
+		IsHost: false,
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
