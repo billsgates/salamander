@@ -49,6 +49,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginResponse'
+  /user:
+    patch:
+      tags:
+      - user
+      summary: update user info
+      operationId: createRoom
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+        required: true
+      responses:
+        "201":
+          description: successfully update user
+      security:
+      - BearerAuth: []
   /users:
     get:
       tags:
@@ -92,6 +109,20 @@ paths:
       security:
       - BearerAuth: []
   /rooms:
+    get:
+      tags:
+      - rooms
+      summary: get current joined room and status
+      operationId: getMenuInfo
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MenuResponse'
+      security:
+      - BearerAuth: []
     post:
       tags:
       - rooms
@@ -101,11 +132,86 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RoomCreateRequest'
+              $ref: '#/components/schemas/RoomRequest'
         required: true
       responses:
         "201":
           description: successfully created a room
+      security:
+      - BearerAuth: []
+  /rooms/{id}:
+    get:
+      tags:
+      - rooms
+      summary: get room info by room id
+      operationId: getRoom
+      parameters:
+      - name: id
+        in: path
+        description: Room ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomInfoResponse'
+      security:
+      - BearerAuth: []
+    patch:
+      tags:
+      - rooms
+      summary: update room info by room id
+      operationId: updateRoom
+      parameters:
+      - name: id
+        in: path
+        description: Room ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomRequest'
+        required: true
+      responses:
+        "201":
+          description: successfully update room
+      security:
+      - BearerAuth: []
+  /rooms/{id}/start:
+    patch:
+      tags:
+      - rooms
+      summary: set start date of room
+      operationId: updateRoomStartDate
+      parameters:
+      - name: id
+        in: path
+        description: Room ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_1'
+        required: true
+      responses:
+        "201":
+          description: successfully set room start Date
       security:
       - BearerAuth: []
   /services:
@@ -146,6 +252,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Service'
+  /participant:
+    delete:
+      tags:
+      - participant
+      summary: delete participant from rooms
+      operationId: deleteParticipant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_2'
+        required: true
+      responses:
+        "204":
+          description: successfully delete participant from rooms
+      security:
+      - BearerAuth: []
+  /participant/status:
+    patch:
+      tags:
+      - participant
+      summary: change parcipant payment status
+      operationId: updateParticipantStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_3'
+        required: true
+      responses:
+        "201":
+          description: successfully update participant payment status
+      security:
+      - BearerAuth: []
 components:
   schemas:
     User:
@@ -255,9 +395,11 @@ components:
         plan_name:
           type: string
           example: Premium
-    RoomCreateRequest:
+    RoomRequest:
       required:
+      - is_public
       - max_count
+      - payment_period
       - plan_name
       - service_id
       type: object
@@ -270,10 +412,19 @@ components:
           type: integer
         plan_name:
           type: string
+        payment_period:
+          type: integer
+          format: month
+        is_public:
+          type: boolean
+        announcement:
+          type: string
       example:
         max_count: 5
         service_id: 1
         plan_name: Premium
+        payment_period: 12
+        is_public: true
     Service:
       type: object
       properties:
@@ -311,6 +462,197 @@ components:
         max_count: 1
         service_id: 1
         plan_name: true
+    Member:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        user_name:
+          type: string
+        joined_at:
+          type: string
+          format: date-time
+        end_at:
+          type: string
+          format: date-time
+        payment_status:
+          $ref: '#/components/schemas/PaymentStatus'
+      example:
+        joined_at: 2000-01-23T04:56:07.000+00:00
+        end_at: 2000-01-23T04:56:07.000+00:00
+        user_id: 0
+        user_name: user_name
+        payment_status: unpaid
+    RoomItem:
+      type: object
+      properties:
+        room_id:
+          type: integer
+          example: 1
+        service_name:
+          type: string
+          example: Netflix
+        plan_name:
+          type: string
+          example: Premium
+        role:
+          type: string
+          example: member
+        payment_fee:
+          type: integer
+          example: 720
+        payment_status:
+          $ref: '#/components/schemas/PaymentStatus'
+        room_status:
+          $ref: '#/components/schemas/RoomStatus'
+      example:
+        room_id: 1
+        role: member
+        service_name: Netflix
+        payment_status: unpaid
+        payment_fee: 720
+        plan_name: Premium
+        room_status: created
+    MenuResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/RoomItem'
+      x-schema-name: MenuResponse
+    RoomInfoResponse:
+      type: object
+      properties:
+        room_id:
+          type: integer
+          example: 1
+        is_public:
+          type: boolean
+          example: false
+        announcement:
+          type: string
+          example: Hi! This is the announcement from administrator
+        max_count:
+          type: integer
+          example: 4
+        payment_period:
+          type: integer
+          format: month
+          example: 6
+        room_status:
+          $ref: '#/components/schemas/RoomStatus'
+        starting_time:
+          type: string
+          format: date-time
+        ending_time:
+          type: string
+          format: date-time
+        service_name:
+          type: string
+          example: Netflix
+        plan_name:
+          type: string
+          example: Premium
+        role:
+          type: string
+          example: member
+        payment_fee:
+          type: integer
+          example: 720
+        admin_name:
+          type: string
+          example: Kevin
+        admin_rating:
+          type: number
+          example: 4.5
+        admin_email:
+          type: string
+          example: Kevin@example.com
+        admin_phone:
+          type: string
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/Member'
+      example:
+        room_id: 1
+        role: member
+        ending_time: 2000-01-23T04:56:07.000+00:00
+        admin_phone: admin_phone
+        service_name: Netflix
+        plan_name: Premium
+        admin_rating: 4.5
+        admin_email: Kevin@example.com
+        room_status: created
+        max_count: 4
+        members:
+        - joined_at: 2000-01-23T04:56:07.000+00:00
+          end_at: 2000-01-23T04:56:07.000+00:00
+          user_id: 0
+          user_name: user_name
+          payment_status: unpaid
+        - joined_at: 2000-01-23T04:56:07.000+00:00
+          end_at: 2000-01-23T04:56:07.000+00:00
+          user_id: 0
+          user_name: user_name
+          payment_status: unpaid
+        is_public: false
+        payment_period: 6
+        payment_fee: 720
+        starting_time: 2000-01-23T04:56:07.000+00:00
+        admin_name: Kevin
+        announcement: Hi! This is the announcement from administrator
+    PaymentStatus:
+      type: string
+      enum:
+      - unpaid
+      - pending
+      - confirmed
+    RoomStatus:
+      type: string
+      enum:
+      - created
+      - start
+      - end
+    body:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Carolyn
+        email:
+          type: string
+          example: Carolyn@example.com
+        image_url:
+          type: string
+          format: url
+    body_1:
+      type: object
+      properties:
+        start_date:
+          type: string
+          format: date-time
+        is_add_canlendar:
+          type: boolean
+          example: true
+    body_2:
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 1
+        roomId:
+          type: integer
+          example: 2
+    body_3:
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 1
+        roomId:
+          type: integer
+          example: 2
+        status:
+          $ref: '#/components/schemas/PaymentStatus'
   securitySchemes:
     BearerAuth:
       type: http
