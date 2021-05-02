@@ -326,8 +326,7 @@ paths:
                     type: integer
                     example: 2
                   status:
-                    type: integer
-                    example: 1
+                    $ref: '#/components/schemas/PaymentStatus'
       responses:
         "201":
           description: successfully update participant payment status
@@ -510,8 +509,8 @@ components:
         end_at:
           type: string
           format: date-time
-        payment_state:
-          type: integer
+        payment_status:
+          $ref: '#/components/schemas/PaymentStatus'
     RoomItem:
       type: object
       properties:
@@ -531,8 +530,9 @@ components:
           type: integer
           example: 720
         payment_status:
-          type: integer
-          example: 0
+          $ref: '#/components/schemas/PaymentStatus'
+        room_status:
+          $ref: '#/components/schemas/RoomStatus'
     MenuResponse:
       type: array
       items:
@@ -557,8 +557,7 @@ components:
           format: month
           example: 6
         room_status:
-          type: integer
-          example: 1
+          $ref: '#/components/schemas/RoomStatus'
         starting_time:
           type: string
           format: date-time
@@ -594,3 +593,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Member'
+    PaymentStatus:
+      type: string
+      enum:
+        - unpaid
+        - pending
+        - confirmed
+    RoomStatus:
+      type: string
+      enum:
+        - created
+        - start
+        - end
