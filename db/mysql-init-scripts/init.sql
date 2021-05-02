@@ -18,6 +18,7 @@ CREATE TABLE users (
  id INT NOT NULL AUTO_INCREMENT,
  name VARCHAR(255) NOT NULL,
  email VARCHAR(200) NOT NULL,
+ image_url VARCHAR(1000),
  password_digest VARCHAR(1000) NOT NULL,
  rating INT DEFAULT 0 NOT NULL,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
@@ -49,8 +50,10 @@ CREATE TABLE plans (
 
 CREATE TABLE rooms (
  room_id INT NOT NULL AUTO_INCREMENT,
- account_name VARCHAR(255),
- account_password VARCHAR(1000),
+ announcement VARCHAR(1000),
+ is_public BOOLEAN NOT NULL,
+ payment_period INT NOT NULL,
+ status_type VARCHAR(255) NOT NULL,
  starting_time TIMESTAMP,
  ending_time TIMESTAMP,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
@@ -69,6 +72,7 @@ CREATE TABLE rooms (
 CREATE TABLE participation (
  user_id INT,
  room_id INT,
+ status_type VARCHAR(255) NOT NULL,
  joined_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
  left_at TIMESTAMP,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
