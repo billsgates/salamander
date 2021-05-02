@@ -74,8 +74,10 @@ func (u *RoomHandler) GenerateInvitationCode(c *gin.Context) {
 		return
 	}
 
-	code, err := u.RoomUsecase.GenerateInvitationCode(c.Request.Context(), int32(roomID))
-	if err != nil {
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	code, err := u.RoomUsecase.GenerateInvitationCode(c.Request.Context(), int32(roomID), user.Id)
+	if code == "" || err != nil {
 		logrus.Error(err)
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
