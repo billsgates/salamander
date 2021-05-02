@@ -28,7 +28,7 @@ func (m *mysqlInvitationRepository) GenerateInvitationCode(ctx context.Context, 
 func (m *mysqlInvitationRepository) ConsumeInvitationCode(ctx context.Context, code string) (roomId int32, err error) {
 	var invitation *domain.Invitation
 
-	if err := m.Conn.Table("invitation_codes").Where("invitation_code = ?", code).First(&invitation).Error; err != nil {
+	if err := m.Conn.Table("invitation_codes").Where("invitation_code = ? AND is_valid = true", code).First(&invitation).Error; err != nil {
 		return -1, err
 	}
 
@@ -37,4 +37,12 @@ func (m *mysqlInvitationRepository) ConsumeInvitationCode(ctx context.Context, c
 	}
 
 	return invitation.RoomId, nil
+}
+
+func (m *mysqlInvitationRepository) ResumeInvitationCode(ctx context.Context, code string) (err error) {
+	if err := m.Conn.Table("invitation_codes").Where("invitation_code = ?", code).Update("is_valid", true).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

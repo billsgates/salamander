@@ -74,6 +74,12 @@ func (r *roomUsecase) GenerateInvitationCode(c context.Context, roomId int32) (r
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+	_, err = r.participationRepo.IsAdmin(ctx, roomId, user.Id)
+	if err != nil {
+		return "", err
+	}
+
 	code := sha1.New()
 	code.Write([]byte(time.Now().String()))
 	code.Write([]byte(fmt.Sprint(roomId)))
@@ -104,6 +110,7 @@ func (r *roomUsecase) JoinRoom(c context.Context, code string) (err error) {
 		IsHost: false,
 	})
 	if err != nil {
+		r.invitationRepo.ResumeInvitationCode(ctx, code)
 		return err
 	}
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"go-server/domain"
 
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -30,4 +31,13 @@ func (m *mysqlParticipationRepository) GetJoinedRooms(ctx context.Context, id in
 	}
 
 	return rooms, nil
+}
+
+func (m *mysqlParticipationRepository) IsAdmin(ctx context.Context, roomId int32, userId int32) (res bool, err error) {
+	var room domain.RoomInfo
+	if err := m.Conn.Table("participation").Where("room_id = ? AND user_id = ?", roomId, userId).First(&room).Error; err != nil {
+		return false, err
+	}
+	logrus.Info(room)
+	return room.IsHost, nil
 }
