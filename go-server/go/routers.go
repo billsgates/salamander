@@ -69,10 +69,52 @@ var routes = Routes{
 	},
 
 	Route{
+		"DeleteParticipant",
+		strings.ToUpper("Delete"),
+		"/api/v1/participant",
+		DeleteParticipant,
+	},
+
+	Route{
+		"UpdateParticipantStatus",
+		strings.ToUpper("Patch"),
+		"/api/v1/participant/status",
+		UpdateParticipantStatus,
+	},
+
+	Route{
 		"CreateRoom",
 		strings.ToUpper("Post"),
 		"/api/v1/rooms",
 		CreateRoom,
+	},
+
+	Route{
+		"GetMenuInfo",
+		strings.ToUpper("Get"),
+		"/api/v1/rooms",
+		GetMenuInfo,
+	},
+
+	Route{
+		"GetRoom",
+		strings.ToUpper("Get"),
+		"/api/v1/rooms/{id}",
+		GetRoom,
+	},
+
+	Route{
+		"UpdateRoom",
+		strings.ToUpper("Patch"),
+		"/api/v1/rooms/{id}",
+		UpdateRoom,
+	},
+
+	Route{
+		"UpdateRoomStartDate",
+		strings.ToUpper("Patch"),
+		"/api/v1/rooms/{id}/start",
+		UpdateRoomStartDate,
 	},
 
 	Route{
@@ -87,6 +129,13 @@ var routes = Routes{
 		strings.ToUpper("Get"),
 		"/api/v1/services/{id}",
 		GetServicesPlan,
+	},
+
+	Route{
+		"CreateRoom",
+		strings.ToUpper("Patch"),
+		"/api/v1/user",
+		CreateRoom,
 	},
 
 	Route{
