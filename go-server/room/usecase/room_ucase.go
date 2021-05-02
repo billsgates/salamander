@@ -28,28 +28,38 @@ func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.Par
 	}
 }
 
-func (r *roomUsecase) Create(c context.Context, room *domain.Room) (err error) {
+func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest) (err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 
-	plan, err := r.serviceRepo.GetPlanByKey(ctx, room.PlanName, fmt.Sprintf("%d", room.ServiceId))
+	plan, err := r.serviceRepo.GetPlanByKey(ctx, roomRequest.PlanName, fmt.Sprintf("%d", roomRequest.ServiceId))
 	if err != nil {
 		return err
 	}
 
-	if plan.MaxCount < room.MaxCount {
+	if plan.MaxCount < roomRequest.MaxCount {
 		return errors.New("max count exceed")
 	}
 
-	err = r.roomRepo.Create(ctx, room)
+	room := &domain.Room{
+		ServiceId:     roomRequest.ServiceId,
+		PlanName:      roomRequest.PlanName,
+		MaxCount:      roomRequest.MaxCount,
+		PaymentPeriod: roomRequest.PaymentPeriod,
+		AdminId:       roomRequest.AdminId,
+		IsPublic:      roomRequest.IsPublic,
+	}
+
+	roomId, err := r.roomRepo.Create(ctx, room)
 	if err != nil {
 		return err
 	}
 
 	err = r.participationRepo.Create(ctx, &domain.Participation{
-		UserId: room.AdminId,
-		RoomId: room.Id,
-		IsHost: true,
+		UserId:        room.AdminId,
+		RoomId:        roomId,
+		PaymentStatus: "confirmed",
+		IsHost:        true,
 	})
 	if err != nil {
 		return err
@@ -104,9 +114,10 @@ func (r *roomUsecase) JoinRoom(c context.Context, code string) (err error) {
 	user := c.Value(domain.CtxUserKey).(*domain.User)
 
 	err = r.participationRepo.Create(ctx, &domain.Participation{
-		UserId: user.Id,
-		RoomId: roomId,
-		IsHost: false,
+		UserId:        user.Id,
+		RoomId:        roomId,
+		PaymentStatus: "unpaid",
+		IsHost:        false,
 	})
 	if err != nil {
 		r.invitationRepo.ResumeInvitationCode(ctx, code)

@@ -28,7 +28,7 @@ func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsec
 }
 
 func (u *RoomHandler) CreateRoom(c *gin.Context) {
-	var body domain.RoomCreateRequest
+	var body domain.RoomRequest
 	if err := c.BindJSON(&body); err != nil {
 		logrus.Error(err)
 		c.AbortWithStatus(http.StatusBadRequest)
@@ -37,11 +37,13 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 
 	user := c.Value(domain.CtxUserKey).(*domain.User)
 
-	err := u.RoomUsecase.Create(c.Request.Context(), &domain.Room{
-		MaxCount:  body.MaxCount,
-		AdminId:   user.Id,
-		ServiceId: body.ServiceId,
-		PlanName:  body.PlanName,
+	err := u.RoomUsecase.Create(c.Request.Context(), &domain.RoomRequest{
+		MaxCount:      body.MaxCount,
+		AdminId:       user.Id,
+		ServiceId:     body.ServiceId,
+		PlanName:      body.PlanName,
+		PaymentPeriod: body.PaymentPeriod,
+		IsPublic:      body.IsPublic,
 	})
 
 	if err != nil {

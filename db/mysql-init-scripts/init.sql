@@ -53,7 +53,7 @@ CREATE TABLE rooms (
  announcement VARCHAR(1000),
  is_public BOOLEAN NOT NULL,
  payment_period INT NOT NULL,
- status_type VARCHAR(255) NOT NULL,
+ room_status VARCHAR(255) NOT NULL DEFAULT 'created',
  starting_time TIMESTAMP,
  ending_time TIMESTAMP,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
@@ -72,7 +72,7 @@ CREATE TABLE rooms (
 CREATE TABLE participation (
  user_id INT,
  room_id INT,
- status_type VARCHAR(255) NOT NULL,
+ payment_status VARCHAR(255) NOT NULL DEFAULT 'unpaid',
  joined_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
  left_at TIMESTAMP,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),

@@ -16,7 +16,7 @@ func NewmysqlParticipationRepository(Conn *gorm.DB) domain.ParticipationReposito
 }
 
 func (m *mysqlParticipationRepository) Create(ctx context.Context, participation *domain.Participation) (err error) {
-	if err := m.Conn.Table("participation").Select("user_id", "room_id", "is_host").Create(&participation).Error; err != nil {
+	if err := m.Conn.Table("participation").Select("user_id", "room_id", "payment_status", "is_host").Create(&participation).Error; err != nil {
 		return err
 	}
 

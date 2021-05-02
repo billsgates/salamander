@@ -15,10 +15,10 @@ func NewmysqlRoomRepository(Conn *gorm.DB) domain.RoomRepository {
 	return &mysqlRoomRepository{Conn}
 }
 
-func (m *mysqlRoomRepository) Create(ctx context.Context, room *domain.Room) (err error) {
-	if err := m.Conn.Select("max_count", "admin_id", "service_id", "plan_name").Create(&room).Error; err != nil {
-		return err
+func (m *mysqlRoomRepository) Create(ctx context.Context, room *domain.Room) (roomId int32, err error) {
+	if err := m.Conn.Select("max_count", "admin_id", "service_id", "plan_name", "payment_period", "is_public").Create(&room).Error; err != nil {
+		return -1, err
 	}
 
-	return nil
+	return room.Id, nil
 }

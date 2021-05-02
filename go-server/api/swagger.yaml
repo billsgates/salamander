@@ -411,10 +411,12 @@ components:
         id:
           type: integer
           example: 1
-        account_name:
+        announcement:
           type: string
-        account_password:
-          type: string
+        is_public:
+          type: boolean
+        room_status:
+          $ref: '#/components/schemas/RoomStatus'
         starting_time:
           type: string
           format: date-time
