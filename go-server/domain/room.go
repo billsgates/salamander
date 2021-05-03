@@ -35,7 +35,7 @@ type RoomRequest struct {
 	ServiceId     int32  `json:"service_id" binding:"required"`
 	PlanName      string `json:"plan_name" binding:"required"`
 	PaymentPeriod int32  `json:"payment_period" binding:"required"`
-	IsPublic      bool   `json:"is_public" binding:"required"`
+	IsPublic      *bool  `json:"is_public" binding:"required"`
 	Announcement  string `json:"announcement,omitempty"`
 }
 

@@ -47,7 +47,7 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 		MaxCount:      roomRequest.MaxCount,
 		PaymentPeriod: roomRequest.PaymentPeriod,
 		AdminId:       roomRequest.AdminId,
-		IsPublic:      roomRequest.IsPublic,
+		IsPublic:      *roomRequest.IsPublic,
 	}
 
 	roomId, err := r.roomRepo.Create(ctx, room)
