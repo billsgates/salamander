@@ -39,13 +39,6 @@ type RoomRequest struct {
 	Announcement  string `json:"announcement,omitempty"`
 }
 
-// type RoomCreateRequest struct {
-// 	MaxCount  int32  `json:"max_count" binding:"required"`
-// 	AdminId   int32  `json:"admin_id,omitempty"`
-// 	ServiceId int32  `json:"service_id" binding:"required"`
-// 	PlanName  string `json:"plan_name" binding:"required"`
-// }
-
 type RoomJoinRequest struct {
 	InvitationCode string `json:"invitation_code" binding:"required"`
 }
@@ -56,13 +49,22 @@ type RoomInfo struct {
 	IsHost   bool   `json:"is_host"`
 }
 
+type RoomItem struct {
+	RoomId        int32          `json:"room_id"`
+	Name          string         `json:"name"`
+	PlanName      string         `json:"plan_name"`
+	IsHost        bool           `json:"is_host"`
+	PaymentStatus *PaymentStatus `json:"payment_status"`
+	RoomStatus    *RoomStatus    `json:"room_status"`
+}
+
 type RoomRepository interface {
 	Create(ctx context.Context, room *Room) (roomId int32, err error)
 }
 
 type RoomUsecase interface {
 	Create(ctx context.Context, room *RoomRequest) error
-	GetJoinedRooms(ctx context.Context, id int32) ([]RoomInfo, error)
+	GetJoinedRooms(ctx context.Context, userId int32) ([]RoomItem, error)
 	GenerateInvitationCode(ctx context.Context, roomId int32, userId int32) (string, error)
 	JoinRoom(ctx context.Context, code string) error
 }

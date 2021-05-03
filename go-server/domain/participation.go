@@ -26,6 +26,6 @@ type Participation struct {
 
 type ParticipationRepository interface {
 	Create(ctx context.Context, participation *Participation) error
-	GetJoinedRooms(ctx context.Context, userId int32) ([]RoomInfo, error)
+	GetJoinedRooms(ctx context.Context, userId int32) ([]RoomItem, error)
 	IsAdmin(ctx context.Context, roomId int32, userId int32) (bool, error)
 }
