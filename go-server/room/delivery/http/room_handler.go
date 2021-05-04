@@ -50,7 +50,7 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 	if err != nil {
 		logrus.Error(err)
 		if err == room.ErrMaxCountExceed {
-			c.AbortWithError(http.StatusBadRequest, err)
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 			return
 		}
 		c.AbortWithStatus(http.StatusBadRequest)
@@ -87,14 +87,14 @@ func (u *RoomHandler) GenerateInvitationCode(c *gin.Context) {
 	if code == "" || err != nil {
 		logrus.Error(err)
 		if err == room.ErrNotHost {
-			c.AbortWithError(http.StatusBadRequest, err)
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 			return
 		}
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": code})
+	c.JSON(http.StatusOK, gin.H{"code": code})
 }
 
 func (u *RoomHandler) JoinRoom(c *gin.Context) {
@@ -109,11 +109,11 @@ func (u *RoomHandler) JoinRoom(c *gin.Context) {
 	if err != nil {
 		logrus.Error(err)
 		if err == room.ErrInvalidInvitationCode {
-			c.AbortWithError(http.StatusBadRequest, err)
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 			return
 		}
 		if err == room.ErrAlreadyJoined {
-			c.AbortWithError(http.StatusBadRequest, err)
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 			return
 		}
 		c.AbortWithStatus(http.StatusBadRequest)
