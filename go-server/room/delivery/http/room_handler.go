@@ -2,6 +2,7 @@ package http
 
 import (
 	"go-server/domain"
+	"go-server/room"
 	"net/http"
 	"strconv"
 
@@ -48,6 +49,10 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 
 	if err != nil {
 		logrus.Error(err)
+		if err == room.ErrMaxCountExceed {
+			c.AbortWithError(http.StatusBadRequest, err)
+			return
+		}
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
@@ -81,6 +86,10 @@ func (u *RoomHandler) GenerateInvitationCode(c *gin.Context) {
 	code, err := u.RoomUsecase.GenerateInvitationCode(c.Request.Context(), int32(roomID), user.Id)
 	if code == "" || err != nil {
 		logrus.Error(err)
+		if err == room.ErrNotHost {
+			c.AbortWithError(http.StatusBadRequest, err)
+			return
+		}
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
@@ -99,6 +108,14 @@ func (u *RoomHandler) JoinRoom(c *gin.Context) {
 	err := u.RoomUsecase.JoinRoom(c, body.InvitationCode)
 	if err != nil {
 		logrus.Error(err)
+		if err == room.ErrInvalidInvitationCode {
+			c.AbortWithError(http.StatusBadRequest, err)
+			return
+		}
+		if err == room.ErrAlreadyJoined {
+			c.AbortWithError(http.StatusBadRequest, err)
+			return
+		}
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}

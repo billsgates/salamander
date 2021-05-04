@@ -3,11 +3,11 @@ package usecase
 import (
 	"context"
 	"crypto/sha1"
-	"errors"
 	"fmt"
 	"time"
 
 	"go-server/domain"
+	"go-server/room"
 )
 
 type roomUsecase struct {
@@ -38,7 +38,7 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 	}
 
 	if plan.MaxCount < roomRequest.MaxCount {
-		return errors.New("max count exceed")
+		return room.ErrMaxCountExceed
 	}
 
 	room := &domain.Room{
@@ -86,7 +86,7 @@ func (r *roomUsecase) GenerateInvitationCode(c context.Context, roomId int32, us
 
 	isAdmin, err := r.participationRepo.IsAdmin(ctx, roomId, userId)
 	if !isAdmin || err != nil {
-		return "", err
+		return "", room.ErrNotHost
 	}
 
 	code := sha1.New()
@@ -108,7 +108,7 @@ func (r *roomUsecase) JoinRoom(c context.Context, code string) (err error) {
 
 	roomId, err := r.invitationRepo.ConsumeInvitationCode(ctx, code)
 	if err != nil {
-		return err
+		return room.ErrInvalidInvitationCode
 	}
 
 	user := c.Value(domain.CtxUserKey).(*domain.User)
@@ -121,7 +121,7 @@ func (r *roomUsecase) JoinRoom(c context.Context, code string) (err error) {
 	})
 	if err != nil {
 		r.invitationRepo.ResumeInvitationCode(ctx, code)
-		return err
+		return room.ErrAlreadyJoined
 	}
 
 	return nil
