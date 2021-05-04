@@ -87,7 +87,7 @@ func (u *RoomHandler) GenerateInvitationCode(c *gin.Context) {
 	if code == "" || err != nil {
 		logrus.Error(err)
 		if err == room.ErrNotHost {
-			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
 			return
 		}
 		c.AbortWithStatus(http.StatusBadRequest)
