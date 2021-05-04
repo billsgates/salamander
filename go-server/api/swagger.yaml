@@ -54,7 +54,7 @@ paths:
       tags:
       - user
       summary: update user info
-      operationId: createRoom
+      operationId: updateUser
       requestBody:
         content:
           application/json:
@@ -112,7 +112,7 @@ paths:
     get:
       tags:
       - rooms
-      summary: get current joined room and status
+      summary: get current joined rooms and status
       operationId: getMenuInfo
       responses:
         "200":
@@ -120,7 +120,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MenuResponse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/MenuResponse'
+                x-content-type: application/json
       security:
       - BearerAuth: []
     post:
@@ -212,6 +215,47 @@ paths:
       responses:
         "201":
           description: successfully set room start Date
+      security:
+      - BearerAuth: []
+  /rooms/{id}/invitation:
+    post:
+      tags:
+      - rooms
+      summary: generate invitation code
+      operationId: postInvitationCode
+      parameters:
+      - name: id
+        in: path
+        description: Room ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      security:
+      - BearerAuth: []
+  /rooms/join:
+    post:
+      tags:
+      - rooms
+      summary: join room by invitation code
+      operationId: joinRoom
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomJoinRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
       security:
       - BearerAuth: []
   /services:
@@ -336,9 +380,9 @@ components:
         password:
           type: string
       example:
-        name: kevin yu
-        email: kevin@ntu.im
-        password: passworda
+        name: test
+        email: test@ntu.im
+        password: test
     LoginRequest:
       required:
       - email
@@ -367,10 +411,12 @@ components:
         id:
           type: integer
           example: 1
-        account_name:
+        announcement:
           type: string
-        account_password:
-          type: string
+        is_public:
+          type: boolean
+        room_status:
+          $ref: '#/components/schemas/RoomStatus'
         starting_time:
           type: string
           format: date-time
@@ -425,6 +471,13 @@ components:
         plan_name: Premium
         payment_period: 12
         is_public: true
+    RoomJoinRequest:
+      required:
+      - invitation_code
+      type: object
+      properties:
+        invitation_code:
+          type: string
     Service:
       type: object
       properties:
@@ -445,7 +498,7 @@ components:
         name: Netflix
         created_at: 2000-01-23T04:56:07.000+00:00
         id: 1
-    ParticipationCreateRequest:
+    Participation:
       required:
       - is_host
       - room_id
@@ -633,6 +686,13 @@ components:
         is_add_canlendar:
           type: boolean
           example: true
+    inline_response_200:
+      type: object
+      properties:
+        code:
+          type: string
+      example:
+        code: code
     body_2:
       type: object
       properties:

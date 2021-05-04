@@ -59,7 +59,7 @@ paths:
         - user
       summary: update user info
       description: ''
-      operationId: createRoom
+      operationId: updateUser
       security:
         - BearerAuth: []
       requestBody:
@@ -145,7 +145,7 @@ paths:
     get:
       tags:
         - rooms
-      summary: get current joined room and status
+      summary: get current joined rooms and status
       description: ''
       operationId: getMenuInfo
       security:
@@ -156,7 +156,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MenuResponse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/MenuResponse'
   /rooms/{id}:
     get:
       tags:
@@ -239,6 +241,50 @@ paths:
       responses:
         "201":
           description: successfully set room start Date
+  /rooms/{id}/invitation:
+    post:
+      tags:
+        - rooms
+      summary: generate invitation code
+      description: ''
+      operationId: postInvitationCode
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: Room ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+  /rooms/join:
+    post:
+      tags:
+        - rooms
+      summary: join room by invitation code
+      description: ''
+      operationId: joinRoom
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomJoinRequest'
+      responses:
+        "200":
+          description: OK
   /services:
     get:
       tags:
@@ -377,9 +423,9 @@ components:
       - email
       - password
       example:
-        name: kevin yu
-        email: kevin@ntu.im
-        password: passworda
+        name: test
+        email: test@ntu.im
+        password: test
     LoginRequest:
       type: object
       properties:
@@ -406,10 +452,12 @@ components:
         id:
           type: integer
           example: 1
-        account_name:
+        announcement:
           type: string
-        account_password:
-          type: string
+        is_public:
+          type: boolean
+        room_status:
+          $ref: '#/components/schemas/RoomStatus'
         starting_time:
           type: string
           format: date-time
@@ -464,6 +512,13 @@ components:
         plan_name: Premium
         payment_period: 12
         is_public: true
+    RoomJoinRequest:
+      type: object
+      properties:
+        invitation_code:
+          type: string
+      required:
+      - invitation_code
     Service:
       type: object
       properties:
@@ -479,7 +534,7 @@ components:
         updated_at:
           type: string
           format: date-time
-    ParticipationCreateRequest:
+    Participation:
       type: object
       properties:
         user_id:

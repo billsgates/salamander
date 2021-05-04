@@ -8,11 +8,11 @@
  */
 package swagger
 
-import (
-	"net/http"
-)
+type Participation struct {
 
-func UpdateUser(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+	UserId int32 `json:"user_id"`
+
+	RoomId int32 `json:"room_id"`
+
+	IsHost bool `json:"is_host"`
 }

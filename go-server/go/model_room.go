@@ -15,9 +15,11 @@ type Room struct {
 
 	Id int32 `json:"id,omitempty"`
 
-	AccountName string `json:"account_name,omitempty"`
+	Announcement string `json:"announcement,omitempty"`
 
-	AccountPassword string `json:"account_password,omitempty"`
+	IsPublic bool `json:"is_public,omitempty"`
+
+	RoomStatus *RoomStatus `json:"room_status,omitempty"`
 
 	StartingTime time.Time `json:"starting_time,omitempty"`
 

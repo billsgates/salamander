@@ -12,6 +12,7 @@ import (
 	"fmt"
 	_authHandlerHttpDelivery "go-server/auth/delivery/http"
 	_authUsecase "go-server/auth/usecase"
+	_invitationRepo "go-server/invitation/repository/mysql"
 	_participationRepo "go-server/participation/repository/mysql"
 	_roomHandlerHttpDelivery "go-server/room/delivery/http"
 	_roomRepo "go-server/room/repository/mysql"
@@ -93,18 +94,21 @@ func main() {
 
 	userRepo := _userRepo.NewmysqlUserRepository(db)
 	roomRepo := _roomRepo.NewmysqlRoomRepository(db)
+	serviceRepo := _serviceRepo.NewmysqlServiceRepository(db)
 	participationRepo := _participationRepo.NewmysqlParticipationRepository(db)
+	invitationRepo := _invitationRepo.NewmysqlInvitationRepository(db)
+
 	userUsecase := _userUsecase.NewUserUsecase(userRepo, timeoutContext)
-	roomUsecase := _roomUsecase.NewRoomUsecase(roomRepo, participationRepo, timeoutContext)
+	roomUsecase := _roomUsecase.NewRoomUsecase(roomRepo, participationRepo, serviceRepo, invitationRepo, timeoutContext)
+	serviceUsecase := _serviceUsecase.NewServiceUsecase(serviceRepo, timeoutContext)
 	authUsecase := _authUsecase.NewAuthUseCase(
 		userRepo,
 		viper.GetString("auth.hash_salt"),
 		[]byte(viper.GetString("auth.signing_key")),
 		viper.GetDuration("auth.token_ttl"),
 	)
+
 	authMiddleware := _authHandlerHttpDelivery.NewAuthMiddleware(authUsecase)
-	serviceRepo := _serviceRepo.NewmysqlServiceRepository(db)
-	serviceUsecase := _serviceUsecase.NewServiceUsecase(serviceRepo, timeoutContext)
 
 	v1Router := r.Group("/api/v1/")
 	{

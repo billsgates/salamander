@@ -104,6 +104,20 @@ var routes = Routes{
 	},
 
 	Route{
+		"JoinRoom",
+		strings.ToUpper("Post"),
+		"/api/v1/rooms/join",
+		JoinRoom,
+	},
+
+	Route{
+		"PostInvitationCode",
+		strings.ToUpper("Post"),
+		"/api/v1/rooms/{id}/invitation",
+		PostInvitationCode,
+	},
+
+	Route{
 		"UpdateRoom",
 		strings.ToUpper("Patch"),
 		"/api/v1/rooms/{id}",
@@ -132,10 +146,10 @@ var routes = Routes{
 	},
 
 	Route{
-		"CreateRoom",
+		"UpdateUser",
 		strings.ToUpper("Patch"),
 		"/api/v1/user",
-		CreateRoom,
+		UpdateUser,
 	},
 
 	Route{
