@@ -43,12 +43,6 @@ type RoomJoinRequest struct {
 	InvitationCode string `json:"invitation_code" binding:"required"`
 }
 
-type RoomInfo struct {
-	Name     string `json:"name"`
-	PlanName string `json:"plan_name"`
-	IsHost   bool   `json:"is_host"`
-}
-
 type RoomItem struct {
 	RoomId        int32          `json:"room_id"`
 	Name          string         `json:"name"`
