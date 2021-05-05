@@ -31,3 +31,24 @@ There should be four containers running in the background (`backend`, `mysql`, `
 ```
 $ make stop
 ```
+
+### Current APIs
+
+|             | Endpoint                    | Method | Status      | Description                               |
+|-------------|-----------------------------|--------|-------------|-------------------------------------------|
+| auth        | /auth/signup                | POST   | Complete    | User signup                               |
+|             | /auth/signin                | POST   | Complete    | User login                                |
+| user        | /user                       | PATCH  | To Do       | Update user info                          |
+| users       | /users                      | GET    | Complete    | Get all users                             |
+|             | /users/{user_id}            | GET    | Complete    | Get user detail by user_id                |
+| rooms       | /rooms                      | POST   | Complete    | Create a room                             |
+|             | /rooms                      | GET    | In Progress | Get all joined rooms                      |
+|             | /rooms/{room_id}            | GET    | To Do       | Get room detail by room_id                |
+|             | /rooms/{room_id}            | PATCH  | To Do       | Update room by room_id                    |
+|             | /rooms/{room_id}/start      | PATCH  | To Do       | Start the room                            |
+|             | /rooms/{room_id}/invitation | POST   | Complete    | Create an invitation code in room room_id |
+|             | /rooms/join                 | POST   | Complete    | Join room by invitation code              |
+| services    | /services                   | GET    | Complete    | Get all services                          |
+|             | /services/{service_id}      | GET    | Complete    | Get service detail by service_id          |
+| participant | /participant                | DELETE | Complete    | Delete participant from room              |
+|             | /participant/status         | PATCH  | To Do       | Change participant payment status         |
