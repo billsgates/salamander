@@ -64,7 +64,7 @@ type RoomRepository interface {
 
 type RoomUsecase interface {
 	Create(ctx context.Context, room *RoomRequest) error
-	GetJoinedRooms(ctx context.Context, userId int32) ([]RoomItem, error)
+	GetJoinedRooms(ctx context.Context) ([]RoomItem, error)
 	GenerateInvitationCode(ctx context.Context, roomId int32, userId int32) (string, error)
 	JoinRoom(ctx context.Context, code string) error
 }

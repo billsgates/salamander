@@ -70,11 +70,13 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 	return nil
 }
 
-func (r *roomUsecase) GetJoinedRooms(c context.Context, id int32) (res []domain.RoomItem, err error) {
+func (r *roomUsecase) GetJoinedRooms(c context.Context) (res []domain.RoomItem, err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 
-	res, err = r.participationRepo.GetJoinedRooms(ctx, id)
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	res, err = r.participationRepo.GetJoinedRooms(ctx, user.Id)
 	if err != nil {
 		return nil, err
 	}
