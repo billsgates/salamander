@@ -2,6 +2,7 @@ package http
 
 import (
 	"go-server/domain"
+	"go-server/room"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -34,6 +35,10 @@ func (p *ParticipationHandler) LeaveRoom(c *gin.Context) {
 	err := p.RoomUsecase.LeaveRoom(c, body.RoomId, body.UserId)
 	if err != nil {
 		logrus.Error(err)
+		if err == room.ErrNotHost {
+			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
+			return
+		}
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}

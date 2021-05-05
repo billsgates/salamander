@@ -131,6 +131,13 @@ func (r *roomUsecase) LeaveRoom(c context.Context, roomId int32, userId int32) (
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	isAdmin, err := r.participationRepo.IsAdmin(ctx, roomId, user.Id)
+	if !isAdmin || err != nil {
+		return room.ErrNotHost
+	}
+
 	err = r.participationRepo.LeaveRoom(ctx, roomId, userId)
 	if err != nil {
 		return err
