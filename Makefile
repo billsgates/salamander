@@ -13,3 +13,6 @@ swagger:
     -i /local/swagger.yaml \
     -l go-server \
     -o /local/go-server
+
+mockery:
+	cd go-server/domain && mockery --all --keeptree
