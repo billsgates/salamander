@@ -28,20 +28,20 @@ func (_m *RoomUsecase) Create(ctx context.Context, room *domain.RoomRequest) err
 	return r0
 }
 
-// GenerateInvitationCode provides a mock function with given fields: ctx, roomId, userId
-func (_m *RoomUsecase) GenerateInvitationCode(ctx context.Context, roomId int32, userId int32) (string, error) {
-	ret := _m.Called(ctx, roomId, userId)
+// GenerateInvitationCode provides a mock function with given fields: ctx, roomId
+func (_m *RoomUsecase) GenerateInvitationCode(ctx context.Context, roomId int32) (string, error) {
+	ret := _m.Called(ctx, roomId)
 
 	var r0 string
-	if rf, ok := ret.Get(0).(func(context.Context, int32, int32) string); ok {
-		r0 = rf(ctx, roomId, userId)
+	if rf, ok := ret.Get(0).(func(context.Context, int32) string); ok {
+		r0 = rf(ctx, roomId)
 	} else {
 		r0 = ret.Get(0).(string)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, int32, int32) error); ok {
-		r1 = rf(ctx, roomId, userId)
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, roomId)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -49,13 +49,13 @@ func (_m *RoomUsecase) GenerateInvitationCode(ctx context.Context, roomId int32,
 	return r0, r1
 }
 
-// GetJoinedRooms provides a mock function with given fields: ctx, userId
-func (_m *RoomUsecase) GetJoinedRooms(ctx context.Context, userId int32) ([]domain.RoomItem, error) {
-	ret := _m.Called(ctx, userId)
+// GetJoinedRooms provides a mock function with given fields: ctx
+func (_m *RoomUsecase) GetJoinedRooms(ctx context.Context) ([]domain.RoomItem, error) {
+	ret := _m.Called(ctx)
 
 	var r0 []domain.RoomItem
-	if rf, ok := ret.Get(0).(func(context.Context, int32) []domain.RoomItem); ok {
-		r0 = rf(ctx, userId)
+	if rf, ok := ret.Get(0).(func(context.Context) []domain.RoomItem); ok {
+		r0 = rf(ctx)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]domain.RoomItem)
@@ -63,8 +63,8 @@ func (_m *RoomUsecase) GetJoinedRooms(ctx context.Context, userId int32) ([]doma
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
-		r1 = rf(ctx, userId)
+	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = rf(ctx)
 	} else {
 		r1 = ret.Error(1)
 	}

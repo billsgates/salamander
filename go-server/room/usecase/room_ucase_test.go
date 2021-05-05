@@ -59,6 +59,12 @@ func TestCreate(t *testing.T) {
 			IsHost:        true,
 		}
 
+		mockUser := domain.User{
+			Id:    1,
+			Name:  "Kevin Yu",
+			Email: "kevin@ntu.im",
+		}
+
 		mockServiceRepo.
 			On("GetPlanByKey", mock.Anything, mockRoomRequest.PlanName, fmt.Sprintf("%d", mockRoomRequest.ServiceId)).
 			Return(&mockPlan, nil)
@@ -71,7 +77,8 @@ func TestCreate(t *testing.T) {
 			On("Create", mock.Anything, &mockParticipation).
 			Return(nil)
 
-		err := u.Create(context.TODO(), &mockRoomRequest)
+		mockCtx := context.WithValue(context.Background(), domain.CtxUserKey, &mockUser)
+		err := u.Create(mockCtx, &mockRoomRequest)
 		assert.NoError(t, err)
 	})
 }
