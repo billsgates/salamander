@@ -126,3 +126,15 @@ func (r *roomUsecase) JoinRoom(c context.Context, code string) (err error) {
 
 	return nil
 }
+
+func (r *roomUsecase) LeaveRoom(c context.Context, roomId int32, userId int32) (err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	err = r.participationRepo.LeaveRoom(ctx, roomId, userId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

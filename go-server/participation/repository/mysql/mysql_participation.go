@@ -40,3 +40,12 @@ func (m *mysqlParticipationRepository) IsAdmin(ctx context.Context, roomId int32
 
 	return participation.IsHost, nil
 }
+
+func (m *mysqlParticipationRepository) LeaveRoom(ctx context.Context, roomId int32, userId int32) (err error) {
+	var participation domain.Participation
+	if err := m.Conn.Table("participation").Where("room_id = ? AND user_id = ?", roomId, userId).Delete(&participation).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

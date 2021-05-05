@@ -339,10 +339,10 @@ paths:
             schema:
               type: object
               properties:
-                userId:
+                user_id:
                   type: integer
                   example: 1
-                roomId:
+                room_id:
                   type: integer
                   example: 2
       responses:
