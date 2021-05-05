@@ -36,17 +36,7 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 		return
 	}
 
-	user := c.Value(domain.CtxUserKey).(*domain.User)
-
-	err := u.RoomUsecase.Create(c.Request.Context(), &domain.RoomRequest{
-		MaxCount:      body.MaxCount,
-		AdminId:       user.Id,
-		ServiceId:     body.ServiceId,
-		PlanName:      body.PlanName,
-		PaymentPeriod: body.PaymentPeriod,
-		IsPublic:      body.IsPublic,
-	})
-
+	err := u.RoomUsecase.Create(c, &body)
 	if err != nil {
 		logrus.Error(err)
 		if err == room.ErrMaxCountExceed {
