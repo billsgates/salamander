@@ -69,9 +69,7 @@ func (u *RoomHandler) GenerateInvitationCode(c *gin.Context) {
 		return
 	}
 
-	user := c.Value(domain.CtxUserKey).(*domain.User)
-
-	code, err := u.RoomUsecase.GenerateInvitationCode(c.Request.Context(), int32(roomID), user.Id)
+	code, err := u.RoomUsecase.GenerateInvitationCode(c, int32(roomID))
 	if code == "" || err != nil {
 		logrus.Error(err)
 		if err == room.ErrNotHost {

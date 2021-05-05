@@ -84,11 +84,13 @@ func (r *roomUsecase) GetJoinedRooms(c context.Context) (res []domain.RoomItem, 
 	return res, nil
 }
 
-func (r *roomUsecase) GenerateInvitationCode(c context.Context, roomId int32, userId int32) (res string, err error) {
+func (r *roomUsecase) GenerateInvitationCode(c context.Context, roomId int32) (res string, err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 
-	isAdmin, err := r.participationRepo.IsAdmin(ctx, roomId, userId)
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	isAdmin, err := r.participationRepo.IsAdmin(ctx, roomId, user.Id)
 	if !isAdmin || err != nil {
 		return "", room.ErrNotHost
 	}
