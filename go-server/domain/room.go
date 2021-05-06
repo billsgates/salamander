@@ -51,11 +51,12 @@ type RoomInfo struct {
 
 type RoomItem struct {
 	RoomId        int32          `json:"room_id"`
-	Name          string         `json:"name"`
+	ServiceName   string         `json:"service_name"`
 	PlanName      string         `json:"plan_name"`
 	IsHost        bool           `json:"is_host"`
 	PaymentStatus *PaymentStatus `json:"payment_status"`
 	RoomStatus    *RoomStatus    `json:"room_status"`
+	Cost          int32          `json:"cost"`
 }
 
 type RoomRepository interface {

@@ -53,35 +53,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginResponse'
-  /user:
-    patch:
-      tags:
-        - user
-      summary: update user info
-      description: ''
-      operationId: updateUser
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        description: ''
-        content:
-          application/json:
-            schema:
-                type: object
-                properties:
-                  name: 
-                    type: string
-                    example: Carolyn
-                  email:
-                    type: string
-                    example: Carolyn@example.com
-                  image_url:
-                    type: string
-                    format: url
-      responses:
-        "201":
-          description: successfully update user
   /users:
     get:
       tags:
@@ -123,6 +94,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+    patch:
+      tags:
+        - users
+      summary: update user info
+      description: ''
+      operationId: updateUser
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: ''
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  name: 
+                    type: string
+                    example: Carolyn
+                  email:
+                    type: string
+                    example: Carolyn@example.com
+                  image_url:
+                    type: string
+                    format: url
+      responses:
+        "201":
+          description: successfully update user
   /rooms:
     post:
       tags:
@@ -578,10 +584,10 @@ components:
         plan_name:
           type: string
           example: Premium
-        role:
-          type: string
-          example: member
-        payment_fee:
+        is_host:
+          type: boolean
+          example: true
+        cost:
           type: integer
           example: 720
         payment_status:
