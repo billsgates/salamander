@@ -77,7 +77,16 @@ func (u *RoomHandler) GetRoomInfo(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": roomInfo})
+	members, err := u.RoomUsecase.GetRoomMembers(c, int32(roomID))
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	roomInfo.Members = members
+
+	c.JSON(http.StatusOK, roomInfo)
 }
 
 func (u *RoomHandler) GenerateInvitationCode(c *gin.Context) {

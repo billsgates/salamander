@@ -163,3 +163,15 @@ func (r *roomUsecase) GetRoomInfo(c context.Context, roomId int32) (res *domain.
 
 	return res, nil
 }
+
+func (r *roomUsecase) GetRoomMembers(c context.Context, roomId int32) (res []domain.Participation, err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	res, err = r.participationRepo.GetRoomMembers(ctx, roomId)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

@@ -66,3 +66,14 @@ func (m *mysqlParticipationRepository) GetRoomInfo(c context.Context, roomId int
 
 	return roomInfo, nil
 }
+
+func (m *mysqlParticipationRepository) GetRoomMembers(c context.Context, roomId int32) (res []domain.Participation, err error) {
+	var members []domain.Participation
+	if err := m.Conn.Table("participation").Select("users.id AS user_id, users.name AS user_name, participation.payment_status").
+		Joins("JOIN users ON users.id = participation.user_id").
+		Where("participation.room_id = ?", roomId).Scan(&members).Error; err != nil {
+		return nil, err
+	}
+
+	return members, nil
+}
