@@ -162,9 +162,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MenuResponse'
+                $ref: '#/components/schemas/RoomsResponse'
   /rooms/{id}:
     get:
       tags:
@@ -594,7 +592,7 @@ components:
           $ref: '#/components/schemas/PaymentStatus'
         room_status:
           $ref: '#/components/schemas/RoomStatus'
-    MenuResponse:
+    RoomsResponse:
       type: array
       items:
         $ref: '#/components/schemas/RoomItem'
