@@ -117,6 +117,14 @@ func (r *roomUsecase) JoinRoom(c context.Context, code string) (err error) {
 		return room.ErrInvalidInvitationCode
 	}
 
+	roomInfo, err := r.participationRepo.GetRoomInfo(ctx, roomId)
+	members, err := r.participationRepo.GetRoomMembers(ctx, roomId)
+
+	if len(members) >= int(roomInfo.MaxCount) {
+		r.invitationRepo.ResumeInvitationCode(ctx, code)
+		return room.ErrRoomFull
+	}
+
 	user := c.Value(domain.CtxUserKey).(*domain.User)
 
 	err = r.participationRepo.Create(ctx, &domain.Participation{

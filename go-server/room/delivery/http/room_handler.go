@@ -130,6 +130,10 @@ func (u *RoomHandler) JoinRoom(c *gin.Context) {
 	err := u.RoomUsecase.JoinRoom(c, body.InvitationCode)
 	if err != nil {
 		logrus.Error(err)
+		if err == room.ErrRoomFull {
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+			return
+		}
 		if err == room.ErrInvalidInvitationCode {
 			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 			return
