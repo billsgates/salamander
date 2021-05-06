@@ -73,6 +73,10 @@ func (u *RoomHandler) GetRoomInfo(c *gin.Context) {
 	roomInfo, err := u.RoomUsecase.GetRoomInfo(c, int32(roomID))
 	if err != nil {
 		logrus.Error(err)
+		if err == room.ErrNotMember {
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+			return
+		}
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
@@ -80,6 +84,10 @@ func (u *RoomHandler) GetRoomInfo(c *gin.Context) {
 	members, err := u.RoomUsecase.GetRoomMembers(c, int32(roomID))
 	if err != nil {
 		logrus.Error(err)
+		if err == room.ErrNotMember {
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+			return
+		}
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}

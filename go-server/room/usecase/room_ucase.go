@@ -156,6 +156,13 @@ func (r *roomUsecase) GetRoomInfo(c context.Context, roomId int32) (res *domain.
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	_, err = r.participationRepo.IsAdmin(ctx, roomId, user.Id)
+	if err != nil {
+		return nil, room.ErrNotMember
+	}
+
 	res, err = r.participationRepo.GetRoomInfo(ctx, roomId)
 	if err != nil {
 		return nil, err
@@ -167,6 +174,13 @@ func (r *roomUsecase) GetRoomInfo(c context.Context, roomId int32) (res *domain.
 func (r *roomUsecase) GetRoomMembers(c context.Context, roomId int32) (res []domain.Participation, err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
+
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	_, err = r.participationRepo.IsAdmin(ctx, roomId, user.Id)
+	if err != nil {
+		return nil, room.ErrNotMember
+	}
 
 	res, err = r.participationRepo.GetRoomMembers(ctx, roomId)
 	if err != nil {
