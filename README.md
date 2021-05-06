@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/billsgates/salamander.svg?branch=master)](https://travis-ci.com/github/billsgates/salamander)
 # Salamander
 backend api server for our project
 
