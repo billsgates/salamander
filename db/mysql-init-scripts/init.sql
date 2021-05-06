@@ -120,3 +120,20 @@ INSERT INTO plans (service_id, plan_name, cost, max_count) VALUES ('2', 'Family'
 INSERT INTO plans (service_id, plan_name, cost, max_count) VALUES ('3', 'Individual', 149, 1);
 INSERT INTO plans (service_id, plan_name, cost, max_count) VALUES ('3', 'Duo', 198, 2);
 INSERT INTO plans (service_id, plan_name, cost, max_count) VALUES ('3', 'Family', 240, 6);
+
+INSERT INTO `rooms` (`room_id`, `announcement`, `is_public`, `payment_period`, `room_status`, `starting_time`, `ending_time`, `created_at`, `updated_at`, `max_count`, `admin_id`, `service_id`, `plan_name`) VALUES
+(1,	NULL,	1,	12,	'created',	NULL,	NULL,	'2021-05-06 07:01:20',	'2021-05-06 07:01:20',	4,	1,	1,	'Premium');
+
+INSERT INTO `invitation_codes` (`room_id`, `invitation_code`, `is_valid`, `created_at`, `updated_at`) VALUES
+(1,	'15a447a',	0,	'2021-05-06 07:01:52',	'2021-05-06 07:10:19'),
+(1,	'4242227',	1,	'2021-05-06 07:01:48',	'2021-05-06 07:01:48'),
+(1,	'8b88a7c',	0,	'2021-05-06 07:01:52',	'2021-05-06 07:02:45'),
+(1,	'910891a',	0,	'2021-05-06 07:01:50',	'2021-05-06 07:09:00'),
+(1,	'9c7644e',	1,	'2021-05-06 07:01:51',	'2021-05-06 07:01:51'),
+(1,	'9f95495',	1,	'2021-05-06 07:01:51',	'2021-05-06 07:01:51');
+
+INSERT INTO `participation` (`user_id`, `room_id`, `payment_status`, `joined_at`, `left_at`, `created_at`, `updated_at`, `is_host`) VALUES
+(1,	1,	'confirmed',	'2021-05-06 07:01:19',	NULL,	'2021-05-06 07:01:20',	'2021-05-06 07:01:20',	1),
+(2,	1,	'unpaid',	'2021-05-06 07:02:45',	NULL,	'2021-05-06 07:02:46',	'2021-05-06 07:02:46',	0),
+(3,	1,	'unpaid',	'2021-05-06 07:10:19',	NULL,	'2021-05-06 07:10:20',	'2021-05-06 07:10:20',	0),
+(4,	1,	'unpaid',	'2021-05-06 07:09:00',	NULL,	'2021-05-06 07:09:00',	'2021-05-06 07:09:00',	0);
