@@ -53,3 +53,16 @@ func (m *mysqlParticipationRepository) LeaveRoom(ctx context.Context, roomId int
 
 	return nil
 }
+
+func (m *mysqlParticipationRepository) GetRoomInfo(c context.Context, roomId int32) (res *domain.RoomInfoResponse, err error) {
+	var roomInfo *domain.RoomInfoResponse
+	if err := m.Conn.Table("rooms").Select("service_providers.name as service_name, rooms.room_id, rooms.is_public, rooms.announcement, rooms.max_count, rooms.plan_name, rooms.room_status, rooms.starting_time, rooms.ending_time, rooms.payment_period, users.name as admin_name, users.email as admin_email, plans.cost as payment_fee").
+		Joins("JOIN users ON users.id = rooms.admin_id").
+		Joins("JOIN plans ON plans.plan_name = rooms.plan_name AND plans.service_id = rooms.service_id").
+		Joins("JOIN service_providers ON service_providers.id = plans.service_id").
+		Where("rooms.room_id = ?", roomId).First(&roomInfo).Error; err != nil {
+		return nil, err
+	}
+
+	return roomInfo, nil
+}

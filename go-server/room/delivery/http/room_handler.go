@@ -23,6 +23,7 @@ func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsec
 	{
 		roomEndpoints.POST("", handler.CreateRoom)
 		roomEndpoints.GET("", handler.GetJoinedRooms)
+		roomEndpoints.GET("/:roomID", handler.GetRoomInfo)
 		roomEndpoints.POST("/:roomID/invitation", handler.GenerateInvitationCode)
 		roomEndpoints.POST("/join", handler.JoinRoom)
 	}
@@ -59,6 +60,24 @@ func (u *RoomHandler) GetJoinedRooms(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": rooms})
+}
+
+func (u *RoomHandler) GetRoomInfo(c *gin.Context) {
+	roomID, err := strconv.ParseInt(c.Param("roomID"), 10, 32)
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	roomInfo, err := u.RoomUsecase.GetRoomInfo(c, int32(roomID))
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": roomInfo})
 }
 
 func (u *RoomHandler) GenerateInvitationCode(c *gin.Context) {

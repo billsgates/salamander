@@ -49,23 +49,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginResponse'
-  /user:
-    patch:
-      tags:
-      - user
-      summary: update user info
-      operationId: updateUser
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body'
-        required: true
-      responses:
-        "201":
-          description: successfully update user
-      security:
-      - BearerAuth: []
   /users:
     get:
       tags:
@@ -108,6 +91,31 @@ paths:
                 $ref: '#/components/schemas/User'
       security:
       - BearerAuth: []
+    patch:
+      tags:
+      - users
+      summary: update user info
+      operationId: updateUser
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+        required: true
+      responses:
+        "201":
+          description: successfully update user
+      security:
+      - BearerAuth: []
   /rooms:
     get:
       tags:
@@ -120,10 +128,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MenuResponse'
-                x-content-type: application/json
+                $ref: '#/components/schemas/RoomsResponse'
       security:
       - BearerAuth: []
     post:
@@ -548,10 +553,10 @@ components:
         plan_name:
           type: string
           example: Premium
-        role:
-          type: string
-          example: member
-        payment_fee:
+        is_host:
+          type: boolean
+          example: true
+        cost:
           type: integer
           example: 720
         payment_status:
@@ -560,17 +565,17 @@ components:
           $ref: '#/components/schemas/RoomStatus'
       example:
         room_id: 1
-        role: member
+        cost: 720
         service_name: Netflix
         payment_status: unpaid
-        payment_fee: 720
+        is_host: true
         plan_name: Premium
         room_status: created
-    MenuResponse:
+    RoomsResponse:
       type: array
       items:
         $ref: '#/components/schemas/RoomItem'
-      x-schema-name: MenuResponse
+      x-schema-name: RoomsResponse
     RoomInfoResponse:
       type: object
       properties:
@@ -696,10 +701,10 @@ components:
     body_2:
       type: object
       properties:
-        userId:
+        user_id:
           type: integer
           example: 1
-        roomId:
+        room_id:
           type: integer
           example: 2
     body_3:

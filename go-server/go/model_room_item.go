@@ -16,9 +16,9 @@ type RoomItem struct {
 
 	PlanName string `json:"plan_name,omitempty"`
 
-	Role string `json:"role,omitempty"`
+	IsHost bool `json:"is_host,omitempty"`
 
-	PaymentFee int32 `json:"payment_fee,omitempty"`
+	Cost int32 `json:"cost,omitempty"`
 
 	PaymentStatus *PaymentStatus `json:"payment_status,omitempty"`
 
