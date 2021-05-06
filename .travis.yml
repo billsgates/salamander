@@ -4,9 +4,7 @@ go:
 - 1.15.1
 
 services:
-  - docker
+ - docker
 
-jobs:
-  include:
-    - stage: unit test
-      script: make test
+script:
+ - make testt
