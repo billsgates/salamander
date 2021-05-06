@@ -24,8 +24,14 @@ type Participation struct {
 	IsHost        bool      `json:"is_host,omitempty"`
 }
 
+type ParticipationRequest struct {
+	UserId int32 `json:"user_id,omitempty" binding:"required"`
+	RoomId int32 `json:"room_id,omitempty" binding:"required"`
+}
+
 type ParticipationRepository interface {
 	Create(ctx context.Context, participation *Participation) error
 	GetJoinedRooms(ctx context.Context, userId int32) ([]RoomItem, error)
 	IsAdmin(ctx context.Context, roomId int32, userId int32) (bool, error)
+	LeaveRoom(ctx context.Context, roomId int32, userId int32) error
 }

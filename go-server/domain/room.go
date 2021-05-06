@@ -61,4 +61,5 @@ type RoomUsecase interface {
 	GetJoinedRooms(ctx context.Context) ([]RoomItem, error)
 	GenerateInvitationCode(ctx context.Context, roomId int32) (string, error)
 	JoinRoom(ctx context.Context, code string) error
+	LeaveRoom(ctx context.Context, roomId int32, userId int32) error
 }

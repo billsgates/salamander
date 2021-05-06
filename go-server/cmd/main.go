@@ -13,6 +13,7 @@ import (
 	_authHandlerHttpDelivery "go-server/auth/delivery/http"
 	_authUsecase "go-server/auth/usecase"
 	_invitationRepo "go-server/invitation/repository/mysql"
+	_participationHandlerHttpDelivery "go-server/participation/delivery/http"
 	_participationRepo "go-server/participation/repository/mysql"
 	_roomHandlerHttpDelivery "go-server/room/delivery/http"
 	_roomRepo "go-server/room/repository/mysql"
@@ -116,6 +117,7 @@ func main() {
 		_userHandlerHttpDelivery.NewUserHandler(v1Router, authMiddleware, userUsecase)
 		_roomHandlerHttpDelivery.NewRoomHandler(v1Router, authMiddleware, roomUsecase)
 		_serviceHandlerHttpDelivery.NewServiceHandler(v1Router, serviceUsecase)
+		_participationHandlerHttpDelivery.NewParticipationHandler(v1Router, authMiddleware, roomUsecase)
 	}
 
 	logrus.Fatal(r.Run(":" + viper.GetString("server.address")))
