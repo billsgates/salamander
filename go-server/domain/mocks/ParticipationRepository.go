@@ -71,3 +71,17 @@ func (_m *ParticipationRepository) IsAdmin(ctx context.Context, roomId int32, us
 
 	return r0, r1
 }
+
+// LeaveRoom provides a mock function with given fields: ctx, roomId, userId
+func (_m *ParticipationRepository) LeaveRoom(ctx context.Context, roomId int32, userId int32) error {
+	ret := _m.Called(ctx, roomId, userId)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32, int32) error); ok {
+		r0 = rf(ctx, roomId, userId)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
