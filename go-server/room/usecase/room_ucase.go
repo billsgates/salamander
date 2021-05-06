@@ -32,6 +32,10 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	roomRequest.AdminId = user.Id
+
 	plan, err := r.serviceRepo.GetPlanByKey(ctx, roomRequest.PlanName, fmt.Sprintf("%d", roomRequest.ServiceId))
 	if err != nil {
 		return err
@@ -41,22 +45,20 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 		return room.ErrMaxCountExceed
 	}
 
-	room := &domain.Room{
+	roomId, err := r.roomRepo.Create(ctx, &domain.Room{
 		ServiceId:     roomRequest.ServiceId,
 		PlanName:      roomRequest.PlanName,
 		MaxCount:      roomRequest.MaxCount,
 		PaymentPeriod: roomRequest.PaymentPeriod,
 		AdminId:       roomRequest.AdminId,
 		IsPublic:      *roomRequest.IsPublic,
-	}
-
-	roomId, err := r.roomRepo.Create(ctx, room)
+	})
 	if err != nil {
 		return err
 	}
 
 	err = r.participationRepo.Create(ctx, &domain.Participation{
-		UserId:        room.AdminId,
+		UserId:        user.Id,
 		RoomId:        roomId,
 		PaymentStatus: "confirmed",
 		IsHost:        true,
@@ -68,11 +70,13 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 	return nil
 }
 
-func (r *roomUsecase) GetJoinedRooms(c context.Context, id int32) (res []domain.RoomItem, err error) {
+func (r *roomUsecase) GetJoinedRooms(c context.Context) (res []domain.RoomItem, err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 
-	res, err = r.participationRepo.GetJoinedRooms(ctx, id)
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	res, err = r.participationRepo.GetJoinedRooms(ctx, user.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -80,11 +84,13 @@ func (r *roomUsecase) GetJoinedRooms(c context.Context, id int32) (res []domain.
 	return res, nil
 }
 
-func (r *roomUsecase) GenerateInvitationCode(c context.Context, roomId int32, userId int32) (res string, err error) {
+func (r *roomUsecase) GenerateInvitationCode(c context.Context, roomId int32) (res string, err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 
-	isAdmin, err := r.participationRepo.IsAdmin(ctx, roomId, userId)
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	isAdmin, err := r.participationRepo.IsAdmin(ctx, roomId, user.Id)
 	if !isAdmin || err != nil {
 		return "", room.ErrNotHost
 	}

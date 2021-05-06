@@ -43,12 +43,6 @@ type RoomJoinRequest struct {
 	InvitationCode string `json:"invitation_code" binding:"required"`
 }
 
-type RoomInfo struct {
-	Name     string `json:"name"`
-	PlanName string `json:"plan_name"`
-	IsHost   bool   `json:"is_host"`
-}
-
 type RoomItem struct {
 	RoomId        int32          `json:"room_id"`
 	Name          string         `json:"name"`
@@ -64,7 +58,7 @@ type RoomRepository interface {
 
 type RoomUsecase interface {
 	Create(ctx context.Context, room *RoomRequest) error
-	GetJoinedRooms(ctx context.Context, userId int32) ([]RoomItem, error)
-	GenerateInvitationCode(ctx context.Context, roomId int32, userId int32) (string, error)
+	GetJoinedRooms(ctx context.Context) ([]RoomItem, error)
+	GenerateInvitationCode(ctx context.Context, roomId int32) (string, error)
 	JoinRoom(ctx context.Context, code string) error
 }

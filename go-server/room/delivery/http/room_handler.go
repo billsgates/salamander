@@ -36,17 +36,7 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 		return
 	}
 
-	user := c.Value(domain.CtxUserKey).(*domain.User)
-
-	err := u.RoomUsecase.Create(c.Request.Context(), &domain.RoomRequest{
-		MaxCount:      body.MaxCount,
-		AdminId:       user.Id,
-		ServiceId:     body.ServiceId,
-		PlanName:      body.PlanName,
-		PaymentPeriod: body.PaymentPeriod,
-		IsPublic:      body.IsPublic,
-	})
-
+	err := u.RoomUsecase.Create(c, &body)
 	if err != nil {
 		logrus.Error(err)
 		if err == room.ErrMaxCountExceed {
@@ -61,9 +51,7 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 }
 
 func (u *RoomHandler) GetJoinedRooms(c *gin.Context) {
-	user := c.Value(domain.CtxUserKey).(*domain.User)
-
-	rooms, err := u.RoomUsecase.GetJoinedRooms(c.Request.Context(), user.Id)
+	rooms, err := u.RoomUsecase.GetJoinedRooms(c)
 	if err != nil {
 		logrus.Error(err)
 		c.AbortWithStatus(http.StatusBadRequest)
@@ -81,9 +69,7 @@ func (u *RoomHandler) GenerateInvitationCode(c *gin.Context) {
 		return
 	}
 
-	user := c.Value(domain.CtxUserKey).(*domain.User)
-
-	code, err := u.RoomUsecase.GenerateInvitationCode(c.Request.Context(), int32(roomID), user.Id)
+	code, err := u.RoomUsecase.GenerateInvitationCode(c, int32(roomID))
 	if code == "" || err != nil {
 		logrus.Error(err)
 		if err == room.ErrNotHost {
