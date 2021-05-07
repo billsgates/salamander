@@ -37,13 +37,7 @@ type RoomInfoResponse struct {
 
 	PaymentFee int32 `json:"payment_fee,omitempty"`
 
-	AdminName string `json:"admin_name,omitempty"`
-
-	AdminRating float64 `json:"admin_rating,omitempty"`
-
-	AdminEmail string `json:"admin_email,omitempty"`
-
-	AdminPhone string `json:"admin_phone,omitempty"`
+	Admin *Admin `json:"admin,omitempty"`
 
 	Members []Member `json:"members,omitempty"`
 }

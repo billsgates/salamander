@@ -81,6 +81,17 @@ func (u *RoomHandler) GetRoomInfo(c *gin.Context) {
 		return
 	}
 
+	admin, err := u.RoomUsecase.GetRoomAdmin(c, int32(roomID))
+	if err != nil {
+		logrus.Error(err)
+		if err == room.ErrNotMember {
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+			return
+		}
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
 	members, err := u.RoomUsecase.GetRoomMembers(c, int32(roomID))
 	if err != nil {
 		logrus.Error(err)
@@ -92,6 +103,7 @@ func (u *RoomHandler) GetRoomInfo(c *gin.Context) {
 		return
 	}
 
+	roomInfo.Admin = admin
 	roomInfo.Members = members
 
 	c.JSON(http.StatusOK, roomInfo)

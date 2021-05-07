@@ -51,6 +51,29 @@ func (_m *ParticipationRepository) GetJoinedRooms(ctx context.Context, userId in
 	return r0, r1
 }
 
+// GetRoomAdmin provides a mock function with given fields: ctx, roomId
+func (_m *ParticipationRepository) GetRoomAdmin(ctx context.Context, roomId int32) (*domain.User, error) {
+	ret := _m.Called(ctx, roomId)
+
+	var r0 *domain.User
+	if rf, ok := ret.Get(0).(func(context.Context, int32) *domain.User); ok {
+		r0 = rf(ctx, roomId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.User)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, roomId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetRoomInfo provides a mock function with given fields: ctx, roomId
 func (_m *ParticipationRepository) GetRoomInfo(ctx context.Context, roomId int32) (*domain.RoomInfoResponse, error) {
 	ret := _m.Called(ctx, roomId)

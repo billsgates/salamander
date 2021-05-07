@@ -8,11 +8,13 @@
  */
 package swagger
 
-type Member struct {
+type Admin struct {
 
-	UserId int32 `json:"user_id,omitempty"`
+	Name string `json:"name,omitempty"`
 
-	UserName string `json:"user_name,omitempty"`
+	Email string `json:"email,omitempty"`
 
-	PaymentStatus *PaymentStatus `json:"payment_status,omitempty"`
+	Rating int32 `json:"rating,omitempty"`
+
+	Phone string `json:"phone,omitempty"`
 }

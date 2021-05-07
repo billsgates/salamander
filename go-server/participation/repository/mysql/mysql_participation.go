@@ -56,7 +56,7 @@ func (m *mysqlParticipationRepository) LeaveRoom(ctx context.Context, roomId int
 
 func (m *mysqlParticipationRepository) GetRoomInfo(c context.Context, roomId int32) (res *domain.RoomInfoResponse, err error) {
 	var roomInfo *domain.RoomInfoResponse
-	if err := m.Conn.Table("rooms").Select("service_providers.name as service_name, rooms.room_id, rooms.is_public, rooms.announcement, rooms.max_count, rooms.plan_name, rooms.room_status, rooms.starting_time, rooms.ending_time, rooms.payment_period, users.name as admin_name, users.email as admin_email, plans.cost as payment_fee").
+	if err := m.Conn.Table("rooms").Select("service_providers.name as service_name, rooms.room_id, rooms.is_public, rooms.announcement, rooms.max_count, rooms.plan_name, rooms.room_status, rooms.starting_time, rooms.ending_time, rooms.payment_period, users.name as admin_name, users.email as admin_email, users.rating as admin_rating, users.phone as admin_phone, plans.cost as payment_fee").
 		Joins("JOIN users ON users.id = rooms.admin_id").
 		Joins("JOIN plans ON plans.plan_name = rooms.plan_name AND plans.service_id = rooms.service_id").
 		Joins("JOIN service_providers ON service_providers.id = plans.service_id").
@@ -65,6 +65,18 @@ func (m *mysqlParticipationRepository) GetRoomInfo(c context.Context, roomId int
 	}
 
 	return roomInfo, nil
+}
+
+func (m *mysqlParticipationRepository) GetRoomAdmin(c context.Context, roomId int32) (res *domain.User, err error) {
+	var admin *domain.User
+	if err := m.Conn.Table("participation").Select("users.name AS name, users.email AS email, users.rating AS rating, users.phone AS phone").
+		Joins("JOIN rooms ON rooms.room_id = participation.room_id").
+		Joins("JOIN users ON users.id = rooms.admin_id").
+		Where("participation.room_id = ?", roomId).Find(&admin).Error; err != nil {
+		return nil, err
+	}
+
+	return admin, nil
 }
 
 func (m *mysqlParticipationRepository) GetRoomMembers(c context.Context, roomId int32) (res []domain.Participation, err error) {

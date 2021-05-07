@@ -2,17 +2,15 @@ package domain
 
 import (
 	"context"
-	"time"
 )
 
 type User struct {
-	Id             int32     `json:"id,omitempty"`
-	Name           string    `json:"name,omitempty"`
-	Email          string    `json:"email,omitempty"`
-	PasswordDigest string    `json:"password_digest,omitempty"`
-	Rating         int32     `json:"rating,omitempty"`
-	CreatedAt      time.Time `json:"created_at,omitempty"`
-	UpdatedAt      time.Time `json:"updated_at,omitempty"`
+	Id             int32  `json:"id,omitempty"`
+	Name           string `json:"name,omitempty"`
+	Email          string `json:"email,omitempty"`
+	Phone          string `json:"phone"`
+	PasswordDigest string `json:"password_digest,omitempty"`
+	Rating         int32  `json:"rating"`
 }
 
 type UserRepository interface {

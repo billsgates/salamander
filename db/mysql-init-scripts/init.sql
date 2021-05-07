@@ -18,6 +18,7 @@ CREATE TABLE users (
  id INT NOT NULL AUTO_INCREMENT,
  name VARCHAR(255) NOT NULL,
  email VARCHAR(200) NOT NULL UNIQUE,
+ phone VARCHAR(200),
  image_url VARCHAR(1000),
  password_digest VARCHAR(1000) NOT NULL,
  rating INT DEFAULT 0 NOT NULL,
@@ -73,8 +74,6 @@ CREATE TABLE participation (
  user_id INT,
  room_id INT,
  payment_status VARCHAR(255) NOT NULL DEFAULT 'unpaid',
- joined_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
- left_at TIMESTAMP,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
  updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
  is_host BOOLEAN NOT NULL,
@@ -132,8 +131,8 @@ INSERT INTO `invitation_codes` (`room_id`, `invitation_code`, `is_valid`, `creat
 (1,	'9c7644e',	1,	'2021-05-06 07:01:51',	'2021-05-06 07:01:51'),
 (1,	'9f95495',	1,	'2021-05-06 07:01:51',	'2021-05-06 07:01:51');
 
-INSERT INTO `participation` (`user_id`, `room_id`, `payment_status`, `joined_at`, `left_at`, `created_at`, `updated_at`, `is_host`) VALUES
-(1,	1,	'confirmed',	'2021-05-06 07:01:19',	NULL,	'2021-05-06 07:01:20',	'2021-05-06 07:01:20',	1),
-(2,	1,	'unpaid',	'2021-05-06 07:02:45',	NULL,	'2021-05-06 07:02:46',	'2021-05-06 07:02:46',	0),
-(3,	1,	'unpaid',	'2021-05-06 07:10:19',	NULL,	'2021-05-06 07:10:20',	'2021-05-06 07:10:20',	0),
-(4,	1,	'unpaid',	'2021-05-06 07:09:00',	NULL,	'2021-05-06 07:09:00',	'2021-05-06 07:09:00',	0);
+INSERT INTO `participation` (`user_id`, `room_id`, `payment_status`, `created_at`, `updated_at`, `is_host`) VALUES
+(1,	1,	'confirmed',	'2021-05-06 07:01:20',	'2021-05-06 07:01:20',	1),
+(2,	1,	'unpaid',	'2021-05-06 07:02:46',	'2021-05-06 07:02:46',	0),
+(3,	1,	'unpaid',	'2021-05-06 07:10:20',	'2021-05-06 07:10:20',	0),
+(4,	1,	'unpaid',	'2021-05-06 07:09:00',	'2021-05-06 07:09:00',	0);
