@@ -555,6 +555,22 @@ components:
         max_count: 1
         service_id: 1
         plan_name: true
+    Admin:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        rating:
+          type: integer
+        phone:
+          type: string
+      example:
+        name: Kevin Yu
+        email: kevin@ntu.im
+        rating: 4
+        phone: 0912345678
     Member:
       type: object
       properties:
@@ -562,14 +578,12 @@ components:
           type: integer
         user_name:
           type: string
-        joined_at:
-          type: string
-          format: date-time
-        end_at:
-          type: string
-          format: date-time
         payment_status:
           $ref: '#/components/schemas/PaymentStatus'
+      example:
+        user_id: 1
+        user_name: Frank Chen
+        payment_status: unpaid
     RoomItem:
       type: object
       properties:
@@ -637,17 +651,8 @@ components:
         payment_fee:
           type: integer
           example: 720
-        admin_name:
-          type: string
-          example: Kevin
-        admin_rating:
-          type: number
-          example: 4.5
-        admin_email:
-          type: string
-          example: Kevin@example.com
-        admin_phone:
-          type: string
+        admin:
+          $ref: '#/components/schemas/Admin'
         members:
           type: array
           items:

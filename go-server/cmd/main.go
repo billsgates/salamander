@@ -36,6 +36,7 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func init() {
@@ -73,7 +74,9 @@ func main() {
 	val.Add("parseTime", "1")
 	// val.Add("loc", "Asia/Taipei")
 	dsn := fmt.Sprintf("%s?%s", connection, val.Encode())
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
 
 	if err != nil {
 		logrus.Fatal(err)

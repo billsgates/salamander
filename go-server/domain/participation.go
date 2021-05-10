@@ -2,7 +2,6 @@ package domain
 
 import (
 	"context"
-	"time"
 )
 
 type PaymentStatus string
@@ -14,14 +13,11 @@ const (
 )
 
 type Participation struct {
-	UserId        int32     `json:"user_id,omitempty"`
-	RoomId        int32     `json:"room_id,omitempty"`
-	PaymentStatus string    `json:"payment_status,omitempty"`
-	JoinedAt      time.Time `json:"starting_time,omitempty"`
-	LeftAt        time.Time `json:"ending_time,omitempty"`
-	CreatedAt     time.Time `json:"created_at,omitempty"`
-	UpdatedAt     time.Time `json:"updated_at,omitempty"`
-	IsHost        bool      `json:"is_host,omitempty"`
+	UserId        int32  `json:"user_id,omitempty"`
+	UserName      string `json:"user_name,omitempty"`
+	RoomId        int32  `json:"room_id,omitempty"`
+	PaymentStatus string `json:"payment_status,omitempty"`
+	IsHost        bool   `json:"is_host,omitempty"`
 }
 
 type ParticipationRequest struct {
@@ -31,6 +27,9 @@ type ParticipationRequest struct {
 
 type ParticipationRepository interface {
 	Create(ctx context.Context, participation *Participation) error
+	GetRoomInfo(ctx context.Context, roomId int32) (res *RoomInfoResponse, err error)
+	GetRoomAdmin(ctx context.Context, roomId int32) (res *User, err error)
+	GetRoomMembers(ctx context.Context, roomId int32) (res []Participation, err error)
 	GetJoinedRooms(ctx context.Context, userId int32) ([]RoomItem, error)
 	IsAdmin(ctx context.Context, roomId int32, userId int32) (bool, error)
 	LeaveRoom(ctx context.Context, roomId int32, userId int32) error

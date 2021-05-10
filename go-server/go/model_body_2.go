@@ -10,7 +10,7 @@ package swagger
 
 type Body2 struct {
 
-	UserId int32 `json:"userId,omitempty"`
+	UserId int32 `json:"user_id,omitempty"`
 
-	RoomId int32 `json:"roomId,omitempty"`
+	RoomId int32 `json:"room_id,omitempty"`
 }

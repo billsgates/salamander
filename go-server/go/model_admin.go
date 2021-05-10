@@ -8,11 +8,13 @@
  */
 package swagger
 
-import (
-	"net/http"
-)
+type Admin struct {
 
-func UpdateUser(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+	Name string `json:"name,omitempty"`
+
+	Email string `json:"email,omitempty"`
+
+	Rating int32 `json:"rating,omitempty"`
+
+	Phone string `json:"phone,omitempty"`
 }

@@ -187,7 +187,7 @@ func TestGenerateInvitationCode(t *testing.T) {
 }
 
 func TestJoinRoom(t *testing.T) {
-	t.Run("Success, Given invitation code is valid and user has not join room yet, When entering the code, Then will succcessfully join the room.", func(t *testing.T) {
+	t.Run("Success, Given invitation code is valid and user has not join room yet and room is not full, When entering the code, Then will succcessfully join the room.", func(t *testing.T) {
 		mockRoomRepo := new(mocks.RoomRepository)
 		mockInvitationRepo := new(mocks.InvitationRepository)
 		mockServiceRepo := new(mocks.ServiceRepository)
@@ -206,9 +206,28 @@ func TestJoinRoom(t *testing.T) {
 			Email: "kevin@ntu.im",
 		}
 
+		mockRoomInfo := domain.RoomInfoResponse{
+			RoomId:   1,
+			MaxCount: 4,
+		}
+
+		mockRoomMembers := []domain.Participation{}
+
 		mockInvitationRepo.
 			On("ConsumeInvitationCode", mock.Anything, mock.AnythingOfType("string")).
 			Return(mockRoomId, nil)
+
+		mockParticipationRepo.
+			On("GetRoomInfo", mock.Anything, mock.MatchedBy(func(roomId int32) bool {
+				return roomId == mockRoomInfo.RoomId
+			})).
+			Return(&mockRoomInfo, nil)
+
+		mockParticipationRepo.
+			On("GetRoomMembers", mock.Anything, mock.MatchedBy(func(roomId int32) bool {
+				return roomId == mockRoomInfo.RoomId
+			})).
+			Return(mockRoomMembers, nil)
 
 		mockParticipationRepo.
 			On("Create", mock.Anything, mock.MatchedBy(func(participation *domain.Participation) bool {
@@ -241,9 +260,28 @@ func TestJoinRoom(t *testing.T) {
 			Email: "kevin@ntu.im",
 		}
 
+		mockRoomInfo := domain.RoomInfoResponse{
+			RoomId:   1,
+			MaxCount: 4,
+		}
+
+		mockRoomMembers := []domain.Participation{}
+
 		mockInvitationRepo.
 			On("ConsumeInvitationCode", mock.Anything, mock.AnythingOfType("string")).
 			Return(mockRoomId, room.ErrInvalidInvitationCode)
+
+		mockParticipationRepo.
+			On("GetRoomInfo", mock.Anything, mock.MatchedBy(func(roomId int32) bool {
+				return roomId == mockRoomInfo.RoomId
+			})).
+			Return(&mockRoomInfo, nil)
+
+		mockParticipationRepo.
+			On("GetRoomMembers", mock.Anything, mock.MatchedBy(func(roomId int32) bool {
+				return roomId == mockRoomInfo.RoomId
+			})).
+			Return(mockRoomMembers, nil)
 
 		mockCtx := context.WithValue(context.Background(), domain.CtxUserKey, &mockUser)
 		err := u.JoinRoom(mockCtx, mockInvitationCode)
@@ -269,9 +307,28 @@ func TestJoinRoom(t *testing.T) {
 			Email: "kevin@ntu.im",
 		}
 
+		mockRoomInfo := domain.RoomInfoResponse{
+			RoomId:   1,
+			MaxCount: 4,
+		}
+
+		mockRoomMembers := []domain.Participation{}
+
 		mockInvitationRepo.
 			On("ConsumeInvitationCode", mock.Anything, mock.AnythingOfType("string")).
 			Return(mockRoomId, nil)
+
+		mockParticipationRepo.
+			On("GetRoomInfo", mock.Anything, mock.MatchedBy(func(roomId int32) bool {
+				return roomId == mockRoomInfo.RoomId
+			})).
+			Return(&mockRoomInfo, nil)
+
+		mockParticipationRepo.
+			On("GetRoomMembers", mock.Anything, mock.MatchedBy(func(roomId int32) bool {
+				return roomId == mockRoomInfo.RoomId
+			})).
+			Return(mockRoomMembers, nil)
 
 		mockInvitationRepo.
 			On("ResumeInvitationCode", mock.Anything, mock.AnythingOfType("string")).

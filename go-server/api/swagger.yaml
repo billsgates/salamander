@@ -49,23 +49,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginResponse'
-  /user:
-    patch:
-      tags:
-      - user
-      summary: update user info
-      operationId: updateUser
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body'
-        required: true
-      responses:
-        "201":
-          description: successfully update user
-      security:
-      - BearerAuth: []
   /users:
     get:
       tags:
@@ -108,6 +91,31 @@ paths:
                 $ref: '#/components/schemas/User'
       security:
       - BearerAuth: []
+    patch:
+      tags:
+      - users
+      summary: update user info
+      operationId: updateUser
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+        required: true
+      responses:
+        "201":
+          description: successfully update user
+      security:
+      - BearerAuth: []
   /rooms:
     get:
       tags:
@@ -120,10 +128,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MenuResponse'
-                x-content-type: application/json
+                $ref: '#/components/schemas/RoomsResponse'
       security:
       - BearerAuth: []
     post:
@@ -515,6 +520,22 @@ components:
         max_count: 1
         service_id: 1
         plan_name: true
+    Admin:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        rating:
+          type: integer
+        phone:
+          type: string
+      example:
+        name: Kevin Yu
+        email: kevin@ntu.im
+        rating: 4
+        phone: 9.12345678E8
     Member:
       type: object
       properties:
@@ -522,19 +543,11 @@ components:
           type: integer
         user_name:
           type: string
-        joined_at:
-          type: string
-          format: date-time
-        end_at:
-          type: string
-          format: date-time
         payment_status:
           $ref: '#/components/schemas/PaymentStatus'
       example:
-        joined_at: 2000-01-23T04:56:07.000+00:00
-        end_at: 2000-01-23T04:56:07.000+00:00
-        user_id: 0
-        user_name: user_name
+        user_id: 1
+        user_name: Frank Chen
         payment_status: unpaid
     RoomItem:
       type: object
@@ -548,10 +561,10 @@ components:
         plan_name:
           type: string
           example: Premium
-        role:
-          type: string
-          example: member
-        payment_fee:
+        is_host:
+          type: boolean
+          example: true
+        cost:
           type: integer
           example: 720
         payment_status:
@@ -560,17 +573,17 @@ components:
           $ref: '#/components/schemas/RoomStatus'
       example:
         room_id: 1
-        role: member
+        cost: 720
         service_name: Netflix
         payment_status: unpaid
-        payment_fee: 720
+        is_host: true
         plan_name: Premium
         room_status: created
-    MenuResponse:
+    RoomsResponse:
       type: array
       items:
         $ref: '#/components/schemas/RoomItem'
-      x-schema-name: MenuResponse
+      x-schema-name: RoomsResponse
     RoomInfoResponse:
       type: object
       properties:
@@ -610,17 +623,8 @@ components:
         payment_fee:
           type: integer
           example: 720
-        admin_name:
-          type: string
-          example: Kevin
-        admin_rating:
-          type: number
-          example: 4.5
-        admin_email:
-          type: string
-          example: Kevin@example.com
-        admin_phone:
-          type: string
+        admin:
+          $ref: '#/components/schemas/Admin'
         members:
           type: array
           items:
@@ -629,29 +633,26 @@ components:
         room_id: 1
         role: member
         ending_time: 2000-01-23T04:56:07.000+00:00
-        admin_phone: admin_phone
         service_name: Netflix
+        admin:
+          name: Kevin Yu
+          email: kevin@ntu.im
+          rating: 4
+          phone: 9.12345678E8
         plan_name: Premium
-        admin_rating: 4.5
-        admin_email: Kevin@example.com
         room_status: created
         max_count: 4
         members:
-        - joined_at: 2000-01-23T04:56:07.000+00:00
-          end_at: 2000-01-23T04:56:07.000+00:00
-          user_id: 0
-          user_name: user_name
+        - user_id: 1
+          user_name: Frank Chen
           payment_status: unpaid
-        - joined_at: 2000-01-23T04:56:07.000+00:00
-          end_at: 2000-01-23T04:56:07.000+00:00
-          user_id: 0
-          user_name: user_name
+        - user_id: 1
+          user_name: Frank Chen
           payment_status: unpaid
         is_public: false
         payment_period: 6
         payment_fee: 720
         starting_time: 2000-01-23T04:56:07.000+00:00
-        admin_name: Kevin
         announcement: Hi! This is the announcement from administrator
     PaymentStatus:
       type: string
@@ -696,10 +697,10 @@ components:
     body_2:
       type: object
       properties:
-        userId:
+        user_id:
           type: integer
           example: 1
-        roomId:
+        room_id:
           type: integer
           example: 2
     body_3:
