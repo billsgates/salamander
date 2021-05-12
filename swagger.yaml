@@ -211,6 +211,24 @@ paths:
       responses:
         "201":
           description: successfully update room
+    delete:
+      tags:
+        - rooms
+      summary: delete room
+      description: ''
+      operationId: deleteRoom
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: Room ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
   /rooms/{id}/start:
     patch:
       tags:

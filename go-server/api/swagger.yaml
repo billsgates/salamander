@@ -171,6 +171,25 @@ paths:
                 $ref: '#/components/schemas/RoomInfoResponse'
       security:
       - BearerAuth: []
+    delete:
+      tags:
+      - rooms
+      summary: delete room
+      operationId: deleteRoom
+      parameters:
+      - name: id
+        in: path
+        description: Room ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
     patch:
       tags:
       - rooms
