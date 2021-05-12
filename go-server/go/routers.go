@@ -90,6 +90,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"DeleteRoom",
+		strings.ToUpper("Delete"),
+		"/api/v1/rooms/{id}",
+		DeleteRoom,
+	},
+
+	Route{
 		"GetMenuInfo",
 		strings.ToUpper("Get"),
 		"/api/v1/rooms",
