@@ -46,7 +46,7 @@ $ make stop
 |             | /rooms                      | GET    | Complete    | Get all joined rooms                      |
 |             | /rooms/{room_id}            | GET    | In Progress | Get room detail by room_id                |
 |             | /rooms/{room_id}            | PATCH  | To Do       | Update room by room_id                    |
-|             | /rooms/{room_id}            | DELETE | To Do       | Delete room by room_id                    |
+|             | /rooms/{room_id}            | DELETE | Complete    | Delete room by room_id                    |
 |             | /rooms/{room_id}/start      | PATCH  | To Do       | Start the room                            |
 |             | /rooms/{room_id}/invitation | POST   | Complete    | Create an invitation code in room room_id |
 |             | /rooms/join                 | POST   | Complete    | Join room by invitation code              |
