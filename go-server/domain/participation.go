@@ -2,6 +2,7 @@ package domain
 
 import (
 	"context"
+	"time"
 )
 
 type PaymentStatus string
@@ -31,6 +32,7 @@ type ParticipationRepository interface {
 	GetRoomAdmin(ctx context.Context, roomId int32) (res *User, err error)
 	GetRoomMembers(ctx context.Context, roomId int32) (res []Participation, err error)
 	GetJoinedRooms(ctx context.Context, userId int32) ([]RoomItem, error)
+	GetRoomMemberByStartingTime(ctx context.Context, starting_time time.Time) (res []Participation, err error)
 	IsAdmin(ctx context.Context, roomId int32, userId int32) (bool, error)
 	LeaveRoom(ctx context.Context, roomId int32, userId int32) error
 }
