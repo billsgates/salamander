@@ -52,18 +52,9 @@ func (m *mysqlUserRepository) GetByEmailPassword(ctx context.Context, email stri
 }
 
 func (m *mysqlUserRepository) Update(ctx context.Context, user *domain.UserRequest) (err error) {
-	if user.ImageUrl != "" {
-		if err := m.Conn.Table("users").Where("id = ?", user.Id).
-			Update("name", user.Name).
-			Update("email", user.Email).
-			Update("image_url", user.ImageUrl).Error; err != nil {
-			return err
-		}
-		return nil
-	}
-	if err := m.Conn.Table("users").Where("id = ?", user.Id).
-		Update("name", user.Name).
-		Update("email", user.Email).Error; err != nil {
+	if err := m.Conn.Table("users").
+		Where("id = ?", user.Id).
+		Updates(&user).Error; err != nil {
 		return err
 	}
 

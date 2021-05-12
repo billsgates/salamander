@@ -16,10 +16,10 @@ type User struct {
 }
 
 type UserRequest struct {
-	Id       int32  `json:"id"`
-	Name     string `json:"name" binding:"required"`
-	Email    string `json:"email" binding:"required"`
-	ImageUrl string `json:"image_url"`
+	Id       int32  `json:"id,omitempty"`
+	Name     string `json:"name,omitempty"`
+	Email    string `json:"email,omitempty"`
+	ImageUrl string `json:"image_url,omitempty"`
 }
 
 type UserRepository interface {
