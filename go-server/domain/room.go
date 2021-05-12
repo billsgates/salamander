@@ -55,7 +55,7 @@ type RoomItem struct {
 
 type RoomInfoResponse struct {
 	RoomId        int32           `json:"room_id,omitempty"`
-	IsPublic      bool            `json:"is_public,omitempty"`
+	IsPublic      bool            `json:"is_public"`
 	Announcement  string          `json:"announcement"`
 	MaxCount      int32           `json:"max_count,omitempty"`
 	PaymentPeriod int32           `json:"payment_period,omitempty"`
@@ -72,6 +72,7 @@ type RoomInfoResponse struct {
 
 type RoomRepository interface {
 	Create(ctx context.Context, room *Room) (roomId int32, err error)
+	Update(ctx context.Context, roomId int32, room *Room) error
 }
 
 type RoomUsecase interface {
@@ -83,4 +84,5 @@ type RoomUsecase interface {
 	GenerateInvitationCode(ctx context.Context, roomId int32) (string, error)
 	JoinRoom(ctx context.Context, code string) error
 	LeaveRoom(ctx context.Context, roomId int32, userId int32) error
+	UpdateRoom(ctx context.Context, roomId int32, room *RoomRequest) error
 }

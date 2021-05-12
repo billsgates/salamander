@@ -216,3 +216,37 @@ func (r *roomUsecase) GetRoomMembers(c context.Context, roomId int32) (res []dom
 
 	return res, nil
 }
+
+func (r *roomUsecase) UpdateRoom(c context.Context, roomId int32, roomRequest *domain.RoomRequest) (err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	_, err = r.participationRepo.IsAdmin(ctx, roomId, user.Id)
+	if err != nil {
+		return room.ErrNotHost
+	}
+
+	plan, err := r.serviceRepo.GetPlanByKey(ctx, roomRequest.PlanName, fmt.Sprintf("%d", roomRequest.ServiceId))
+	if err != nil {
+		return err
+	}
+
+	if plan.MaxCount < roomRequest.MaxCount {
+		return room.ErrMaxCountExceed
+	}
+
+	err = r.roomRepo.Update(ctx, roomId, &domain.Room{
+		ServiceId:     roomRequest.ServiceId,
+		PlanName:      roomRequest.PlanName,
+		MaxCount:      roomRequest.MaxCount,
+		PaymentPeriod: roomRequest.PaymentPeriod,
+		IsPublic:      *roomRequest.IsPublic,
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
