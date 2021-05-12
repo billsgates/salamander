@@ -24,6 +24,7 @@ func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsec
 		roomEndpoints.POST("", handler.CreateRoom)
 		roomEndpoints.GET("", handler.GetJoinedRooms)
 		roomEndpoints.GET("/:roomID", handler.GetRoomInfo)
+		roomEndpoints.PATCH("/:roomID", handler.UpdateRoomInfo)
 		roomEndpoints.POST("/:roomID/invitation", handler.GenerateInvitationCode)
 		roomEndpoints.POST("/join", handler.JoinRoom)
 	}
@@ -159,4 +160,37 @@ func (u *RoomHandler) JoinRoom(c *gin.Context) {
 	}
 
 	c.Status(http.StatusOK)
+}
+
+func (u *RoomHandler) UpdateRoomInfo(c *gin.Context) {
+	var body domain.RoomRequest
+	if err := c.BindJSON(&body); err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	roomID, err := strconv.ParseInt(c.Param("roomID"), 10, 32)
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	err = u.RoomUsecase.UpdateRoom(c, int32(roomID), &body)
+	if err != nil {
+		logrus.Error(err)
+		if err == room.ErrNotHost {
+			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
+			return
+		}
+		if err == room.ErrMaxCountExceed {
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+			return
+		}
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	c.Status(http.StatusCreated)
 }

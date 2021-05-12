@@ -22,3 +22,11 @@ func (m *mysqlRoomRepository) Create(ctx context.Context, room *domain.Room) (ro
 
 	return room.Id, nil
 }
+
+func (m *mysqlRoomRepository) Update(ctx context.Context, roomId int32, room *domain.Room) (err error) {
+	if err := m.Conn.Table("rooms").Select("max_count", "service_id", "plan_name", "payment_period", "is_public").Where("room_id = ?", roomId).Updates(&room).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
