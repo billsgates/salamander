@@ -12,6 +12,7 @@ import (
 	"fmt"
 	_authHandlerHttpDelivery "go-server/auth/delivery/http"
 	_authUsecase "go-server/auth/usecase"
+	_queue "go-server/internal/infrastructure/queue"
 	_scheduler "go-server/internal/infrastructure/scheduler"
 	_invitationRepo "go-server/invitation/repository/mysql"
 	_participationHandlerHttpDelivery "go-server/participation/delivery/http"
@@ -83,6 +84,10 @@ func main() {
 		logrus.Fatal(err)
 	}
 
+	// rabbitmq
+	rabbitMQHandler := _queue.NewRabbitMQHandler()
+	go _queue.NewWorker(rabbitMQHandler)
+
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
@@ -111,6 +116,7 @@ func main() {
 		viper.GetString("auth.hash_salt"),
 		[]byte(viper.GetString("auth.signing_key")),
 		viper.GetDuration("auth.token_ttl"),
+		rabbitMQHandler,
 	)
 
 	authMiddleware := _authHandlerHttpDelivery.NewAuthMiddleware(authUsecase)
