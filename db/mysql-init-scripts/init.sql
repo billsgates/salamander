@@ -80,7 +80,7 @@ CREATE TABLE participation (
 
  PRIMARY KEY (user_id, room_id),
  FOREIGN KEY (user_id) REFERENCES users(id),
- FOREIGN KEY (room_id) REFERENCES rooms(room_id)
+ FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE CASCADE
 );
 
 CREATE TABLE invitation_codes (
@@ -91,7 +91,7 @@ CREATE TABLE invitation_codes (
  updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 
  PRIMARY KEY (room_id, invitation_code),
- FOREIGN KEY (room_id) REFERENCES rooms(room_id)
+ FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE CASCADE
 );
 
 -- password = 'kevin'
