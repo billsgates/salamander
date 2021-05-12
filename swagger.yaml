@@ -71,6 +71,34 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+    patch:
+      tags:
+        - users
+      summary: update user info
+      description: ''
+      operationId: updateUser
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        description: ''
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  name: 
+                    type: string
+                    example: Carolyn
+                  email:
+                    type: string
+                    example: Carolyn@example.com
+                  image_url:
+                    type: string
+                    format: url
+      responses:
+        "201":
+          description: successfully update user
   /users/{id}:
     get:
       tags:
@@ -94,41 +122,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-    patch:
-      tags:
-        - users
-      summary: update user info
-      description: ''
-      operationId: updateUser
-      security:
-        - BearerAuth: []
-      parameters:
-        - in: path
-          name: id
-          description: User ID
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        description: ''
-        content:
-          application/json:
-            schema:
-                type: object
-                properties:
-                  name: 
-                    type: string
-                    example: Carolyn
-                  email:
-                    type: string
-                    example: Carolyn@example.com
-                  image_url:
-                    type: string
-                    format: url
-      responses:
-        "201":
-          description: successfully update user
   /rooms:
     post:
       tags:

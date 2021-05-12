@@ -50,3 +50,13 @@ func (m *mysqlUserRepository) GetByEmailPassword(ctx context.Context, email stri
 
 	return user, nil
 }
+
+func (m *mysqlUserRepository) Update(ctx context.Context, user *domain.UserRequest) (err error) {
+	if err := m.Conn.Table("users").
+		Where("id = ?", user.Id).
+		Updates(&user).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
