@@ -44,8 +44,8 @@ $ make stop
 |             | /users/{user_id}            | GET    | Complete    | Get user detail by user_id                |
 | rooms       | /rooms                      | POST   | Complete    | Create a room                             |
 |             | /rooms                      | GET    | Complete    | Get all joined rooms                      |
-|             | /rooms/{room_id}            | GET    | In Progress | Get room detail by room_id                |
-|             | /rooms/{room_id}            | PATCH  | To Do       | Update room by room_id                    |
+|             | /rooms/{room_id}            | GET    | Complete    | Get room detail by room_id                |
+|             | /rooms/{room_id}            | PATCH  | Complete    | Update room by room_id                    |
 |             | /rooms/{room_id}/start      | PATCH  | To Do       | Start the room                            |
 |             | /rooms/{room_id}/invitation | POST   | Complete    | Create an invitation code in room room_id |
 |             | /rooms/join                 | POST   | Complete    | Join room by invitation code              |
