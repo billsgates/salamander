@@ -32,7 +32,7 @@ func NewAuthUseCase(
 	}
 }
 
-func (a *authUsecase) SignUp(ctx context.Context, name string, email string, password string) (err error) {
+func (a *authUsecase) SignUp(ctx context.Context, name string, email string, password string) (res string, err error) {
 	pwd := sha1.New()
 	pwd.Write([]byte(password))
 	pwd.Write([]byte(a.hashSalt))
@@ -43,7 +43,12 @@ func (a *authUsecase) SignUp(ctx context.Context, name string, email string, pas
 		PasswordDigest: fmt.Sprintf("%x", pwd.Sum(nil)),
 	}
 
-	return a.userRepo.Create(ctx, user)
+	err = a.userRepo.Create(ctx, user)
+	if err != nil {
+		return "", err
+	}
+
+	return a.SignIn(ctx, email, password)
 }
 
 func (a *authUsecase) SignIn(ctx context.Context, email string, password string) (string, error) {

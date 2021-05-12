@@ -25,7 +25,7 @@ type LoginRequest struct {
 }
 
 type AuthUsecase interface {
-	SignUp(ctx context.Context, name string, email string, password string) error
+	SignUp(ctx context.Context, name string, email string, password string) (string, error)
 	SignIn(ctx context.Context, email string, password string) (string, error)
 	ParseToken(ctx context.Context, accessToken string) (*User, error)
 }
