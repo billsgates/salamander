@@ -15,11 +15,19 @@ type User struct {
 	UpdatedAt      time.Time `json:"updated_at,omitempty"`
 }
 
+type UserRequest struct {
+	Id       int32  `json:"id"`
+	Name     string `json:"name" binding:"required"`
+	Email    string `json:"email" binding:"required"`
+	ImageUrl string `json:"image_url"`
+}
+
 type UserRepository interface {
 	Create(ctx context.Context, user *User) error
 	FetchAll(ctx context.Context) ([]User, error)
 	GetByID(ctx context.Context, id string) (*User, error)
 	GetByEmailPassword(ctx context.Context, email string, password string) (*User, error)
+	Update(ctx context.Context, user *UserRequest) error
 }
 
 type UserUsecase interface {
@@ -27,4 +35,5 @@ type UserUsecase interface {
 	FetchAll(ctx context.Context) ([]User, error)
 	GetByID(ctx context.Context, id string) (*User, error)
 	GetByEmailPassword(ctx context.Context, email string, password string) (*User, error)
+	Update(ctx context.Context, user *UserRequest) error
 }

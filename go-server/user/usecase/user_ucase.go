@@ -62,3 +62,14 @@ func (u *userUsecase) GetByEmailPassword(c context.Context, email string, passwo
 	}
 	return res, nil
 }
+
+func (u *userUsecase) Update(c context.Context, user *domain.UserRequest) (err error) {
+	ctx, cancel := context.WithTimeout(c, u.contextTimeout)
+	defer cancel()
+
+	err = u.userRepo.Update(ctx, user)
+	if err != nil {
+		return err
+	}
+	return nil
+}

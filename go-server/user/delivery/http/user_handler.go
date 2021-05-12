@@ -22,6 +22,7 @@ func NewUserHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, userUsec
 	userEndpoints := e.Group("users", authMiddleware)
 	{
 		userEndpoints.GET("", handler.GetAllUsers)
+		userEndpoints.PATCH("", handler.UpdateUserInfo)
 		userEndpoints.GET("/:userID", handler.GetUserByUserID)
 	}
 }
@@ -52,4 +53,23 @@ func (u *UserHandler) GetUserByUserID(c *gin.Context) {
 		Email:  anUser.Email,
 		Rating: anUser.Rating,
 	})
+}
+
+func (u *UserHandler) UpdateUserInfo(c *gin.Context) {
+	var body domain.UserRequest
+	if err := c.BindJSON(&body); err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+	body.Id = user.Id
+	err := u.UserUsecase.Update(c, &body)
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+	c.Status(http.StatusCreated)
 }
