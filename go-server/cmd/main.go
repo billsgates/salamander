@@ -12,6 +12,7 @@ import (
 	"fmt"
 	_authHandlerHttpDelivery "go-server/auth/delivery/http"
 	_authUsecase "go-server/auth/usecase"
+	_scheduler "go-server/internal/infrastructure/scheduler"
 	_invitationRepo "go-server/invitation/repository/mysql"
 	_participationHandlerHttpDelivery "go-server/participation/delivery/http"
 	_participationRepo "go-server/participation/repository/mysql"
@@ -122,6 +123,8 @@ func main() {
 		_serviceHandlerHttpDelivery.NewServiceHandler(v1Router, serviceUsecase)
 		_participationHandlerHttpDelivery.NewParticipationHandler(v1Router, authMiddleware, roomUsecase)
 	}
+
+	_scheduler.NewScheduler(roomUsecase, timeoutContext)
 
 	logrus.Fatal(r.Run(":" + viper.GetString("server.address")))
 }

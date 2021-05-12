@@ -270,3 +270,16 @@ func (r *roomUsecase) Delete(c context.Context, roomId int32) (err error) {
 
 	return nil
 }
+
+func (r *roomUsecase) GetTodayStartingMember(c context.Context) (res []domain.Participation, err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+	// truncate timestamp to date only
+	now := time.Now().Truncate(24 * time.Hour)
+	res, err = r.participationRepo.GetRoomMemberByStartingTime(ctx, now)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

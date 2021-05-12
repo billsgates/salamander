@@ -155,6 +155,29 @@ func (_m *RoomUsecase) GetRoomMembers(ctx context.Context, roomId int32) ([]doma
 	return r0, r1
 }
 
+// GetTodayStartingMember provides a mock function with given fields: c
+func (_m *RoomUsecase) GetTodayStartingMember(c context.Context) ([]domain.Participation, error) {
+	ret := _m.Called(c)
+
+	var r0 []domain.Participation
+	if rf, ok := ret.Get(0).(func(context.Context) []domain.Participation); ok {
+		r0 = rf(c)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]domain.Participation)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = rf(c)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // JoinRoom provides a mock function with given fields: ctx, code
 func (_m *RoomUsecase) JoinRoom(ctx context.Context, code string) error {
 	ret := _m.Called(ctx, code)

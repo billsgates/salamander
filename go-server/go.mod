@@ -3,6 +3,7 @@ module go-server
 go 1.16
 
 require (
+	github.com/robfig/cron/v3 v3.0.0
 	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.1

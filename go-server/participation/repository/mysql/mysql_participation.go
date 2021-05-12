@@ -3,6 +3,7 @@ package mysql
 import (
 	"context"
 	"go-server/domain"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -84,6 +85,18 @@ func (m *mysqlParticipationRepository) GetRoomMembers(c context.Context, roomId 
 	if err := m.Conn.Table("participation").Select("users.id AS user_id, users.name AS user_name, participation.payment_status").
 		Joins("JOIN users ON users.id = participation.user_id").
 		Where("participation.room_id = ?", roomId).Scan(&members).Error; err != nil {
+		return nil, err
+	}
+
+	return members, nil
+}
+
+func (m *mysqlParticipationRepository) GetRoomMemberByStartingTime(c context.Context, starting_time time.Time) (res []domain.Participation, err error) {
+	var members []domain.Participation
+	if err := m.Conn.Table("participation").Select("users.id AS user_id, users.name AS user_name, participation.payment_status").
+		Joins("JOIN users ON users.id = participation.user_id").
+		Joins("JOIN rooms ON rooms.room_id = participation.room_id").
+		Where("rooms.starting_time = ?", starting_time).Scan(&members).Error; err != nil {
 		return nil, err
 	}
 
