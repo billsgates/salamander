@@ -22,3 +22,12 @@ func (m *mysqlRoomRepository) Create(ctx context.Context, room *domain.Room) (ro
 
 	return room.Id, nil
 }
+
+func (m *mysqlRoomRepository) Delete(ctx context.Context, roomId int32) (err error) {
+	var room *domain.Room
+	if err := m.Conn.Table("rooms").Where("room_id = ?", roomId).Delete(&room).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

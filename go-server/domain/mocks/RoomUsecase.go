@@ -28,6 +28,20 @@ func (_m *RoomUsecase) Create(ctx context.Context, room *domain.RoomRequest) err
 	return r0
 }
 
+// Delete provides a mock function with given fields: ctx, roomId
+func (_m *RoomUsecase) Delete(ctx context.Context, roomId int32) error {
+	ret := _m.Called(ctx, roomId)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) error); ok {
+		r0 = rf(ctx, roomId)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // GenerateInvitationCode provides a mock function with given fields: ctx, roomId
 func (_m *RoomUsecase) GenerateInvitationCode(ctx context.Context, roomId int32) (string, error) {
 	ret := _m.Called(ctx, roomId)

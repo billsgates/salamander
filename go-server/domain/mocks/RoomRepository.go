@@ -34,3 +34,17 @@ func (_m *RoomRepository) Create(ctx context.Context, room *domain.Room) (int32,
 
 	return r0, r1
 }
+
+// Delete provides a mock function with given fields: ctx, roomId
+func (_m *RoomRepository) Delete(ctx context.Context, roomId int32) error {
+	ret := _m.Called(ctx, roomId)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) error); ok {
+		r0 = rf(ctx, roomId)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}

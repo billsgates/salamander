@@ -72,10 +72,12 @@ type RoomInfoResponse struct {
 
 type RoomRepository interface {
 	Create(ctx context.Context, room *Room) (roomId int32, err error)
+	Delete(ctx context.Context, roomId int32) (err error)
 }
 
 type RoomUsecase interface {
 	Create(ctx context.Context, room *RoomRequest) error
+	Delete(ctx context.Context, roomId int32) error
 	GetRoomInfo(ctx context.Context, roomId int32) (res *RoomInfoResponse, err error)
 	GetRoomAdmin(ctx context.Context, roomId int32) (res *User, err error)
 	GetRoomMembers(ctx context.Context, roomId int32) (res []Participation, err error)

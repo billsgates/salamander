@@ -216,3 +216,22 @@ func (r *roomUsecase) GetRoomMembers(c context.Context, roomId int32) (res []dom
 
 	return res, nil
 }
+
+func (r *roomUsecase) Delete(c context.Context, roomId int32) (err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	isAdmin, err := r.participationRepo.IsAdmin(ctx, roomId, user.Id)
+	if !isAdmin || err != nil {
+		return room.ErrNotHost
+	}
+
+	err = r.roomRepo.Delete(ctx, roomId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
