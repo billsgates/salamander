@@ -18,7 +18,7 @@ type RoomRequest struct {
 
 	PlanName string `json:"plan_name"`
 
-	PaymentPeriod int32 `json:"payment_period"`
+	PaymentPeriod int32 `json:"payment_period,omitempty"`
 
 	IsPublic bool `json:"is_public"`
 

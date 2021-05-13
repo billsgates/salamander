@@ -254,6 +254,13 @@ paths:
                   type: string
                   format: date-time
                   example: 2020-1-1
+                plan_interval: 
+                  type: integer
+                  format: month
+                  example: 12
+                payment_deadline: 
+                  type: integer
+                  example: 1
                 is_add_canlendar:
                   type: boolean
                   example: true
@@ -523,13 +530,11 @@ components:
       - max_count
       - service_id
       - plan_name
-      - payment_period
       - is_public
       example:
         max_count: 5
         service_id: 1
         plan_name: Premium
-        payment_period: 12
         is_public: true
     RoomJoinRequest:
       type: object
