@@ -34,7 +34,7 @@ type RoomRequest struct {
 	AdminId       int32  `json:"admin_id,omitempty"`
 	ServiceId     int32  `json:"service_id" binding:"required"`
 	PlanName      string `json:"plan_name" binding:"required"`
-	PaymentPeriod int32  `json:"payment_period" binding:"required"`
+	PaymentPeriod int32  `json:"payment_period"`
 	IsPublic      *bool  `json:"is_public" binding:"required"`
 	Announcement  string `json:"announcement,omitempty"`
 }
@@ -58,7 +58,7 @@ type RoomInfoResponse struct {
 	IsPublic      bool            `json:"is_public"`
 	Announcement  string          `json:"announcement"`
 	MaxCount      int32           `json:"max_count,omitempty"`
-	PaymentPeriod int32           `json:"payment_period,omitempty"`
+	PaymentPeriod int32           `json:"payment_period"`
 	RoomStatus    *RoomStatus     `json:"room_status,omitempty"`
 	StartingTime  *time.Time      `json:"starting_time"`
 	EndingTime    *time.Time      `json:"ending_time"`
