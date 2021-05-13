@@ -46,12 +46,11 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 	}
 
 	roomId, err := r.roomRepo.Create(ctx, &domain.Room{
-		ServiceId:     roomRequest.ServiceId,
-		PlanName:      roomRequest.PlanName,
-		MaxCount:      roomRequest.MaxCount,
-		PaymentPeriod: roomRequest.PaymentPeriod,
-		AdminId:       roomRequest.AdminId,
-		IsPublic:      *roomRequest.IsPublic,
+		ServiceId: roomRequest.ServiceId,
+		PlanName:  roomRequest.PlanName,
+		MaxCount:  roomRequest.MaxCount,
+		AdminId:   roomRequest.AdminId,
+		IsPublic:  *roomRequest.IsPublic,
 	})
 	if err != nil {
 		return err

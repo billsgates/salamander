@@ -53,7 +53,7 @@ CREATE TABLE rooms (
  room_id INT NOT NULL AUTO_INCREMENT,
  announcement VARCHAR(1000),
  is_public BOOLEAN NOT NULL,
- payment_period INT NOT NULL,
+ payment_period INT,
  room_status VARCHAR(255) NOT NULL DEFAULT 'created',
  starting_time TIMESTAMP,
  ending_time TIMESTAMP,
