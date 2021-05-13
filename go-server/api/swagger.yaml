@@ -71,6 +71,22 @@ paths:
                 x-content-type: application/json
       security:
       - BearerAuth: []
+    patch:
+      tags:
+      - users
+      summary: update user info
+      operationId: updateUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+        required: true
+      responses:
+        "201":
+          description: successfully update user
+      security:
+      - BearerAuth: []
   /users/{id}:
     get:
       tags:
@@ -93,31 +109,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-      security:
-      - BearerAuth: []
-    patch:
-      tags:
-      - users
-      summary: update user info
-      operationId: updateUser
-      parameters:
-      - name: id
-        in: path
-        description: User ID
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body'
-        required: true
-      responses:
-        "201":
-          description: successfully update user
       security:
       - BearerAuth: []
   /rooms:
@@ -473,7 +464,6 @@ components:
       required:
       - is_public
       - max_count
-      - payment_period
       - plan_name
       - service_id
       type: object
@@ -497,7 +487,6 @@ components:
         max_count: 5
         service_id: 1
         plan_name: Premium
-        payment_period: 12
         is_public: true
     RoomJoinRequest:
       required:
@@ -707,6 +696,13 @@ components:
         start_date:
           type: string
           format: date-time
+        plan_interval:
+          type: integer
+          format: month
+          example: 12
+        payment_deadline:
+          type: integer
+          example: 1
         is_add_canlendar:
           type: boolean
           example: true
