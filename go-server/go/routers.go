@@ -169,7 +169,7 @@ var routes = Routes{
 	Route{
 		"UpdateUser",
 		strings.ToUpper("Patch"),
-		"/api/v1/users/{id}",
+		"/api/v1/users",
 		UpdateUser,
 	},
 }

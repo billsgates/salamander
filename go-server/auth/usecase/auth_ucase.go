@@ -8,6 +8,8 @@ import (
 
 	"go-server/auth"
 	"go-server/domain"
+	adapterqueue "go-server/internal/adapter/queue"
+	"go-server/internal/infrastructure/queue"
 
 	"github.com/dgrijalva/jwt-go/v4"
 )
@@ -17,18 +19,21 @@ type authUsecase struct {
 	hashSalt       string
 	signingKey     []byte
 	expireDuration time.Duration
+	producer       adapterqueue.Producer
 }
 
 func NewAuthUseCase(
 	userRepo domain.UserRepository,
 	hashSalt string,
 	signingKey []byte,
-	tokenTTLSeconds time.Duration) domain.AuthUsecase {
+	tokenTTLSeconds time.Duration,
+	queue *queue.RabbitMQHandler) domain.AuthUsecase {
 	return &authUsecase{
 		userRepo:       userRepo,
 		hashSalt:       hashSalt,
 		signingKey:     signingKey,
 		expireDuration: time.Second * tokenTTLSeconds,
+		producer:       adapterqueue.NewProducer(queue.Channel(), "verification"),
 	}
 }
 
@@ -48,6 +53,7 @@ func (a *authUsecase) SignUp(ctx context.Context, name string, email string, pas
 		return "", err
 	}
 
+	a.producer.Publish([]byte(email))
 	return a.SignIn(ctx, email, password)
 }
 

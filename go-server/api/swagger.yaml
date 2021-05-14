@@ -71,6 +71,22 @@ paths:
                 x-content-type: application/json
       security:
       - BearerAuth: []
+    patch:
+      tags:
+      - users
+      summary: update user info
+      operationId: updateUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+        required: true
+      responses:
+        "201":
+          description: successfully update user
+      security:
+      - BearerAuth: []
   /users/{id}:
     get:
       tags:
@@ -93,31 +109,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-      security:
-      - BearerAuth: []
-    patch:
-      tags:
-      - users
-      summary: update user info
-      operationId: updateUser
-      parameters:
-      - name: id
-        in: path
-        description: User ID
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body'
-        required: true
-      responses:
-        "201":
-          description: successfully update user
       security:
       - BearerAuth: []
   /rooms:

@@ -96,3 +96,17 @@ func (_m *UserRepository) GetByID(ctx context.Context, id string) (*domain.User,
 
 	return r0, r1
 }
+
+// Update provides a mock function with given fields: ctx, user
+func (_m *UserRepository) Update(ctx context.Context, user *domain.UserRequest) error {
+	ret := _m.Called(ctx, user)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, *domain.UserRequest) error); ok {
+		r0 = rf(ctx, user)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
