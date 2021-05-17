@@ -250,18 +250,18 @@ paths:
             schema:
               type: object
               properties:
-                start_date: 
+                starting_time: 
                   type: string
                   format: date-time
                   example: 2020-1-1
-                plan_interval: 
+                round_interval: 
                   type: integer
                   format: month
                   example: 12
                 payment_deadline: 
                   type: integer
                   example: 1
-                is_add_canlendar:
+                is_add_calendar:
                   type: boolean
                   example: true
       responses:

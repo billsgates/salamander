@@ -97,7 +97,7 @@ CREATE TABLE rounds (
  starting_time TIMESTAMP NOT NULL,
  round_interval INT NOT NULL,
  payment_deadline INT NOT NULL,
- is_add_to_google_calendar BOOLEAN NOT NULL DEFAULT false,
+ is_add_calendar BOOLEAN NOT NULL DEFAULT false,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
  updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 

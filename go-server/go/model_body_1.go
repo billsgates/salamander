@@ -13,11 +13,11 @@ import (
 
 type Body1 struct {
 
-	StartDate time.Time `json:"start_date,omitempty"`
+	StartingTime time.Time `json:"starting_time,omitempty"`
 
-	PlanInterval int32 `json:"plan_interval,omitempty"`
+	RoundInterval int32 `json:"round_interval,omitempty"`
 
 	PaymentDeadline int32 `json:"payment_deadline,omitempty"`
 
-	IsAddCanlendar bool `json:"is_add_canlendar,omitempty"`
+	IsAddCalendar bool `json:"is_add_calendar,omitempty"`
 }

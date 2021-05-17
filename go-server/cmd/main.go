@@ -20,6 +20,7 @@ import (
 	_roomHandlerHttpDelivery "go-server/room/delivery/http"
 	_roomRepo "go-server/room/repository/mysql"
 	_roomUsecase "go-server/room/usecase"
+	_roundRepo "go-server/round/repository/mysql"
 	_serviceHandlerHttpDelivery "go-server/service/delivery/http"
 	_serviceRepo "go-server/service/repository/mysql"
 	_serviceUsecase "go-server/service/usecase"
@@ -107,9 +108,10 @@ func main() {
 	serviceRepo := _serviceRepo.NewmysqlServiceRepository(db)
 	participationRepo := _participationRepo.NewmysqlParticipationRepository(db)
 	invitationRepo := _invitationRepo.NewmysqlInvitationRepository(db)
+	roundRepo := _roundRepo.NewmysqlRoundRepository(db)
 
 	userUsecase := _userUsecase.NewUserUsecase(userRepo, timeoutContext)
-	roomUsecase := _roomUsecase.NewRoomUsecase(roomRepo, participationRepo, serviceRepo, invitationRepo, timeoutContext)
+	roomUsecase := _roomUsecase.NewRoomUsecase(roomRepo, participationRepo, serviceRepo, invitationRepo, roundRepo, timeoutContext)
 	serviceUsecase := _serviceUsecase.NewServiceUsecase(serviceRepo, timeoutContext)
 	authUsecase := _authUsecase.NewAuthUseCase(
 		userRepo,

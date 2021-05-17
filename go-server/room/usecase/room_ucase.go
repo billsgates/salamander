@@ -15,15 +15,17 @@ type roomUsecase struct {
 	participationRepo domain.ParticipationRepository
 	serviceRepo       domain.ServiceRepository
 	invitationRepo    domain.InvitationRepository
+	roundRepo         domain.RoundRepository
 	contextTimeout    time.Duration
 }
 
-func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.ParticipationRepository, serviceRepo domain.ServiceRepository, invitationRepo domain.InvitationRepository, timeout time.Duration) domain.RoomUsecase {
+func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.ParticipationRepository, serviceRepo domain.ServiceRepository, invitationRepo domain.InvitationRepository, roundRepo domain.RoundRepository, timeout time.Duration) domain.RoomUsecase {
 	return &roomUsecase{
 		roomRepo:          roomRepo,
 		participationRepo: participationRepo,
 		serviceRepo:       serviceRepo,
 		invitationRepo:    invitationRepo,
+		roundRepo:         roundRepo,
 		contextTimeout:    timeout,
 	}
 }
@@ -281,4 +283,15 @@ func (r *roomUsecase) GetTodayStartingMember(c context.Context) (res []domain.Pa
 	}
 
 	return res, nil
+}
+
+func (r *roomUsecase) AddRound(c context.Context, roomId int32, round *domain.Round) (err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	err = r.roundRepo.AddRound(ctx, roomId, round)
+	if err != nil {
+		return err
+	}
+	return nil
 }
