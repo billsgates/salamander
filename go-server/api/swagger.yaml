@@ -611,18 +611,8 @@ components:
         max_count:
           type: integer
           example: 4
-        payment_period:
-          type: integer
-          format: month
-          example: 6
         room_status:
           $ref: '#/components/schemas/RoomStatus'
-        starting_time:
-          type: string
-          format: date-time
-        ending_time:
-          type: string
-          format: date-time
         service_name:
           type: string
           example: Netflix
@@ -635,6 +625,8 @@ components:
         payment_fee:
           type: integer
           example: 720
+        round_info:
+          $ref: '#/components/schemas/RoundInfo'
         admin:
           $ref: '#/components/schemas/Admin'
         members:
@@ -643,17 +635,14 @@ components:
             $ref: '#/components/schemas/Member'
       example:
         room_id: 1
-        role: member
-        ending_time: 2000-01-23T04:56:07.000+00:00
-        service_name: Netflix
-        admin:
-          name: Kevin Yu
-          email: kevin@ntu.im
-          rating: 4
-          phone: 9.12345678E8
-        plan_name: Premium
-        room_status: created
         max_count: 4
+        role: member
+        service_name: Netflix
+        round_info:
+          ending_time: 2000-01-23T04:56:07.000+00:00
+          round_interval: 12
+          starting_time: 2000-01-23T04:56:07.000+00:00
+          payment_deadline: 2000-01-23T04:56:07.000+00:00
         members:
         - user_id: 1
           user_name: Frank Chen
@@ -662,10 +651,35 @@ components:
           user_name: Frank Chen
           payment_status: unpaid
         is_public: false
-        payment_period: 6
         payment_fee: 720
-        starting_time: 2000-01-23T04:56:07.000+00:00
+        admin:
+          name: Kevin Yu
+          email: kevin@ntu.im
+          rating: 4
+          phone: 9.12345678E8
+        plan_name: Premium
         announcement: Hi! This is the announcement from administrator
+        room_status: created
+    RoundInfo:
+      type: object
+      properties:
+        payment_deadline:
+          type: string
+          format: date-time
+        round_interval:
+          type: integer
+          example: 12
+        starting_time:
+          type: string
+          format: date-time
+        ending_time:
+          type: string
+          format: date-time
+      example:
+        ending_time: 2000-01-23T04:56:07.000+00:00
+        round_interval: 12
+        starting_time: 2000-01-23T04:56:07.000+00:00
+        payment_deadline: 2000-01-23T04:56:07.000+00:00
     PaymentStatus:
       type: string
       enum:

@@ -645,20 +645,8 @@ components:
         max_count:
           type: integer
           example: 4
-        payment_period:
-          type: integer
-          format: month
-          example: 6
         room_status:
           $ref: '#/components/schemas/RoomStatus'
-        starting_time:
-          type: string
-          format: date-time
-          example: 2021-1-1
-        ending_time:
-          type: string
-          format: date-time
-          example: 2021-6-1
         service_name:
           type: string
           example: Netflix
@@ -671,12 +659,32 @@ components:
         payment_fee:
           type: integer
           example: 720
+        round_info:
+          $ref: '#/components/schemas/RoundInfo'
         admin:
           $ref: '#/components/schemas/Admin'
         members:
           type: array
           items:
             $ref: '#/components/schemas/Member'
+    RoundInfo:
+      type: object
+      properties:
+        payment_deadline:
+          type: string
+          format: date-time
+          example: 2021-12-24
+        round_interval:
+          type: integer
+          example: 12
+        starting_time:
+          type: string
+          format: date-time
+          example: 2021-1-1
+        ending_time:
+          type: string
+          format: date-time
+          example: 2021-6-1
     PaymentStatus:
       type: string
       enum:

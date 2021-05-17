@@ -54,20 +54,18 @@ type RoomItem struct {
 }
 
 type RoomInfoResponse struct {
-	RoomId        int32           `json:"room_id,omitempty"`
-	IsPublic      bool            `json:"is_public"`
-	Announcement  string          `json:"announcement"`
-	MaxCount      int32           `json:"max_count,omitempty"`
-	PaymentPeriod int32           `json:"payment_period"`
-	RoomStatus    *RoomStatus     `json:"room_status,omitempty"`
-	StartingTime  *time.Time      `json:"starting_time"`
-	EndingTime    *time.Time      `json:"ending_time"`
-	ServiceName   string          `json:"service_name,omitempty"`
-	PlanName      string          `json:"plan_name,omitempty"`
-	Role          string          `json:"role,omitempty"`
-	PaymentFee    int32           `json:"payment_fee,omitempty"`
-	Admin         *User           `json:"admin,omitempty" gorm:"-"`
-	Members       []Participation `json:"members,omitempty" gorm:"-"`
+	RoomId       int32           `json:"room_id,omitempty"`
+	IsPublic     bool            `json:"is_public"`
+	Announcement string          `json:"announcement"`
+	MaxCount     int32           `json:"max_count,omitempty"`
+	RoomStatus   *RoomStatus     `json:"room_status,omitempty"`
+	ServiceName  string          `json:"service_name,omitempty"`
+	PlanName     string          `json:"plan_name,omitempty"`
+	Role         string          `json:"role,omitempty"`
+	PaymentFee   int32           `json:"payment_fee,omitempty"`
+	Round        *RoundInfo      `json:"round" gorm:"-"`
+	Admin        *User           `json:"admin,omitempty" gorm:"-"`
+	Members      []Participation `json:"members,omitempty" gorm:"-"`
 }
 
 type RoomRepository interface {

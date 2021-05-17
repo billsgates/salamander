@@ -12,6 +12,13 @@ type Round struct {
 	IsAddCalendar   *bool  `json:"is_add_calendar,omitempty" binding:"required"`
 }
 
+type RoundInfo struct {
+	StartingTime    string `json:"starting_time"`
+	EndingTime      string `json:"ending_time"`
+	PaymentDeadline string `json:"payment_deadline"`
+	RoundInterval   int32  `json:"round_interval"`
+}
+
 type RoundRepository interface {
 	AddRound(ctx context.Context, roomId int32, round *Round) error
 }
