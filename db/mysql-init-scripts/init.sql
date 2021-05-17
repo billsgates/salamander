@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS rooms;
 DROP TABLE IF EXISTS service_providers;
 DROP TABLE IF EXISTS participation;
 DROP TABLE IF EXISTS invitation_codes;
+DROP TABLE IF EXISTS rounds;
 DROP TABLE IF EXISTS plans;
  
 CREATE TABLE users (
@@ -53,10 +54,7 @@ CREATE TABLE rooms (
  room_id INT NOT NULL AUTO_INCREMENT,
  announcement VARCHAR(1000),
  is_public BOOLEAN NOT NULL,
- payment_period INT,
  room_status VARCHAR(255) NOT NULL DEFAULT 'created',
- starting_time TIMESTAMP,
- ending_time TIMESTAMP,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
  updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
  max_count INT NOT NULL,
@@ -94,6 +92,19 @@ CREATE TABLE invitation_codes (
  FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE CASCADE
 );
 
+CREATE TABLE rounds (
+ room_id INT,
+ starting_time TIMESTAMP NOT NULL,
+ round_interval INT NOT NULL,
+ payment_deadline INT NOT NULL,
+ is_add_to_google_calendar BOOLEAN NOT NULL DEFAULT false,
+ created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+ updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+
+ PRIMARY KEY (room_id, starting_time),
+ FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE CASCADE
+);
+
 -- password = 'kevin'
 INSERT INTO users (name, email, password_digest) VALUES ('Kevin Yu', 'kevin@ntu.im', '61d1f2b7264c447dcdb110f233551e5c51520d5f');
 -- password = 'frank'
@@ -120,8 +131,8 @@ INSERT INTO plans (service_id, plan_name, cost, max_count) VALUES ('3', 'Individ
 INSERT INTO plans (service_id, plan_name, cost, max_count) VALUES ('3', 'Duo', 198, 2);
 INSERT INTO plans (service_id, plan_name, cost, max_count) VALUES ('3', 'Family', 240, 6);
 
-INSERT INTO `rooms` (`room_id`, `announcement`, `is_public`, `payment_period`, `room_status`, `starting_time`, `ending_time`, `created_at`, `updated_at`, `max_count`, `admin_id`, `service_id`, `plan_name`) VALUES
-(1,	NULL,	1,	12,	'created',	NULL,	NULL,	'2021-05-06 07:01:20',	'2021-05-06 07:01:20',	4,	1,	1,	'Premium');
+INSERT INTO `rooms` (`room_id`, `announcement`, `is_public`, `max_count`, `admin_id`, `service_id`, `plan_name`) VALUES
+(1,	NULL,	1,	4,	1,	1,	'Premium');
 
 INSERT INTO `invitation_codes` (`room_id`, `invitation_code`, `is_valid`, `created_at`, `updated_at`) VALUES
 (1,	'15a447a',	0,	'2021-05-06 07:01:52',	'2021-05-06 07:10:19'),
