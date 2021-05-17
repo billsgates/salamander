@@ -106,6 +106,17 @@ func (u *RoomHandler) GetRoomInfo(c *gin.Context) {
 		return
 	}
 
+	roomRound, err := u.RoomUsecase.GetRound(c, int32(roomID))
+	if err != nil {
+		logrus.Error(err)
+		if err == room.ErrNotMember {
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+			return
+		}
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
 	admin, err := u.RoomUsecase.GetRoomAdmin(c, int32(roomID))
 	if err != nil {
 		logrus.Error(err)
@@ -129,6 +140,7 @@ func (u *RoomHandler) GetRoomInfo(c *gin.Context) {
 	}
 
 	roomInfo.Admin = admin
+	roomInfo.Round = roomRound
 	roomInfo.Members = members
 
 	c.JSON(http.StatusOK, roomInfo)
@@ -239,6 +251,10 @@ func (u *RoomHandler) AddRound(c *gin.Context) {
 	err = u.RoomUsecase.AddRound(c, int32(roomID), &body)
 	if err != nil {
 		logrus.Error(err)
+		if err == room.ErrNotHost {
+			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
+			return
+		}
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}

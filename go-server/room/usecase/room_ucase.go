@@ -289,9 +289,24 @@ func (r *roomUsecase) AddRound(c context.Context, roomId int32, round *domain.Ro
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	isAdmin, err := r.participationRepo.IsAdmin(ctx, roomId, user.Id)
+	if !isAdmin || err != nil {
+		return room.ErrNotHost
+	}
+
 	err = r.roundRepo.AddRound(ctx, roomId, round)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (r *roomUsecase) GetRound(c context.Context, roomId int32) (res *domain.RoundInfo, err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	res, err = r.roundRepo.GetRound(ctx, roomId)
+	return res, nil
 }

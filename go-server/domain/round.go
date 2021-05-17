@@ -21,4 +21,5 @@ type RoundInfo struct {
 
 type RoundRepository interface {
 	AddRound(ctx context.Context, roomId int32, round *Round) error
+	GetRound(ctx context.Context, roomId int32) (res *RoundInfo, err error)
 }
