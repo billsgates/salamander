@@ -16,8 +16,9 @@ const (
 type Room struct {
 	Id            int32       `json:"id,omitempty"`
 	Announcement  string      `json:"announcement,omitempty"`
-	IsPublic      bool        `json:"is_public,omitempty"`
+	IsPublic      *bool       `json:"is_public,omitempty"`
 	RoomStatus    *RoomStatus `json:"room_status,omitempty"`
+	RoundId       int32       `json:"round_id,omitempty"`
 	StartingTime  time.Time   `json:"starting_time,omitempty"`
 	EndingTime    time.Time   `json:"ending_time,omitempty"`
 	PaymentPeriod int32       `json:"payment_period"`
@@ -71,6 +72,7 @@ type RoomInfoResponse struct {
 type RoomRepository interface {
 	Create(ctx context.Context, room *Room) (roomId int32, err error)
 	Update(ctx context.Context, roomId int32, room *Room) error
+	UpdateRoundId(ctx context.Context, roomId int32, roundId int32) error
 	Delete(ctx context.Context, roomId int32) (err error)
 }
 

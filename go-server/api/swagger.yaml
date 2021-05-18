@@ -476,9 +476,6 @@ components:
           type: integer
         plan_name:
           type: string
-        payment_period:
-          type: integer
-          format: month
         is_public:
           type: boolean
         announcement:
@@ -709,7 +706,7 @@ components:
       properties:
         starting_time:
           type: string
-          format: date-time
+          example: 2020-05-15
         round_interval:
           type: integer
           format: month

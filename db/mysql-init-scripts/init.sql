@@ -37,6 +37,18 @@ CREATE TABLE service_providers (
 
  PRIMARY KEY (id)
 );
+
+CREATE TABLE rounds (
+ round_id INT NOT NULL AUTO_INCREMENT,
+ starting_time TIMESTAMP NOT NULL,
+ ending_time TIMESTAMP NOT NULL,
+ round_interval INT NOT NULL,
+ payment_deadline TIMESTAMP NOT NULL,
+ is_add_calendar BOOLEAN NOT NULL DEFAULT false,
+ created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+
+ PRIMARY KEY (round_id)
+);
  
 CREATE TABLE plans (
  service_id INT,
@@ -55,6 +67,7 @@ CREATE TABLE rooms (
  announcement VARCHAR(1000),
  is_public BOOLEAN NOT NULL,
  room_status VARCHAR(255) NOT NULL DEFAULT 'created',
+ round_id INT NULL,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
  updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
  max_count INT NOT NULL,
@@ -63,6 +76,7 @@ CREATE TABLE rooms (
  plan_name VARCHAR(255),
 
  PRIMARY KEY (room_id),
+ FOREIGN KEY (round_id) REFERENCES rounds(round_id) ON DELETE SET NULL,
  FOREIGN KEY (admin_id) REFERENCES users(id),
  FOREIGN KEY (service_id) REFERENCES service_providers(id),
  FOREIGN KEY (service_id, plan_name) REFERENCES plans(service_id, plan_name)
@@ -89,19 +103,6 @@ CREATE TABLE invitation_codes (
  updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 
  PRIMARY KEY (room_id, invitation_code),
- FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE CASCADE
-);
-
-CREATE TABLE rounds (
- room_id INT UNIQUE,
- starting_time TIMESTAMP NOT NULL,
- ending_time TIMESTAMP NOT NULL,
- round_interval INT NOT NULL,
- payment_deadline TIMESTAMP NOT NULL,
- is_add_calendar BOOLEAN NOT NULL DEFAULT false,
- created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-
- PRIMARY KEY (room_id, starting_time),
  FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE CASCADE
 );
 

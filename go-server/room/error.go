@@ -9,4 +9,5 @@ var (
 	ErrRoomFull              = errors.New("room is full")
 	ErrInvalidInvitationCode = errors.New("invalid invitation code")
 	ErrAlreadyJoined         = errors.New("already joined")
+	ErrRoundAlreadyCreated   = errors.New("already created round")
 )

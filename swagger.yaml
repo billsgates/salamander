@@ -252,8 +252,7 @@ paths:
               properties:
                 starting_time: 
                   type: string
-                  format: date-time
-                  example: 2020-1-1
+                  example: '2020-05-15'
                 round_interval: 
                   type: integer
                   format: month
@@ -519,9 +518,6 @@ components:
           type: integer
         plan_name:
           type: string
-        payment_period:
-          format: month
-          type: integer
         is_public:
           type: boolean
         announcement:

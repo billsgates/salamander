@@ -14,18 +14,25 @@ type RoundRepository struct {
 	mock.Mock
 }
 
-// AddRound provides a mock function with given fields: ctx, roomId, round
-func (_m *RoundRepository) AddRound(ctx context.Context, roomId int32, round *domain.Round) error {
-	ret := _m.Called(ctx, roomId, round)
+// AddRound provides a mock function with given fields: ctx, round
+func (_m *RoundRepository) AddRound(ctx context.Context, round *domain.Round) (int32, error) {
+	ret := _m.Called(ctx, round)
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, int32, *domain.Round) error); ok {
-		r0 = rf(ctx, roomId, round)
+	var r0 int32
+	if rf, ok := ret.Get(0).(func(context.Context, *domain.Round) int32); ok {
+		r0 = rf(ctx, round)
 	} else {
-		r0 = ret.Error(0)
+		r0 = ret.Get(0).(int32)
 	}
 
-	return r0
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *domain.Round) error); ok {
+		r1 = rf(ctx, round)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // GetRound provides a mock function with given fields: ctx, roomId

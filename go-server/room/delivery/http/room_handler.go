@@ -213,6 +213,8 @@ func (u *RoomHandler) UpdateRoomInfo(c *gin.Context) {
 		return
 	}
 
+	logrus.Info("update body: ", body)
+
 	err = u.RoomUsecase.UpdateRoom(c, int32(roomID), &body)
 	if err != nil {
 		logrus.Error(err)
@@ -252,6 +254,10 @@ func (u *RoomHandler) AddRound(c *gin.Context) {
 	if err != nil {
 		logrus.Error(err)
 		if err == room.ErrNotHost {
+			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
+			return
+		}
+		if err == room.ErrRoundAlreadyCreated {
 			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
 			return
 		}

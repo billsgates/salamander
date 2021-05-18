@@ -54,7 +54,7 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 		PlanName:  roomRequest.PlanName,
 		MaxCount:  roomRequest.MaxCount,
 		AdminId:   roomRequest.AdminId,
-		IsPublic:  *roomRequest.IsPublic,
+		IsPublic:  roomRequest.IsPublic,
 	})
 	if err != nil {
 		return err
@@ -245,7 +245,8 @@ func (r *roomUsecase) UpdateRoom(c context.Context, roomId int32, roomRequest *d
 		PlanName:      roomRequest.PlanName,
 		MaxCount:      roomRequest.MaxCount,
 		PaymentPeriod: roomRequest.PaymentPeriod,
-		IsPublic:      *roomRequest.IsPublic,
+		IsPublic:      roomRequest.IsPublic,
+		Announcement:  roomRequest.Announcement,
 	})
 
 	if err != nil {
@@ -298,6 +299,11 @@ func (r *roomUsecase) AddRound(c context.Context, roomId int32, roundRequest *do
 		return room.ErrNotHost
 	}
 
+	roundInfo, err := r.GetRound(ctx, roomId)
+	if roundInfo.StartingTime != "" {
+		return room.ErrRoundAlreadyCreated
+	}
+
 	start, err := time.Parse("2006-01-02", roundRequest.StartingTime)
 	if err != nil {
 		logrus.Info("parse time err: ", err)
@@ -306,8 +312,7 @@ func (r *roomUsecase) AddRound(c context.Context, roomId int32, roundRequest *do
 	end := start.AddDate(0, int(roundRequest.RoundInterval), 0)
 	deadline := end.AddDate(0, 0, -(roundRequest.PaymentDeadline * 7))
 
-	err = r.roundRepo.AddRound(ctx, roomId, &domain.Round{
-		RoomId:          roomId,
+	roundId, err := r.roundRepo.AddRound(ctx, &domain.Round{
 		StartingTime:    start,
 		EndingTime:      end,
 		RoundInterval:   roundRequest.RoundInterval,
@@ -317,6 +322,12 @@ func (r *roomUsecase) AddRound(c context.Context, roomId int32, roundRequest *do
 	if err != nil {
 		return err
 	}
+
+	err = r.roomRepo.UpdateRoundId(ctx, roomId, roundId)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
