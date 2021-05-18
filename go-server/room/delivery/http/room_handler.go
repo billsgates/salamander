@@ -239,7 +239,7 @@ func (u *RoomHandler) AddRound(c *gin.Context) {
 		return
 	}
 
-	var body domain.Round
+	var body domain.RoundRequest
 	body.RoomId = int32(roomID)
 
 	if err := c.BindJSON(&body); err != nil {

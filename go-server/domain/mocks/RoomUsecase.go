@@ -15,11 +15,11 @@ type RoomUsecase struct {
 }
 
 // AddRound provides a mock function with given fields: ctx, roomId, round
-func (_m *RoomUsecase) AddRound(ctx context.Context, roomId int32, round *domain.Round) error {
+func (_m *RoomUsecase) AddRound(ctx context.Context, roomId int32, round *domain.RoundRequest) error {
 	ret := _m.Called(ctx, roomId, round)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, int32, *domain.Round) error); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, int32, *domain.RoundRequest) error); ok {
 		r0 = rf(ctx, roomId, round)
 	} else {
 		r0 = ret.Error(0)

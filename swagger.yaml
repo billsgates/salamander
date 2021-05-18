@@ -672,19 +672,16 @@ components:
       properties:
         payment_deadline:
           type: string
-          format: date-time
-          example: 2021-12-24
+          example: 2021/11/10
         round_interval:
           type: integer
-          example: 12
+          example: 5
         starting_time:
           type: string
-          format: date-time
-          example: 2021-1-1
+          example: 2021/06/17
         ending_time:
           type: string
-          format: date-time
-          example: 2021-6-1
+          example: 2021/11/17
     PaymentStatus:
       type: string
       enum:

@@ -639,10 +639,10 @@ components:
         role: member
         service_name: Netflix
         round_info:
-          ending_time: 2000-01-23T04:56:07.000+00:00
-          round_interval: 12
-          starting_time: 2000-01-23T04:56:07.000+00:00
-          payment_deadline: 2000-01-23T04:56:07.000+00:00
+          ending_time: 2021/11/17
+          round_interval: 5
+          starting_time: 2021/06/17
+          payment_deadline: 2021/11/10
         members:
         - user_id: 1
           user_name: Frank Chen
@@ -665,21 +665,21 @@ components:
       properties:
         payment_deadline:
           type: string
-          format: date-time
+          example: 2021/11/10
         round_interval:
           type: integer
-          example: 12
+          example: 5
         starting_time:
           type: string
-          format: date-time
+          example: 2021/06/17
         ending_time:
           type: string
-          format: date-time
+          example: 2021/11/17
       example:
-        ending_time: 2000-01-23T04:56:07.000+00:00
-        round_interval: 12
-        starting_time: 2000-01-23T04:56:07.000+00:00
-        payment_deadline: 2000-01-23T04:56:07.000+00:00
+        ending_time: 2021/11/17
+        round_interval: 5
+        starting_time: 2021/06/17
+        payment_deadline: 2021/11/10
     PaymentStatus:
       type: string
       enum:

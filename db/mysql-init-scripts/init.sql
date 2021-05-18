@@ -93,13 +93,13 @@ CREATE TABLE invitation_codes (
 );
 
 CREATE TABLE rounds (
- room_id INT,
+ room_id INT UNIQUE,
  starting_time TIMESTAMP NOT NULL,
+ ending_time TIMESTAMP NOT NULL,
  round_interval INT NOT NULL,
- payment_deadline INT NOT NULL,
+ payment_deadline TIMESTAMP NOT NULL,
  is_add_calendar BOOLEAN NOT NULL DEFAULT false,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
- updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 
  PRIMARY KEY (room_id, starting_time),
  FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE CASCADE

@@ -1,6 +1,6 @@
 <mxfile>
     <diagram id="MsC0r7KR_TDMJE-EqAvD" name="Page-1">
-        <mxGraphModel dx="1326" dy="1018" grid="0" gridSize="21" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
+        <mxGraphModel dx="1326" dy="752" grid="0" gridSize="21" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -395,7 +395,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="219" value="invitation_codes" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;shadow=0;labelBackgroundColor=none;strokeColor=#3700CC;fontColor=#000000;fillColor=#FFFFFF;swimlaneFillColor=#ffffff;" parent="1" vertex="1">
-                    <mxGeometry x="676" y="553" width="180" height="190" as="geometry"/>
+                    <mxGeometry x="674" y="487" width="180" height="190" as="geometry"/>
                 </mxCell>
                 <mxCell id="220" style="shape=partialRectangle;collapsible=0;dropTarget=0;pointerEvents=0;fillColor=none;top=0;left=0;bottom=0;right=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;strokeColor=#3700CC;" parent="219" vertex="1">
                     <mxGeometry y="30" width="180" height="30" as="geometry"/>
@@ -445,7 +445,7 @@
                 <mxCell id="241" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#000000;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="223" target="122" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
-                            <mxPoint x="883" y="628"/>
+                            <mxPoint x="883" y="562"/>
                             <mxPoint x="883" y="121"/>
                         </Array>
                         <mxPoint x="1019" y="641" as="sourcePoint"/>

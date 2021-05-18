@@ -2,14 +2,24 @@ package domain
 
 import (
 	"context"
+	"time"
 )
 
-type Round struct {
+type RoundRequest struct {
 	RoomId          int32  `json:"room_id,omitempty"`
 	StartingTime    string `json:"starting_time,omitempty" binding:"required"`
 	RoundInterval   int32  `json:"round_interval,omitempty" binding:"required"`
-	PaymentDeadline int32  `json:"payment_deadline,omitempty" binding:"required"`
+	PaymentDeadline int    `json:"payment_deadline,omitempty" binding:"required"`
 	IsAddCalendar   *bool  `json:"is_add_calendar,omitempty" binding:"required"`
+}
+
+type Round struct {
+	RoomId          int32     `json:"room_id,omitempty"`
+	StartingTime    time.Time `json:"starting_time,omitempty"`
+	EndingTime      time.Time `json:"ending_time,omitempty"`
+	RoundInterval   int32     `json:"round_interval,omitempty"`
+	PaymentDeadline time.Time `json:"payment_deadline,omitempty"`
+	IsAddCalendar   *bool     `json:"is_add_calendar,omitempty"`
 }
 
 type RoundInfo struct {

@@ -8,6 +8,8 @@ import (
 
 	"go-server/domain"
 	"go-server/room"
+
+	"github.com/sirupsen/logrus"
 )
 
 type roomUsecase struct {
@@ -285,7 +287,7 @@ func (r *roomUsecase) GetTodayStartingMember(c context.Context) (res []domain.Pa
 	return res, nil
 }
 
-func (r *roomUsecase) AddRound(c context.Context, roomId int32, round *domain.Round) (err error) {
+func (r *roomUsecase) AddRound(c context.Context, roomId int32, roundRequest *domain.RoundRequest) (err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 
@@ -296,7 +298,22 @@ func (r *roomUsecase) AddRound(c context.Context, roomId int32, round *domain.Ro
 		return room.ErrNotHost
 	}
 
-	err = r.roundRepo.AddRound(ctx, roomId, round)
+	start, err := time.Parse("2006-01-02", roundRequest.StartingTime)
+	if err != nil {
+		logrus.Info("parse time err: ", err)
+		return err
+	}
+	end := start.AddDate(0, int(roundRequest.RoundInterval), 0)
+	deadline := end.AddDate(0, 0, -(roundRequest.PaymentDeadline * 7))
+
+	err = r.roundRepo.AddRound(ctx, roomId, &domain.Round{
+		RoomId:          roomId,
+		StartingTime:    start,
+		EndingTime:      end,
+		RoundInterval:   roundRequest.RoundInterval,
+		PaymentDeadline: deadline,
+		IsAddCalendar:   roundRequest.IsAddCalendar,
+	})
 	if err != nil {
 		return err
 	}
@@ -308,5 +325,15 @@ func (r *roomUsecase) GetRound(c context.Context, roomId int32) (res *domain.Rou
 	defer cancel()
 
 	res, err = r.roundRepo.GetRound(ctx, roomId)
+	if res.StartingTime != "" {
+		start, _ := time.Parse(time.RFC3339, res.StartingTime)
+		end, _ := time.Parse(time.RFC3339, res.EndingTime)
+		deadline, _ := time.Parse(time.RFC3339, res.PaymentDeadline)
+
+		res.StartingTime = fmt.Sprintf("%d/%02d/%02d", start.Year(), start.Month(), start.Day())
+		res.EndingTime = fmt.Sprintf("%d/%02d/%02d", end.Year(), end.Month(), end.Day())
+		res.PaymentDeadline = fmt.Sprintf("%d/%02d/%02d", deadline.Year(), deadline.Month(), deadline.Day())
+	}
+
 	return res, nil
 }

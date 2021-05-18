@@ -4,6 +4,7 @@ import (
 	"context"
 	"go-server/domain"
 
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -16,6 +17,7 @@ func NewmysqlRoundRepository(Conn *gorm.DB) domain.RoundRepository {
 }
 
 func (m *mysqlRoundRepository) AddRound(ctx context.Context, roomId int32, round *domain.Round) (err error) {
+	logrus.Info("repo round: ", round)
 	if err := m.Conn.Table("rounds").Create(&round).Error; err != nil {
 		return err
 	}
