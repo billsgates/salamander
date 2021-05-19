@@ -310,7 +310,7 @@ func (r *roomUsecase) AddRound(c context.Context, roomId int32, roundRequest *do
 		return err
 	}
 	end := start.AddDate(0, int(roundRequest.RoundInterval), 0)
-	deadline := end.AddDate(0, 0, -(roundRequest.PaymentDeadline * 7))
+	deadline := start.AddDate(0, 0, -(roundRequest.PaymentDeadline * 7))
 
 	roundId, err := r.roundRepo.AddRound(ctx, &domain.Round{
 		StartingTime:    start,
