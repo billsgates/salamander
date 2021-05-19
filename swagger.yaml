@@ -226,6 +226,29 @@ paths:
       responses:
         "200":
           description: OK
+  /rooms/{id}/members:
+    get:
+      tags:
+        - rooms
+      summary: get all members of room 
+      description: ''
+      operationId: getAllRoomMembers
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: Room ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MembersResponse'
   /rooms/{id}/round:
     post:
       tags:
@@ -266,6 +289,24 @@ paths:
       responses:
         "201":
           description: successfully set room start Date
+    delete:
+      tags:
+        - rooms
+      summary: remove current round of room 
+      description: ''
+      operationId: removeRoomRound
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: Room ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: successfully remove current round
   /rooms/{id}/invitation:
     post:
       tags:
@@ -292,6 +333,34 @@ paths:
                 properties:
                   code:
                     type: string
+    get:
+      tags:
+        - rooms
+      summary: get all invitation codes
+      description: ''
+      operationId: getAllInvitationCodes
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: Room ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    code:
+                      type: string
+                  example:
+                  - code: "skda35d"
   /rooms/join:
     post:
       tags:
@@ -307,6 +376,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RoomJoinRequest'
+      responses:
+        "200":
+          description: OK
+  /rooms/join/{code}:
+    post:
+      tags:
+        - rooms
+      summary: join room by url
+      description: ''
+      operationId: joinRoomByUrl
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: code
+          description: invitation code
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: OK
@@ -626,6 +714,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/RoomItem'
+    MembersResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Member'
     RoomInfoResponse:
       type: object
       properties:
