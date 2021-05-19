@@ -47,7 +47,7 @@ $ make stop
 |             | /rooms/{room_id}            | GET    | Complete    | Get room detail by room_id                |
 |             | /rooms/{room_id}            | PATCH  | Complete    | Update room by room_id                    |
 |             | /rooms/{room_id}            | DELETE | Complete    | Delete room by room_id                    |
-|             | /rooms/{room_id}/members    | GET    | To Do       | Get all members                           |
+|             | /rooms/{room_id}/members    | GET    | Complete    | Get all members                           |
 |             | /rooms/{room_id}/round      | POST   | Complete    | Add new round of the room                 |
 |             | /rooms/{room_id}/round      | DELETE | To Do       | Remove current round of the room          |
 |             | /rooms/{room_id}/invitation | POST   | Complete    | Create an invitation code in room room_id |
