@@ -10,5 +10,5 @@ package swagger
 
 type InlineResponse200 struct {
 
-	Code string `json:"code,omitempty"`
+	InvitationCode string `json:"invitation_code,omitempty"`
 }
