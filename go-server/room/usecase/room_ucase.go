@@ -348,3 +348,30 @@ func (r *roomUsecase) GetRound(c context.Context, roomId int32) (res *domain.Rou
 
 	return res, nil
 }
+
+func (r *roomUsecase) DeleteRound(c context.Context, roomId int32) (err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	isAdmin, err := r.participationRepo.IsAdmin(ctx, roomId, user.Id)
+	if !isAdmin || err != nil {
+		return room.ErrNotHost
+	}
+
+	roomInfo, err := r.GetRoomInfo(ctx, roomId)
+	if err != nil {
+		return err
+	}
+
+	if roomInfo.RoundId != 0 {
+		err := r.roundRepo.DeleteRound(ctx, roomInfo.RoundId)
+		if err != nil {
+			return err
+		}
+	} else {
+		return room.ErrNoRound
+	}
+	return nil
+}

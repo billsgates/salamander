@@ -10,4 +10,5 @@ var (
 	ErrInvalidInvitationCode = errors.New("invalid invitation code")
 	ErrAlreadyJoined         = errors.New("already joined")
 	ErrRoundAlreadyCreated   = errors.New("already created round")
+	ErrNoRound               = errors.New("no round created")
 )

@@ -35,6 +35,20 @@ func (_m *RoundRepository) AddRound(ctx context.Context, round *domain.Round) (i
 	return r0, r1
 }
 
+// DeleteRound provides a mock function with given fields: ctx, roundId
+func (_m *RoundRepository) DeleteRound(ctx context.Context, roundId int32) error {
+	ret := _m.Called(ctx, roundId)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) error); ok {
+		r0 = rf(ctx, roundId)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // GetRound provides a mock function with given fields: ctx, roomId
 func (_m *RoundRepository) GetRound(ctx context.Context, roomId int32) (*domain.RoundInfo, error) {
 	ret := _m.Called(ctx, roomId)
