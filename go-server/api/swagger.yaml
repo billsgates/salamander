@@ -210,12 +210,12 @@ paths:
           description: successfully update room
       security:
       - BearerAuth: []
-  /rooms/{id}/start:
-    patch:
+  /rooms/{id}/round:
+    post:
       tags:
       - rooms
-      summary: set start date of room
-      operationId: updateRoomStartDate
+      summary: create new round of room
+      operationId: createRoomRound
       parameters:
       - name: id
         in: path

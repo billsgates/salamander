@@ -26,7 +26,7 @@ func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsec
 		roomEndpoints.GET("/:roomID", handler.GetRoomInfo)
 		roomEndpoints.PATCH("/:roomID", handler.UpdateRoomInfo)
 		roomEndpoints.DELETE("/:roomID", handler.DeleteRoom)
-		roomEndpoints.PATCH("/:roomID/start", handler.AddRound)
+		roomEndpoints.POST("/:roomID/round", handler.AddRound)
 		roomEndpoints.POST("/:roomID/invitation", handler.GenerateInvitationCode)
 		roomEndpoints.POST("/join", handler.JoinRoom)
 	}
