@@ -26,8 +26,9 @@ func TestCreate(t *testing.T) {
 		mockInvitationRepo := new(mocks.InvitationRepository)
 		mockServiceRepo := new(mocks.ServiceRepository)
 		mockParticipationRepo := new(mocks.ParticipationRepository)
+		mockRoundRepo := new(mocks.RoundRepository)
 
-		u := ucase.NewRoomUsecase(mockRoomRepo, mockParticipationRepo, mockServiceRepo, mockInvitationRepo, 2*time.Second)
+		u := ucase.NewRoomUsecase(mockRoomRepo, mockParticipationRepo, mockServiceRepo, mockInvitationRepo, mockRoundRepo, 2*time.Second)
 
 		mockRoomRequest := domain.RoomRequest{
 			MaxCount:      4,
@@ -76,8 +77,9 @@ func TestCreate(t *testing.T) {
 		mockInvitationRepo := new(mocks.InvitationRepository)
 		mockServiceRepo := new(mocks.ServiceRepository)
 		mockParticipationRepo := new(mocks.ParticipationRepository)
+		mockRoundRepo := new(mocks.RoundRepository)
 
-		u := ucase.NewRoomUsecase(mockRoomRepo, mockParticipationRepo, mockServiceRepo, mockInvitationRepo, 2*time.Second)
+		u := ucase.NewRoomUsecase(mockRoomRepo, mockParticipationRepo, mockServiceRepo, mockInvitationRepo, mockRoundRepo, 2*time.Second)
 
 		mockRoomRequest := domain.RoomRequest{
 			MaxCount:      5,
@@ -128,8 +130,9 @@ func TestGenerateInvitationCode(t *testing.T) {
 		mockInvitationRepo := new(mocks.InvitationRepository)
 		mockServiceRepo := new(mocks.ServiceRepository)
 		mockParticipationRepo := new(mocks.ParticipationRepository)
+		mockRoundRepo := new(mocks.RoundRepository)
 
-		u := ucase.NewRoomUsecase(mockRoomRepo, mockParticipationRepo, mockServiceRepo, mockInvitationRepo, 2*time.Second)
+		u := ucase.NewRoomUsecase(mockRoomRepo, mockParticipationRepo, mockServiceRepo, mockInvitationRepo, mockRoundRepo, 2*time.Second)
 
 		var (
 			mockRoomId = int32(1)
@@ -159,8 +162,9 @@ func TestGenerateInvitationCode(t *testing.T) {
 		mockInvitationRepo := new(mocks.InvitationRepository)
 		mockServiceRepo := new(mocks.ServiceRepository)
 		mockParticipationRepo := new(mocks.ParticipationRepository)
+		mockRoundRepo := new(mocks.RoundRepository)
 
-		u := ucase.NewRoomUsecase(mockRoomRepo, mockParticipationRepo, mockServiceRepo, mockInvitationRepo, 2*time.Second)
+		u := ucase.NewRoomUsecase(mockRoomRepo, mockParticipationRepo, mockServiceRepo, mockInvitationRepo, mockRoundRepo, 2*time.Second)
 
 		var (
 			mockRoomId = int32(1)
@@ -192,8 +196,9 @@ func TestJoinRoom(t *testing.T) {
 		mockInvitationRepo := new(mocks.InvitationRepository)
 		mockServiceRepo := new(mocks.ServiceRepository)
 		mockParticipationRepo := new(mocks.ParticipationRepository)
+		mockRoundRepo := new(mocks.RoundRepository)
 
-		u := ucase.NewRoomUsecase(mockRoomRepo, mockParticipationRepo, mockServiceRepo, mockInvitationRepo, 2*time.Second)
+		u := ucase.NewRoomUsecase(mockRoomRepo, mockParticipationRepo, mockServiceRepo, mockInvitationRepo, mockRoundRepo, 2*time.Second)
 
 		var (
 			mockRoomId         = int32(1)
@@ -246,8 +251,9 @@ func TestJoinRoom(t *testing.T) {
 		mockInvitationRepo := new(mocks.InvitationRepository)
 		mockServiceRepo := new(mocks.ServiceRepository)
 		mockParticipationRepo := new(mocks.ParticipationRepository)
+		mockRoundRepo := new(mocks.RoundRepository)
 
-		u := ucase.NewRoomUsecase(mockRoomRepo, mockParticipationRepo, mockServiceRepo, mockInvitationRepo, 2*time.Second)
+		u := ucase.NewRoomUsecase(mockRoomRepo, mockParticipationRepo, mockServiceRepo, mockInvitationRepo, mockRoundRepo, 2*time.Second)
 
 		var (
 			mockRoomId         = int32(1)
@@ -293,8 +299,9 @@ func TestJoinRoom(t *testing.T) {
 		mockInvitationRepo := new(mocks.InvitationRepository)
 		mockServiceRepo := new(mocks.ServiceRepository)
 		mockParticipationRepo := new(mocks.ParticipationRepository)
+		mockRoundRepo := new(mocks.RoundRepository)
 
-		u := ucase.NewRoomUsecase(mockRoomRepo, mockParticipationRepo, mockServiceRepo, mockInvitationRepo, 2*time.Second)
+		u := ucase.NewRoomUsecase(mockRoomRepo, mockParticipationRepo, mockServiceRepo, mockInvitationRepo, mockRoundRepo, 2*time.Second)
 
 		var (
 			mockRoomId         = int32(1)

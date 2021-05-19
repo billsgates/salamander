@@ -8,6 +8,8 @@ import (
 
 	"go-server/domain"
 	"go-server/room"
+
+	"github.com/sirupsen/logrus"
 )
 
 type roomUsecase struct {
@@ -15,15 +17,17 @@ type roomUsecase struct {
 	participationRepo domain.ParticipationRepository
 	serviceRepo       domain.ServiceRepository
 	invitationRepo    domain.InvitationRepository
+	roundRepo         domain.RoundRepository
 	contextTimeout    time.Duration
 }
 
-func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.ParticipationRepository, serviceRepo domain.ServiceRepository, invitationRepo domain.InvitationRepository, timeout time.Duration) domain.RoomUsecase {
+func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.ParticipationRepository, serviceRepo domain.ServiceRepository, invitationRepo domain.InvitationRepository, roundRepo domain.RoundRepository, timeout time.Duration) domain.RoomUsecase {
 	return &roomUsecase{
 		roomRepo:          roomRepo,
 		participationRepo: participationRepo,
 		serviceRepo:       serviceRepo,
 		invitationRepo:    invitationRepo,
+		roundRepo:         roundRepo,
 		contextTimeout:    timeout,
 	}
 }
@@ -46,12 +50,11 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 	}
 
 	roomId, err := r.roomRepo.Create(ctx, &domain.Room{
-		ServiceId:     roomRequest.ServiceId,
-		PlanName:      roomRequest.PlanName,
-		MaxCount:      roomRequest.MaxCount,
-		PaymentPeriod: roomRequest.PaymentPeriod,
-		AdminId:       roomRequest.AdminId,
-		IsPublic:      *roomRequest.IsPublic,
+		ServiceId: roomRequest.ServiceId,
+		PlanName:  roomRequest.PlanName,
+		MaxCount:  roomRequest.MaxCount,
+		AdminId:   roomRequest.AdminId,
+		IsPublic:  roomRequest.IsPublic,
 	})
 	if err != nil {
 		return err
@@ -242,7 +245,8 @@ func (r *roomUsecase) UpdateRoom(c context.Context, roomId int32, roomRequest *d
 		PlanName:      roomRequest.PlanName,
 		MaxCount:      roomRequest.MaxCount,
 		PaymentPeriod: roomRequest.PaymentPeriod,
-		IsPublic:      *roomRequest.IsPublic,
+		IsPublic:      roomRequest.IsPublic,
+		Announcement:  roomRequest.Announcement,
 	})
 
 	if err != nil {
@@ -279,6 +283,67 @@ func (r *roomUsecase) GetTodayStartingMember(c context.Context) (res []domain.Pa
 	res, err = r.participationRepo.GetRoomMemberByStartingTime(ctx, now)
 	if err != nil {
 		return nil, err
+	}
+
+	return res, nil
+}
+
+func (r *roomUsecase) AddRound(c context.Context, roomId int32, roundRequest *domain.RoundRequest) (err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	isAdmin, err := r.participationRepo.IsAdmin(ctx, roomId, user.Id)
+	if !isAdmin || err != nil {
+		return room.ErrNotHost
+	}
+
+	roundInfo, err := r.GetRound(ctx, roomId)
+	if roundInfo.StartingTime != "" {
+		return room.ErrRoundAlreadyCreated
+	}
+
+	start, err := time.Parse("2006-01-02", roundRequest.StartingTime)
+	if err != nil {
+		logrus.Info("parse time err: ", err)
+		return err
+	}
+	end := start.AddDate(0, int(roundRequest.RoundInterval), 0)
+	deadline := end.AddDate(0, 0, -(roundRequest.PaymentDeadline * 7))
+
+	roundId, err := r.roundRepo.AddRound(ctx, &domain.Round{
+		StartingTime:    start,
+		EndingTime:      end,
+		RoundInterval:   roundRequest.RoundInterval,
+		PaymentDeadline: deadline,
+		IsAddCalendar:   roundRequest.IsAddCalendar,
+	})
+	if err != nil {
+		return err
+	}
+
+	err = r.roomRepo.UpdateRoundId(ctx, roomId, roundId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *roomUsecase) GetRound(c context.Context, roomId int32) (res *domain.RoundInfo, err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	res, err = r.roundRepo.GetRound(ctx, roomId)
+	if res.StartingTime != "" {
+		start, _ := time.Parse(time.RFC3339, res.StartingTime)
+		end, _ := time.Parse(time.RFC3339, res.EndingTime)
+		deadline, _ := time.Parse(time.RFC3339, res.PaymentDeadline)
+
+		res.StartingTime = fmt.Sprintf("%d/%02d/%02d", start.Year(), start.Month(), start.Day())
+		res.EndingTime = fmt.Sprintf("%d/%02d/%02d", end.Year(), end.Month(), end.Day())
+		res.PaymentDeadline = fmt.Sprintf("%d/%02d/%02d", deadline.Year(), deadline.Month(), deadline.Day())
 	}
 
 	return res, nil

@@ -14,6 +14,20 @@ type RoomUsecase struct {
 	mock.Mock
 }
 
+// AddRound provides a mock function with given fields: ctx, roomId, round
+func (_m *RoomUsecase) AddRound(ctx context.Context, roomId int32, round *domain.RoundRequest) error {
+	ret := _m.Called(ctx, roomId, round)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32, *domain.RoundRequest) error); ok {
+		r0 = rf(ctx, roomId, round)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // Create provides a mock function with given fields: ctx, room
 func (_m *RoomUsecase) Create(ctx context.Context, room *domain.RoomRequest) error {
 	ret := _m.Called(ctx, room)
@@ -142,6 +156,29 @@ func (_m *RoomUsecase) GetRoomMembers(ctx context.Context, roomId int32) ([]doma
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]domain.Participation)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, roomId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetRound provides a mock function with given fields: ctx, roomId
+func (_m *RoomUsecase) GetRound(ctx context.Context, roomId int32) (*domain.RoundInfo, error) {
+	ret := _m.Called(ctx, roomId)
+
+	var r0 *domain.RoundInfo
+	if rf, ok := ret.Get(0).(func(context.Context, int32) *domain.RoundInfo); ok {
+		r0 = rf(ctx, roomId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.RoundInfo)
 		}
 	}
 

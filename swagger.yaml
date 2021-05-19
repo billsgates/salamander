@@ -250,11 +250,17 @@ paths:
             schema:
               type: object
               properties:
-                start_date: 
+                starting_time: 
                   type: string
-                  format: date-time
-                  example: 2020-1-1
-                is_add_canlendar:
+                  example: '2020-05-15'
+                round_interval: 
+                  type: integer
+                  format: month
+                  example: 12
+                payment_deadline: 
+                  type: integer
+                  example: 1
+                is_add_calendar:
                   type: boolean
                   example: true
       responses:
@@ -512,9 +518,6 @@ components:
           type: integer
         plan_name:
           type: string
-        payment_period:
-          format: month
-          type: integer
         is_public:
           type: boolean
         announcement:
@@ -523,13 +526,11 @@ components:
       - max_count
       - service_id
       - plan_name
-      - payment_period
       - is_public
       example:
         max_count: 5
         service_id: 1
         plan_name: Premium
-        payment_period: 12
         is_public: true
     RoomJoinRequest:
       type: object
@@ -640,20 +641,8 @@ components:
         max_count:
           type: integer
           example: 4
-        payment_period:
-          type: integer
-          format: month
-          example: 6
         room_status:
           $ref: '#/components/schemas/RoomStatus'
-        starting_time:
-          type: string
-          format: date-time
-          example: 2021-1-1
-        ending_time:
-          type: string
-          format: date-time
-          example: 2021-6-1
         service_name:
           type: string
           example: Netflix
@@ -666,12 +655,29 @@ components:
         payment_fee:
           type: integer
           example: 720
+        round_info:
+          $ref: '#/components/schemas/RoundInfo'
         admin:
           $ref: '#/components/schemas/Admin'
         members:
           type: array
           items:
             $ref: '#/components/schemas/Member'
+    RoundInfo:
+      type: object
+      properties:
+        payment_deadline:
+          type: string
+          example: 2021/11/10
+        round_interval:
+          type: integer
+          example: 5
+        starting_time:
+          type: string
+          example: 2021/06/17
+        ending_time:
+          type: string
+          example: 2021/11/17
     PaymentStatus:
       type: string
       enum:

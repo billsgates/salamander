@@ -464,7 +464,6 @@ components:
       required:
       - is_public
       - max_count
-      - payment_period
       - plan_name
       - service_id
       type: object
@@ -477,9 +476,6 @@ components:
           type: integer
         plan_name:
           type: string
-        payment_period:
-          type: integer
-          format: month
         is_public:
           type: boolean
         announcement:
@@ -488,7 +484,6 @@ components:
         max_count: 5
         service_id: 1
         plan_name: Premium
-        payment_period: 12
         is_public: true
     RoomJoinRequest:
       required:
@@ -613,18 +608,8 @@ components:
         max_count:
           type: integer
           example: 4
-        payment_period:
-          type: integer
-          format: month
-          example: 6
         room_status:
           $ref: '#/components/schemas/RoomStatus'
-        starting_time:
-          type: string
-          format: date-time
-        ending_time:
-          type: string
-          format: date-time
         service_name:
           type: string
           example: Netflix
@@ -637,6 +622,8 @@ components:
         payment_fee:
           type: integer
           example: 720
+        round_info:
+          $ref: '#/components/schemas/RoundInfo'
         admin:
           $ref: '#/components/schemas/Admin'
         members:
@@ -645,17 +632,14 @@ components:
             $ref: '#/components/schemas/Member'
       example:
         room_id: 1
-        role: member
-        ending_time: 2000-01-23T04:56:07.000+00:00
-        service_name: Netflix
-        admin:
-          name: Kevin Yu
-          email: kevin@ntu.im
-          rating: 4
-          phone: 9.12345678E8
-        plan_name: Premium
-        room_status: created
         max_count: 4
+        role: member
+        service_name: Netflix
+        round_info:
+          ending_time: 2021/11/17
+          round_interval: 5
+          starting_time: 2021/06/17
+          payment_deadline: 2021/11/10
         members:
         - user_id: 1
           user_name: Frank Chen
@@ -664,10 +648,35 @@ components:
           user_name: Frank Chen
           payment_status: unpaid
         is_public: false
-        payment_period: 6
         payment_fee: 720
-        starting_time: 2000-01-23T04:56:07.000+00:00
+        admin:
+          name: Kevin Yu
+          email: kevin@ntu.im
+          rating: 4
+          phone: 9.12345678E8
+        plan_name: Premium
         announcement: Hi! This is the announcement from administrator
+        room_status: created
+    RoundInfo:
+      type: object
+      properties:
+        payment_deadline:
+          type: string
+          example: 2021/11/10
+        round_interval:
+          type: integer
+          example: 5
+        starting_time:
+          type: string
+          example: 2021/06/17
+        ending_time:
+          type: string
+          example: 2021/11/17
+      example:
+        ending_time: 2021/11/17
+        round_interval: 5
+        starting_time: 2021/06/17
+        payment_deadline: 2021/11/10
     PaymentStatus:
       type: string
       enum:
@@ -695,10 +704,17 @@ components:
     body_1:
       type: object
       properties:
-        start_date:
+        starting_time:
           type: string
-          format: date-time
-        is_add_canlendar:
+          example: 2020-05-15
+        round_interval:
+          type: integer
+          format: month
+          example: 12
+        payment_deadline:
+          type: integer
+          example: 1
+        is_add_calendar:
           type: boolean
           example: true
     inline_response_200:

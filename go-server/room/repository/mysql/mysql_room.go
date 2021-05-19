@@ -16,7 +16,7 @@ func NewmysqlRoomRepository(Conn *gorm.DB) domain.RoomRepository {
 }
 
 func (m *mysqlRoomRepository) Create(ctx context.Context, room *domain.Room) (roomId int32, err error) {
-	if err := m.Conn.Select("max_count", "admin_id", "service_id", "plan_name", "payment_period", "is_public").Create(&room).Error; err != nil {
+	if err := m.Conn.Select("max_count", "admin_id", "service_id", "plan_name", "is_public").Create(&room).Error; err != nil {
 		return -1, err
 	}
 
@@ -24,7 +24,15 @@ func (m *mysqlRoomRepository) Create(ctx context.Context, room *domain.Room) (ro
 }
 
 func (m *mysqlRoomRepository) Update(ctx context.Context, roomId int32, room *domain.Room) (err error) {
-	if err := m.Conn.Table("rooms").Select("max_count", "service_id", "plan_name", "payment_period", "is_public").Where("room_id = ?", roomId).Updates(&room).Error; err != nil {
+	if err := m.Conn.Table("rooms").Where("room_id = ?", roomId).Updates(&room).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *mysqlRoomRepository) UpdateRoundId(ctx context.Context, roomId int32, roundId int32) (err error) {
+	if err := m.Conn.Table("rooms").Where("room_id = ?", roomId).Update("round_id", roundId).Error; err != nil {
 		return err
 	}
 

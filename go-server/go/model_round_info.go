@@ -8,13 +8,13 @@
  */
 package swagger
 
-type Body1 struct {
+type RoundInfo struct {
 
-	StartingTime string `json:"starting_time,omitempty"`
+	PaymentDeadline string `json:"payment_deadline,omitempty"`
 
 	RoundInterval int32 `json:"round_interval,omitempty"`
 
-	PaymentDeadline int32 `json:"payment_deadline,omitempty"`
+	StartingTime string `json:"starting_time,omitempty"`
 
-	IsAddCalendar bool `json:"is_add_calendar,omitempty"`
+	EndingTime string `json:"ending_time,omitempty"`
 }

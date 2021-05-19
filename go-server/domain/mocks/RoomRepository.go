@@ -62,3 +62,17 @@ func (_m *RoomRepository) Update(ctx context.Context, roomId int32, room *domain
 
 	return r0
 }
+
+// UpdateRoundId provides a mock function with given fields: ctx, roomId, roundId
+func (_m *RoomRepository) UpdateRoundId(ctx context.Context, roomId int32, roundId int32) error {
+	ret := _m.Called(ctx, roomId, roundId)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32, int32) error); ok {
+		r0 = rf(ctx, roomId, roundId)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}

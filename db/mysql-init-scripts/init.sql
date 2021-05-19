@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS rooms;
 DROP TABLE IF EXISTS service_providers;
 DROP TABLE IF EXISTS participation;
 DROP TABLE IF EXISTS invitation_codes;
+DROP TABLE IF EXISTS rounds;
 DROP TABLE IF EXISTS plans;
  
 CREATE TABLE users (
@@ -36,6 +37,18 @@ CREATE TABLE service_providers (
 
  PRIMARY KEY (id)
 );
+
+CREATE TABLE rounds (
+ round_id INT NOT NULL AUTO_INCREMENT,
+ starting_time TIMESTAMP NOT NULL,
+ ending_time TIMESTAMP NOT NULL,
+ round_interval INT NOT NULL,
+ payment_deadline TIMESTAMP NOT NULL,
+ is_add_calendar BOOLEAN NOT NULL DEFAULT false,
+ created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+
+ PRIMARY KEY (round_id)
+);
  
 CREATE TABLE plans (
  service_id INT,
@@ -53,10 +66,8 @@ CREATE TABLE rooms (
  room_id INT NOT NULL AUTO_INCREMENT,
  announcement VARCHAR(1000),
  is_public BOOLEAN NOT NULL,
- payment_period INT NOT NULL,
  room_status VARCHAR(255) NOT NULL DEFAULT 'created',
- starting_time TIMESTAMP,
- ending_time TIMESTAMP,
+ round_id INT NULL,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
  updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
  max_count INT NOT NULL,
@@ -65,6 +76,7 @@ CREATE TABLE rooms (
  plan_name VARCHAR(255),
 
  PRIMARY KEY (room_id),
+ FOREIGN KEY (round_id) REFERENCES rounds(round_id) ON DELETE SET NULL,
  FOREIGN KEY (admin_id) REFERENCES users(id),
  FOREIGN KEY (service_id) REFERENCES service_providers(id),
  FOREIGN KEY (service_id, plan_name) REFERENCES plans(service_id, plan_name)
@@ -120,8 +132,8 @@ INSERT INTO plans (service_id, plan_name, cost, max_count) VALUES ('3', 'Individ
 INSERT INTO plans (service_id, plan_name, cost, max_count) VALUES ('3', 'Duo', 198, 2);
 INSERT INTO plans (service_id, plan_name, cost, max_count) VALUES ('3', 'Family', 240, 6);
 
-INSERT INTO `rooms` (`room_id`, `announcement`, `is_public`, `payment_period`, `room_status`, `starting_time`, `ending_time`, `created_at`, `updated_at`, `max_count`, `admin_id`, `service_id`, `plan_name`) VALUES
-(1,	NULL,	1,	12,	'created',	NULL,	NULL,	'2021-05-06 07:01:20',	'2021-05-06 07:01:20',	4,	1,	1,	'Premium');
+INSERT INTO `rooms` (`room_id`, `announcement`, `is_public`, `max_count`, `admin_id`, `service_id`, `plan_name`) VALUES
+(1,	NULL,	1,	4,	1,	1,	'Premium');
 
 INSERT INTO `invitation_codes` (`room_id`, `invitation_code`, `is_valid`, `created_at`, `updated_at`) VALUES
 (1,	'15a447a',	0,	'2021-05-06 07:01:52',	'2021-05-06 07:10:19'),
