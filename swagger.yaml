@@ -226,13 +226,13 @@ paths:
       responses:
         "200":
           description: OK
-  /rooms/{id}/start:
-    patch:
+  /rooms/{id}/round:
+    post:
       tags:
         - rooms
-      summary: set start date of room 
+      summary: create new round of room 
       description: ''
-      operationId: updateRoomStartDate
+      operationId: createRoomRound
       security:
         - BearerAuth: []
       parameters:

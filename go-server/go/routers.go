@@ -90,6 +90,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"CreateRoomRound",
+		strings.ToUpper("Post"),
+		"/api/v1/rooms/{id}/round",
+		CreateRoomRound,
+	},
+
+	Route{
 		"DeleteRoom",
 		strings.ToUpper("Delete"),
 		"/api/v1/rooms/{id}",
@@ -129,13 +136,6 @@ var routes = Routes{
 		strings.ToUpper("Patch"),
 		"/api/v1/rooms/{id}",
 		UpdateRoom,
-	},
-
-	Route{
-		"UpdateRoomStartDate",
-		strings.ToUpper("Patch"),
-		"/api/v1/rooms/{id}/start",
-		UpdateRoomStartDate,
 	},
 
 	Route{
