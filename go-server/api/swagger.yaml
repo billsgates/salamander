@@ -210,6 +210,30 @@ paths:
           description: successfully update room
       security:
       - BearerAuth: []
+  /rooms/{id}/members:
+    get:
+      tags:
+      - rooms
+      summary: get all members of room
+      operationId: getAllRoomMembers
+      parameters:
+      - name: id
+        in: path
+        description: Room ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MembersResponse'
+      security:
+      - BearerAuth: []
   /rooms/{id}/round:
     post:
       tags:
@@ -236,7 +260,52 @@ paths:
           description: successfully set room start Date
       security:
       - BearerAuth: []
+    delete:
+      tags:
+      - rooms
+      summary: remove current round of room
+      operationId: removeRoomRound
+      parameters:
+      - name: id
+        in: path
+        description: Room ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: successfully remove current round
+      security:
+      - BearerAuth: []
   /rooms/{id}/invitation:
+    get:
+      tags:
+      - rooms
+      summary: get all invitation codes
+      operationId: getAllInvitationCodes
+      parameters:
+      - name: id
+        in: path
+        description: Room ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+                x-content-type: application/json
+      security:
+      - BearerAuth: []
     post:
       tags:
       - rooms
@@ -257,7 +326,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200'
+                $ref: '#/components/schemas/inline_response_200_1'
       security:
       - BearerAuth: []
   /rooms/join:
@@ -272,6 +341,26 @@ paths:
             schema:
               $ref: '#/components/schemas/RoomJoinRequest'
         required: true
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+  /rooms/join/{code}:
+    post:
+      tags:
+      - rooms
+      summary: join room by url
+      operationId: joinRoomByUrl
+      parameters:
+      - name: code
+        in: path
+        description: invitation code
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
         "200":
           description: OK
@@ -593,6 +682,11 @@ components:
       items:
         $ref: '#/components/schemas/RoomItem'
       x-schema-name: RoomsResponse
+    MembersResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Member'
+      x-schema-name: MembersResponse
     RoomInfoResponse:
       type: object
       properties:
@@ -718,6 +812,12 @@ components:
           type: boolean
           example: true
     inline_response_200:
+      properties:
+        code:
+          type: string
+      example:
+      - code: skda35d
+    inline_response_200_1:
       type: object
       properties:
         code:

@@ -104,6 +104,20 @@ var routes = Routes{
 	},
 
 	Route{
+		"GetAllInvitationCodes",
+		strings.ToUpper("Get"),
+		"/api/v1/rooms/{id}/invitation",
+		GetAllInvitationCodes,
+	},
+
+	Route{
+		"GetAllRoomMembers",
+		strings.ToUpper("Get"),
+		"/api/v1/rooms/{id}/members",
+		GetAllRoomMembers,
+	},
+
+	Route{
 		"GetMenuInfo",
 		strings.ToUpper("Get"),
 		"/api/v1/rooms",
@@ -125,10 +139,24 @@ var routes = Routes{
 	},
 
 	Route{
+		"JoinRoomByUrl",
+		strings.ToUpper("Post"),
+		"/api/v1/rooms/join/{code}",
+		JoinRoomByUrl,
+	},
+
+	Route{
 		"PostInvitationCode",
 		strings.ToUpper("Post"),
 		"/api/v1/rooms/{id}/invitation",
 		PostInvitationCode,
+	},
+
+	Route{
+		"RemoveRoomRound",
+		strings.ToUpper("Delete"),
+		"/api/v1/rooms/{id}/round",
+		RemoveRoomRound,
 	},
 
 	Route{
