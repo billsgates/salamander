@@ -111,6 +111,25 @@ func (r *roomUsecase) GenerateInvitationCode(c context.Context, roomId int32) (r
 	return invitationCode, nil
 }
 
+func (r *roomUsecase) GetInvitationCodes(c context.Context, roomId int32) (res []domain.InvitationCode, err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	isAdmin, err := r.participationRepo.IsAdmin(ctx, roomId, user.Id)
+	if !isAdmin || err != nil {
+		return nil, room.ErrNotHost
+	}
+
+	res, err = r.invitationRepo.GetInvitationCodes(ctx, roomId)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
 func (r *roomUsecase) JoinRoom(c context.Context, code string) (err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()

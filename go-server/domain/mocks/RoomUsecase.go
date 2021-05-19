@@ -77,6 +77,29 @@ func (_m *RoomUsecase) GenerateInvitationCode(ctx context.Context, roomId int32)
 	return r0, r1
 }
 
+// GetInvitationCodes provides a mock function with given fields: ctx, roomId
+func (_m *RoomUsecase) GetInvitationCodes(ctx context.Context, roomId int32) ([]domain.InvitationCode, error) {
+	ret := _m.Called(ctx, roomId)
+
+	var r0 []domain.InvitationCode
+	if rf, ok := ret.Get(0).(func(context.Context, int32) []domain.InvitationCode); ok {
+		r0 = rf(ctx, roomId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]domain.InvitationCode)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, roomId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetJoinedRooms provides a mock function with given fields: ctx
 func (_m *RoomUsecase) GetJoinedRooms(ctx context.Context) ([]domain.RoomItem, error) {
 	ret := _m.Called(ctx)

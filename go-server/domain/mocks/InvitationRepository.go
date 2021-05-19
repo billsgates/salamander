@@ -4,6 +4,7 @@ package mocks
 
 import (
 	context "context"
+	domain "go-server/domain"
 
 	mock "github.com/stretchr/testify/mock"
 )
@@ -46,6 +47,29 @@ func (_m *InvitationRepository) GenerateInvitationCode(ctx context.Context, room
 	}
 
 	return r0
+}
+
+// GetInvitationCodes provides a mock function with given fields: ctx, roomId
+func (_m *InvitationRepository) GetInvitationCodes(ctx context.Context, roomId int32) ([]domain.InvitationCode, error) {
+	ret := _m.Called(ctx, roomId)
+
+	var r0 []domain.InvitationCode
+	if rf, ok := ret.Get(0).(func(context.Context, int32) []domain.InvitationCode); ok {
+		r0 = rf(ctx, roomId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]domain.InvitationCode)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, roomId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // ResumeInvitationCode provides a mock function with given fields: ctx, code

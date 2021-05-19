@@ -28,6 +28,7 @@ func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsec
 		roomEndpoints.DELETE("/:roomID", handler.DeleteRoom)
 		roomEndpoints.POST("/:roomID/round", handler.AddRound)
 		roomEndpoints.POST("/:roomID/invitation", handler.GenerateInvitationCode)
+		roomEndpoints.GET("/:roomID/invitation", handler.GetInvitationCodes)
 		roomEndpoints.POST("/join", handler.JoinRoom)
 	}
 }
@@ -166,6 +167,28 @@ func (u *RoomHandler) GenerateInvitationCode(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"code": code})
+}
+
+func (u *RoomHandler) GetInvitationCodes(c *gin.Context) {
+	roomID, err := strconv.ParseInt(c.Param("roomID"), 10, 32)
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	codes, err := u.RoomUsecase.GetInvitationCodes(c, int32(roomID))
+	if err != nil {
+		logrus.Error(err)
+		if err == room.ErrNotHost {
+			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
+			return
+		}
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": codes})
 }
 
 func (u *RoomHandler) JoinRoom(c *gin.Context) {

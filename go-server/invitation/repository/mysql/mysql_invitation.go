@@ -46,3 +46,13 @@ func (m *mysqlInvitationRepository) ResumeInvitationCode(ctx context.Context, co
 
 	return nil
 }
+
+func (m *mysqlInvitationRepository) GetInvitationCodes(ctx context.Context, roomId int32) (res []domain.InvitationCode, err error) {
+	var codes []domain.InvitationCode
+
+	if err := m.Conn.Table("invitation_codes").Select("invitation_code").Where("room_id = ? AND is_valid = true", roomId).Find(&codes).Error; err != nil {
+		return nil, err
+	}
+
+	return codes, nil
+}
