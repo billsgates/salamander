@@ -749,6 +749,9 @@ components:
           example: 720
         round_info:
           $ref: '#/components/schemas/RoundInfo'
+        round_id:
+          type: integer
+          example: 3
         admin:
           $ref: '#/components/schemas/Admin'
         members:

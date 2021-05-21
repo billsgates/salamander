@@ -60,6 +60,7 @@ type RoomInfoResponse struct {
 	Announcement string          `json:"announcement"`
 	MaxCount     int32           `json:"max_count,omitempty"`
 	RoomStatus   *RoomStatus     `json:"room_status,omitempty"`
+	RoundId      int32           `json:"round_id"`
 	ServiceName  string          `json:"service_name,omitempty"`
 	PlanName     string          `json:"plan_name,omitempty"`
 	Role         string          `json:"role,omitempty"`
@@ -90,4 +91,5 @@ type RoomUsecase interface {
 	UpdateRoom(ctx context.Context, roomId int32, room *RoomRequest) error
 	AddRound(ctx context.Context, roomId int32, round *RoundRequest) error
 	GetRound(ctx context.Context, roomId int32) (res *RoundInfo, err error)
+	DeleteRound(ctx context.Context, roomId int32) error
 }

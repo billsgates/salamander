@@ -32,3 +32,13 @@ func (m *mysqlRoundRepository) GetRound(ctx context.Context, roomId int32) (res 
 
 	return roundInfo, nil
 }
+
+func (m *mysqlRoundRepository) DeleteRound(ctx context.Context, roundId int32) (err error) {
+	var round *domain.Round
+
+	if err := m.Conn.Table("rounds").Where("round_id = ?", roundId).Delete(&round).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

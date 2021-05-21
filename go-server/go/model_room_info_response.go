@@ -30,6 +30,8 @@ type RoomInfoResponse struct {
 
 	RoundInfo *RoundInfo `json:"round_info,omitempty"`
 
+	RoundId int32 `json:"round_id,omitempty"`
+
 	Admin *Admin `json:"admin,omitempty"`
 
 	Members []Member `json:"members,omitempty"`

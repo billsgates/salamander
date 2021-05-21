@@ -718,6 +718,9 @@ components:
           example: 720
         round_info:
           $ref: '#/components/schemas/RoundInfo'
+        round_id:
+          type: integer
+          example: 3
         admin:
           $ref: '#/components/schemas/Admin'
         members:
@@ -726,9 +729,17 @@ components:
             $ref: '#/components/schemas/Member'
       example:
         room_id: 1
-        max_count: 4
         role: member
         service_name: Netflix
+        admin:
+          name: Kevin Yu
+          email: kevin@ntu.im
+          rating: 4
+          phone: 9.12345678E8
+        plan_name: Premium
+        room_status: created
+        max_count: 4
+        round_id: 3
         round_info:
           ending_time: 2021/11/17
           round_interval: 5
@@ -743,14 +754,7 @@ components:
           payment_status: unpaid
         is_public: false
         payment_fee: 720
-        admin:
-          name: Kevin Yu
-          email: kevin@ntu.im
-          rating: 4
-          phone: 9.12345678E8
-        plan_name: Premium
         announcement: Hi! This is the announcement from administrator
-        room_status: created
     RoundInfo:
       type: object
       properties:
