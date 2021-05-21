@@ -32,6 +32,7 @@ func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsec
 		roomEndpoints.POST("/:roomID/invitation", handler.GenerateInvitationCode)
 		roomEndpoints.GET("/:roomID/invitation", handler.GetInvitationCodes)
 		roomEndpoints.POST("/join", handler.JoinRoom)
+		roomEndpoints.POST("/join/:invitationCode", handler.JoinRoomByUrl)
 	}
 }
 
@@ -223,6 +224,31 @@ func (u *RoomHandler) JoinRoom(c *gin.Context) {
 	}
 
 	err := u.RoomUsecase.JoinRoom(c, body.InvitationCode)
+	if err != nil {
+		logrus.Error(err)
+		if err == room.ErrRoomFull {
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+			return
+		}
+		if err == room.ErrInvalidInvitationCode {
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+			return
+		}
+		if err == room.ErrAlreadyJoined {
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+			return
+		}
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	c.Status(http.StatusOK)
+}
+
+func (u *RoomHandler) JoinRoomByUrl(c *gin.Context) {
+	invitationCode := c.Param("invitationCode")
+
+	err := u.RoomUsecase.JoinRoom(c, invitationCode)
 	if err != nil {
 		logrus.Error(err)
 		if err == room.ErrRoomFull {
