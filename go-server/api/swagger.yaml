@@ -283,7 +283,7 @@ paths:
     get:
       tags:
       - rooms
-      summary: get all invitation codes
+      summary: get all valid invitation codes
       operationId: getAllInvitationCodes
       parameters:
       - name: id
@@ -817,7 +817,7 @@ components:
           example: true
     inline_response_200:
       properties:
-        code:
+        invitation_code:
           type: string
       example:
       - code: skda35d

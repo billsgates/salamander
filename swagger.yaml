@@ -336,7 +336,7 @@ paths:
     get:
       tags:
         - rooms
-      summary: get all invitation codes
+      summary: get all valid invitation codes
       description: ''
       operationId: getAllInvitationCodes
       security:
@@ -357,7 +357,7 @@ paths:
                 type: array
                 items:
                   properties:
-                    code:
+                    invitation_code:
                       type: string
                   example:
                   - code: "skda35d"

@@ -51,9 +51,9 @@ $ make stop
 |             | /rooms/{room_id}/round      | POST   | Complete    | Add new round of the room                 |
 |             | /rooms/{room_id}/round      | DELETE | Complete    | Remove current round of the room          |
 |             | /rooms/{room_id}/invitation | POST   | Complete    | Create an invitation code in room room_id |
-|             | /rooms/{room_id}/invitations| GET    | To Do       | Get all invitation codes in room room_id  |
+|             | /rooms/{room_id}/invitation | GET    | Complete    | Get all valid invitation codes in room    |
 |             | /rooms/join                 | POST   | Complete    | Join room by invitation code              |
-|             | /rooms/join/{code}          | POST   | To Do       | Join room by url              |
+|             | /rooms/join/{code}          | POST   | To Do       | Join room by url                          |
 | services    | /services                   | GET    | Complete    | Get all services                          |
 |             | /services/{service_id}      | GET    | Complete    | Get service detail by service_id          |
 | participant | /participant                | DELETE | Complete    | Delete participant from room              |
