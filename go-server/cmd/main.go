@@ -12,6 +12,7 @@ import (
 	"fmt"
 	_authHandlerHttpDelivery "go-server/auth/delivery/http"
 	_authUsecase "go-server/auth/usecase"
+	_gmailHandler "go-server/internal/infrastructure/mail"
 	_queue "go-server/internal/infrastructure/queue"
 	_scheduler "go-server/internal/infrastructure/scheduler"
 	_invitationRepo "go-server/invitation/repository/mysql"
@@ -85,9 +86,18 @@ func main() {
 		logrus.Fatal(err)
 	}
 
+	// gmail
+	client_id := viper.GetString(`gmail.client_id`)
+	client_secret := viper.GetString(`gmail.client_secret`)
+	access_token := viper.GetString(`gmail.access_token`)
+	refresh_token := viper.GetString(`gmail.refresh_token`)
+	gmailHandler := _gmailHandler.NewOAuthGmailHandler(client_id, client_secret, access_token, refresh_token)
+
 	// rabbitmq
 	rabbitMQHandler := _queue.NewRabbitMQHandler()
-	go _queue.NewWorker(rabbitMQHandler)
+
+	emailWorker := _queue.NewWorker(rabbitMQHandler, gmailHandler)
+	go emailWorker.Start()
 
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
