@@ -2,6 +2,7 @@ package http
 
 import (
 	"go-server/domain"
+	"go-server/participation"
 	"go-server/room"
 	"net/http"
 	"strconv"
@@ -11,14 +12,16 @@ import (
 )
 
 type RoomHandler struct {
-	RoomUsecase        domain.RoomUsecase
-	ApplicationUsecase domain.ApplicationUsecase
+	RoomUsecase          domain.RoomUsecase
+	ApplicationUsecase   domain.ApplicationUsecase
+	ParticipationUsecase domain.ParticipationUsecase
 }
 
-func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsecase domain.RoomUsecase, applicationUsecase domain.ApplicationUsecase) {
+func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsecase domain.RoomUsecase, applicationUsecase domain.ApplicationUsecase, participationUsecase domain.ParticipationUsecase) {
 	handler := &RoomHandler{
-		RoomUsecase:        roomUsecase,
-		ApplicationUsecase: applicationUsecase,
+		RoomUsecase:          roomUsecase,
+		ApplicationUsecase:   applicationUsecase,
+		ParticipationUsecase: participationUsecase,
 	}
 
 	roomEndpoints := e.Group("rooms", authMiddleware)
@@ -373,6 +376,17 @@ func (u *RoomHandler) CreateApplication(c *gin.Context) {
 	roomID, err := strconv.ParseInt(c.Param("roomID"), 10, 32)
 	if err != nil {
 		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	isMember, err := u.ParticipationUsecase.IsMember(c, int32(roomID))
+	if isMember || err != nil {
+		logrus.Error(err)
+		if err == participation.ErrAlreadyJoined {
+			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
+			return
+		}
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}

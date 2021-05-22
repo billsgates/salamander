@@ -26,6 +26,10 @@ type ParticipationRequest struct {
 	RoomId int32 `json:"room_id,omitempty" binding:"required"`
 }
 
+type ParticipationUsecase interface {
+	IsMember(ctx context.Context, roomId int32) (bool, error)
+}
+
 type ParticipationRepository interface {
 	Create(ctx context.Context, participation *Participation) error
 	GetRoomInfo(ctx context.Context, roomId int32) (res *RoomInfoResponse, err error)
@@ -34,5 +38,6 @@ type ParticipationRepository interface {
 	GetJoinedRooms(ctx context.Context, userId int32) ([]RoomItem, error)
 	GetRoomMemberByStartingTime(ctx context.Context, starting_time time.Time) (res []Participation, err error)
 	IsAdmin(ctx context.Context, roomId int32, userId int32) (bool, error)
+	IsMember(ctx context.Context, roomId int32, userId int32) (bool, error)
 	LeaveRoom(ctx context.Context, roomId int32, userId int32) error
 }

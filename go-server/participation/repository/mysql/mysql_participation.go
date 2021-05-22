@@ -46,6 +46,15 @@ func (m *mysqlParticipationRepository) IsAdmin(ctx context.Context, roomId int32
 	return participation.IsHost, nil
 }
 
+func (m *mysqlParticipationRepository) IsMember(ctx context.Context, roomId int32, userId int32) (res bool, err error) {
+	var participation domain.Participation
+	if err := m.Conn.Table("participation").Where("room_id = ? AND user_id = ?", roomId, userId).First(&participation).Error; err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
 func (m *mysqlParticipationRepository) LeaveRoom(ctx context.Context, roomId int32, userId int32) (err error) {
 	var participation domain.Participation
 	if err := m.Conn.Table("participation").Where("room_id = ? AND user_id = ?", roomId, userId).Delete(&participation).Error; err != nil {
