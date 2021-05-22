@@ -14,6 +14,8 @@ tags:
     description: Rooms
   - name: services
     description: Services
+  - name: applications
+    description: Application
 paths:
   /auth/signup:
     post:
@@ -160,6 +162,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RoomsResponse'
+  /rooms/public:
+    get:
+      tags:
+        - rooms
+      summary: get public rooms
+      description: ''
+      operationId: getPublicRooms
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoomPublic'
   /rooms/{id}:
     get:
       tags:
@@ -361,6 +381,49 @@ paths:
                       type: string
                   example:
                   - code: "skda35d"
+  /rooms/{id}/application:
+    post:
+      tags:
+        - rooms
+      summary: apply to join room
+      description: ''
+      operationId: applyRoom
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: Room ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+    get:
+      tags:
+        - rooms
+      summary: get all applications of the room
+      description: ''
+      operationId: applyRoom
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: Room ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Application'
   /rooms/join:
     post:
       tags:
@@ -489,7 +552,28 @@ paths:
       responses:
         "201":
           description: successfully update participant payment status
-
+  /application/accept:
+    post:
+      tags:
+        - applications
+      summary: accept room application
+      description: ''
+      operationId: acceptApplication
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  application_id: 
+                    type: integer
+                    example: 1
+      responses:
+        "200":
+          description: OK
 components:
   securitySchemes:
     BearerAuth:
@@ -675,6 +759,19 @@ components:
         email: kevin@ntu.im
         rating: 4
         phone: 0912345678
+    Application:
+      type: object
+      properties:
+        application_id:
+          type: integer
+        user_id:
+          type: integer
+        name:
+          type: string
+      example:
+        application_id: 1
+        user_id: 1
+        name: Kevin Yu
     Member:
       type: object
       properties:
@@ -688,6 +785,29 @@ components:
         user_id: 1
         user_name: Frank Chen
         payment_status: unpaid
+    RoomPublic:
+      type: object
+      properties:
+        room_id:
+          type: integer
+          example: 1
+        admin:
+          $ref: '#/components/schemas/Admin'
+        service_name:
+          type: string
+          example: Netflix
+        plan_name:
+          type: string
+          example: Premium
+        cost:
+          type: integer
+          example: 720
+        max_count:
+          type: integer
+          example: 4
+        member_count:
+          type: integer
+          example: 2
     RoomItem:
       type: object
       properties:
