@@ -37,6 +37,7 @@ func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsec
 		roomEndpoints.POST("/:roomID/invitation", handler.GenerateInvitationCode)
 		roomEndpoints.GET("/:roomID/invitation", handler.GetInvitationCodes)
 		roomEndpoints.POST("/:roomID/application", handler.CreateApplication)
+		roomEndpoints.GET("/:roomID/application", handler.GetApplications)
 		roomEndpoints.POST("/join", handler.JoinRoom)
 		roomEndpoints.POST("/join/:invitationCode", handler.JoinRoomByUrl)
 	}
@@ -399,4 +400,33 @@ func (u *RoomHandler) CreateApplication(c *gin.Context) {
 	}
 
 	c.Status(http.StatusOK)
+}
+
+func (u *RoomHandler) GetApplications(c *gin.Context) {
+	roomID, err := strconv.ParseInt(c.Param("roomID"), 10, 32)
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	isAdmin, err := u.ParticipationUsecase.IsAdmin(c, int32(roomID))
+	if !isAdmin || err != nil {
+		logrus.Error(err)
+		if err == participation.ErrNotHost {
+			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
+			return
+		}
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	applications, err := u.ApplicationUsecase.FetchAll(c, int32(roomID))
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": applications})
 }

@@ -12,8 +12,10 @@ type Application struct {
 
 type ApplicationUsecase interface {
 	Create(ctx context.Context, roomId int32) error
+	FetchAll(ctx context.Context, roomId int32) (res []Application, err error)
 }
 
 type ApplicationRepository interface {
 	Create(ctx context.Context, roomId int32, userId int32) error
+	FetchAll(ctx context.Context, roomId int32) (res []Application, err error)
 }

@@ -28,6 +28,7 @@ type ParticipationRequest struct {
 
 type ParticipationUsecase interface {
 	IsMember(ctx context.Context, roomId int32) (bool, error)
+	IsAdmin(ctx context.Context, roomId int32) (bool, error)
 }
 
 type ParticipationRepository interface {

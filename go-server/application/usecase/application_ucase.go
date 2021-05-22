@@ -31,3 +31,14 @@ func (a *applicationUsecase) Create(c context.Context, roomId int32) (err error)
 	}
 	return nil
 }
+
+func (a *applicationUsecase) FetchAll(c context.Context, roomId int32) (res []domain.Application, err error) {
+	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
+	defer cancel()
+
+	res, err = a.applicationRepo.FetchAll(ctx, roomId)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

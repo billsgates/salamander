@@ -26,3 +26,13 @@ func (m *mysqlApplicationRepository) Create(ctx context.Context, roomId int32, u
 
 	return nil
 }
+
+func (m *mysqlApplicationRepository) FetchAll(ctx context.Context, roomId int32) (res []domain.Application, err error) {
+	var applications []domain.Application
+
+	if err := m.Conn.Table("applications").Where("room_id = ?", roomId).Scan(&applications).Error; err != nil {
+		return nil, err
+	}
+
+	return applications, nil
+}
