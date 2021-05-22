@@ -1,7 +1,10 @@
 package queue
 
 import (
+	"go-server/domain"
 	"go-server/internal/infrastructure/mail"
+
+	helper "go-server/internal/common"
 
 	"github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
@@ -50,9 +53,10 @@ func (w *Worker) Start() {
 
 	go func() {
 		for d := range w.msgs {
-			logrus.Printf("Received a message: %s", d.Body)
-			w.SendEmail(string(d.Body))
-			logrus.Printf("Done")
+			message := helper.Decompress(d.Body)
+			user := helper.DecodeToUser(message)
+			logrus.Printf("Received a message: %s", user)
+			w.SendEmail(&user)
 			d.Ack(false)
 		}
 	}()
@@ -60,12 +64,12 @@ func (w *Worker) Start() {
 	<-forever
 }
 
-func (w *Worker) SendEmail(target string) {
+func (w *Worker) SendEmail(user *domain.User) {
 	data := struct {
 		ReceiverName string
 		SenderName   string
 	}{
-		ReceiverName: "David Gilmour",
+		ReceiverName: user.Name,
 		SenderName:   "Bills Gate",
 	}
 	status, err := w.GmailHandler.SendEmailOAUTH2("kevinyu05062006@gmail.com", data, "sample_template.txt")

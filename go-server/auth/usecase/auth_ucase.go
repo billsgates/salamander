@@ -9,6 +9,7 @@ import (
 	"go-server/auth"
 	"go-server/domain"
 	adapterqueue "go-server/internal/adapter/queue"
+	helper "go-server/internal/common"
 	"go-server/internal/infrastructure/queue"
 
 	"github.com/dgrijalva/jwt-go/v4"
@@ -53,7 +54,9 @@ func (a *authUsecase) SignUp(ctx context.Context, name string, email string, pas
 		return "", err
 	}
 
-	a.producer.Publish([]byte(email))
+	message := helper.EncodeToBytes(user)
+	message = helper.Compress(message)
+	a.producer.Publish(message)
 	return a.SignIn(ctx, email, password)
 }
 
