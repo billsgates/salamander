@@ -28,6 +28,7 @@ func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsec
 	{
 		roomEndpoints.POST("", handler.CreateRoom)
 		roomEndpoints.GET("", handler.GetJoinedRooms)
+		roomEndpoints.GET("/public", handler.GetPublicRooms)
 		roomEndpoints.GET("/:roomID", handler.GetRoomInfo)
 		roomEndpoints.PATCH("/:roomID", handler.UpdateRoomInfo)
 		roomEndpoints.DELETE("/:roomID", handler.DeleteRoom)
@@ -63,6 +64,17 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 	}
 
 	c.Status(http.StatusCreated)
+}
+
+func (u *RoomHandler) GetPublicRooms(c *gin.Context) {
+	rooms, err := u.RoomUsecase.GetPublicRooms(c)
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": rooms})
 }
 
 func (u *RoomHandler) DeleteRoom(c *gin.Context) {

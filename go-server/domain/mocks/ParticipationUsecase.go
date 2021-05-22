@@ -13,6 +13,27 @@ type ParticipationUsecase struct {
 	mock.Mock
 }
 
+// IsAdmin provides a mock function with given fields: ctx, roomId
+func (_m *ParticipationUsecase) IsAdmin(ctx context.Context, roomId int32) (bool, error) {
+	ret := _m.Called(ctx, roomId)
+
+	var r0 bool
+	if rf, ok := ret.Get(0).(func(context.Context, int32) bool); ok {
+		r0 = rf(ctx, roomId)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, roomId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // IsMember provides a mock function with given fields: ctx, roomId
 func (_m *ParticipationUsecase) IsMember(ctx context.Context, roomId int32) (bool, error) {
 	ret := _m.Called(ctx, roomId)

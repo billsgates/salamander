@@ -137,6 +137,29 @@ func (_m *RoomUsecase) GetJoinedRooms(ctx context.Context) ([]domain.RoomItem, e
 	return r0, r1
 }
 
+// GetPublicRooms provides a mock function with given fields: ctx
+func (_m *RoomUsecase) GetPublicRooms(ctx context.Context) ([]domain.RoomPublic, error) {
+	ret := _m.Called(ctx)
+
+	var r0 []domain.RoomPublic
+	if rf, ok := ret.Get(0).(func(context.Context) []domain.RoomPublic); ok {
+		r0 = rf(ctx)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]domain.RoomPublic)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = rf(ctx)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetRoomAdmin provides a mock function with given fields: ctx, roomId
 func (_m *RoomUsecase) GetRoomAdmin(ctx context.Context, roomId int32) (*domain.User, error) {
 	ret := _m.Called(ctx, roomId)

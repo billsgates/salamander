@@ -788,8 +788,12 @@ components:
         room_id:
           type: integer
           example: 1
-        admin:
-          $ref: '#/components/schemas/Admin'
+        admin_name:
+          type: string
+          example: Kevin Yu
+        admin_rating:
+          type: integer
+          example: 4
         service_name:
           type: string
           example: Netflix
