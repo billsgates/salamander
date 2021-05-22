@@ -10,6 +10,8 @@ package main
 
 import (
 	"fmt"
+	_applicationRepo "go-server/application/repository/mysql"
+	_applicationUsecase "go-server/application/usecase"
 	_authHandlerHttpDelivery "go-server/auth/delivery/http"
 	_authUsecase "go-server/auth/usecase"
 	_queue "go-server/internal/infrastructure/queue"
@@ -109,10 +111,12 @@ func main() {
 	participationRepo := _participationRepo.NewmysqlParticipationRepository(db)
 	invitationRepo := _invitationRepo.NewmysqlInvitationRepository(db)
 	roundRepo := _roundRepo.NewmysqlRoundRepository(db)
+	applicationRepo := _applicationRepo.NewmysqlApplicationRepository(db)
 
 	userUsecase := _userUsecase.NewUserUsecase(userRepo, timeoutContext)
 	roomUsecase := _roomUsecase.NewRoomUsecase(roomRepo, participationRepo, serviceRepo, invitationRepo, roundRepo, timeoutContext)
 	serviceUsecase := _serviceUsecase.NewServiceUsecase(serviceRepo, timeoutContext)
+	applicationUsecase := _applicationUsecase.NewApplicationUsecase(applicationRepo, timeoutContext)
 	authUsecase := _authUsecase.NewAuthUseCase(
 		userRepo,
 		viper.GetString("auth.hash_salt"),
@@ -127,7 +131,7 @@ func main() {
 	{
 		_authHandlerHttpDelivery.NewAuthHandler(v1Router, authUsecase)
 		_userHandlerHttpDelivery.NewUserHandler(v1Router, authMiddleware, userUsecase)
-		_roomHandlerHttpDelivery.NewRoomHandler(v1Router, authMiddleware, roomUsecase)
+		_roomHandlerHttpDelivery.NewRoomHandler(v1Router, authMiddleware, roomUsecase, applicationUsecase)
 		_serviceHandlerHttpDelivery.NewServiceHandler(v1Router, serviceUsecase)
 		_participationHandlerHttpDelivery.NewParticipationHandler(v1Router, authMiddleware, roomUsecase)
 	}
