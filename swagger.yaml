@@ -405,7 +405,7 @@ paths:
         - rooms
       summary: get all applications of the room
       description: ''
-      operationId: applyRoom
+      operationId: getApplications
       security:
         - BearerAuth: []
       parameters:
