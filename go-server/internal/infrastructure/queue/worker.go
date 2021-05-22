@@ -55,7 +55,6 @@ func (w *Worker) Start() {
 		for d := range w.msgs {
 			message := helper.Decompress(d.Body)
 			user := helper.DecodeToUser(message)
-			logrus.Printf("Received a message: %s", user)
 			w.SendEmail(&user)
 			d.Ack(false)
 		}
