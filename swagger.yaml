@@ -762,14 +762,11 @@ components:
     Application:
       type: object
       properties:
-        application_id:
-          type: integer
         user_id:
           type: integer
         name:
           type: string
       example:
-        application_id: 1
         user_id: 1
         name: Kevin Yu
     Member:

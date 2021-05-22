@@ -97,13 +97,12 @@ CREATE TABLE participation (
 );
 
 CREATE TABLE applications (
- application_id INT NOT NULL AUTO_INCREMENT,
  user_id INT,
  room_id INT,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
  updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 
- PRIMARY KEY (application_id),
+ PRIMARY KEY (user_id, room_id),
  FOREIGN KEY (user_id) REFERENCES users(id),
  FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE CASCADE
 );

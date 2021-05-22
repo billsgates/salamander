@@ -10,8 +10,6 @@ package swagger
 
 type Application struct {
 
-	ApplicationId int32 `json:"application_id,omitempty"`
-
 	UserId int32 `json:"user_id,omitempty"`
 
 	Name string `json:"name,omitempty"`
