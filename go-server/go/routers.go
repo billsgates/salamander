@@ -55,6 +55,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"AcceptApplication",
+		strings.ToUpper("Post"),
+		"/api/v1/application/accept",
+		AcceptApplication,
+	},
+
+	Route{
 		"SignIn",
 		strings.ToUpper("Post"),
 		"/api/v1/auth/signin",
@@ -80,6 +87,13 @@ var routes = Routes{
 		strings.ToUpper("Patch"),
 		"/api/v1/participant/status",
 		UpdateParticipantStatus,
+	},
+
+	Route{
+		"ApplyRoom",
+		strings.ToUpper("Post"),
+		"/api/v1/rooms/{id}/application",
+		ApplyRoom,
 	},
 
 	Route{
@@ -118,10 +132,24 @@ var routes = Routes{
 	},
 
 	Route{
+		"GetApplications",
+		strings.ToUpper("Get"),
+		"/api/v1/rooms/{id}/application",
+		GetApplications,
+	},
+
+	Route{
 		"GetMenuInfo",
 		strings.ToUpper("Get"),
 		"/api/v1/rooms",
 		GetMenuInfo,
+	},
+
+	Route{
+		"GetPublicRooms",
+		strings.ToUpper("Get"),
+		"/api/v1/rooms/public",
+		GetPublicRooms,
 	},
 
 	Route{
