@@ -1,7 +1,13 @@
 package queue
 
 import (
+	"go-server/domain"
+	"go-server/internal/infrastructure/mail"
+
+	helper "go-server/internal/common"
+
 	"github.com/sirupsen/logrus"
+	"github.com/streadway/amqp"
 )
 
 func failOnError(err error, msg string) {
@@ -10,23 +16,13 @@ func failOnError(err error, msg string) {
 	}
 }
 
-func sendEmail(target string) {
-	// m := gomail.NewMessage()
-	// m.SetHeader("From", "admin@billsgate.com")
-	// m.SetHeader("To", "kevin.ct.yu@ntu.im")
-	// m.SetHeader("Subject", "Test")
-	// m.SetBody("text/html", "Hello! Greetings from BillsGate!")
-
-	// // d := gomail.NewDialer("mail.billsgate.com", 465, "", "")
-	// // d := gomail.NewDialer("mailserver", 587, "admin", "password")
-	// d := gomail.Dialer{Host: "localhost", Port: 587}
-
-	// if err := d.DialAndSend(m); err != nil {
-	// 	panic(err)
-	// }
+type Worker struct {
+	GmailHandler    *mail.GmailHandler
+	RabbitMQHandler *RabbitMQHandler
+	msgs            <-chan amqp.Delivery
 }
 
-func NewWorker(rabbitMQHandler *RabbitMQHandler) {
+func NewWorker(rabbitMQHandler *RabbitMQHandler, gmailHandler *mail.GmailHandler) *Worker {
 	err := rabbitMQHandler.Channel().Qos(
 		1,     // prefetch count
 		0,     // prefetch size
@@ -45,16 +41,41 @@ func NewWorker(rabbitMQHandler *RabbitMQHandler) {
 	)
 	failOnError(err, "Failed to register a consumer")
 
+	return &Worker{
+		RabbitMQHandler: rabbitMQHandler,
+		GmailHandler:    gmailHandler,
+		msgs:            msgs,
+	}
+}
+
+func (w *Worker) Start() {
 	forever := make(chan bool)
 
 	go func() {
-		for d := range msgs {
-			logrus.Printf("Received a message: %s", d.Body)
-			// sendEmail(string(d.Body))
-			logrus.Printf("Done")
+		for d := range w.msgs {
+			message := helper.Decompress(d.Body)
+			user := helper.DecodeToUser(message)
+			w.SendEmail(&user)
 			d.Ack(false)
 		}
 	}()
 
 	<-forever
+}
+
+func (w *Worker) SendEmail(user *domain.User) {
+	data := struct {
+		ReceiverName string
+		SenderName   string
+	}{
+		ReceiverName: user.Name,
+		SenderName:   "Bills Gate",
+	}
+	status, err := w.GmailHandler.SendEmailOAUTH2("kevinyu05062006@gmail.com", data, "sample_template.txt")
+	if err != nil {
+		logrus.Info(err)
+	}
+	if status {
+		logrus.Info("Email sent successfully using OAUTH")
+	}
 }
