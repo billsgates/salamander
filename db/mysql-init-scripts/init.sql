@@ -127,7 +127,7 @@ INSERT INTO users (name, email, password_digest) VALUES ('Paul Liu', 'paul@ntu.i
 -- password = 'jason'
 INSERT INTO users (name, email, password_digest) VALUES ('Jason Wang', 'jason@ntu.im', 'e1d20ac5d01c96892298f5f92539d41ebdd28a18');
 
-INSERT INTO service_providers (name) VALUES ('Neflix');
+INSERT INTO service_providers (name) VALUES ('Netflix');
 INSERT INTO service_providers (name) VALUES ('Youtube Premium');
 INSERT INTO service_providers (name) VALUES ('Spotify');
 
