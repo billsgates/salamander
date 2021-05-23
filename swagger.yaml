@@ -501,27 +501,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Service'
-  /services/{id}:
-    get:
-      tags:
-        - services
-      summary: get service plans by id
-      description: ''
-      operationId: getServicesPlan
-      parameters:
-        - in: path
-          name: id
-          description: Service ID
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Service'
   /participant:
     delete:
       tags:
@@ -744,12 +723,22 @@ components:
         name:
           type: string
           example: Netflix
-        created_at:
+        plans:
+          type: array
+          items:
+            $ref: '#/components/schemas/Plan'
+    Plan:
+      type: object
+      properties:
+        plan_name:
           type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
+          example: Premium
+        cost:
+          type: integer
+          example: 390
+        max_count:
+          type: integer
+          example: 4
     Participation:
       type: object
       properties:

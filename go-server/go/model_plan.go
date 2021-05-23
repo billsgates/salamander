@@ -8,11 +8,11 @@
  */
 package swagger
 
-type Service struct {
+type Plan struct {
 
-	Id int32 `json:"id,omitempty"`
+	PlanName string `json:"plan_name,omitempty"`
 
-	Name string `json:"name,omitempty"`
+	Cost int32 `json:"cost,omitempty"`
 
-	Plans []Plan `json:"plans,omitempty"`
+	MaxCount int32 `json:"max_count,omitempty"`
 }
