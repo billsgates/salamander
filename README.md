@@ -39,9 +39,8 @@ $ make stop
 |-------------|-----------------------------|--------|-------------|-------------------------------------------|
 | auth        | /auth/signup                | POST   | Complete    | User signup                               |
 |             | /auth/signin                | POST   | Complete    | User login                                |
-| users       | /users                      | GET    | Complete    | Get all users                             |
-|             | /users                      | PATCH  | Complete    | Update user info                          |
-|             | /users/{user_id}            | GET    | Complete    | Get user detail by user_id                |
+| users       | /user                       | GET    | Complete    | Get user info                             |
+|             | /user                       | PATCH  | Complete    | Update user info                          |
 | rooms       | /rooms                      | POST   | Complete    | Create a room                             |
 |             | /rooms                      | GET    | Complete    | Get all joined rooms                      |
 |             | /rooms/public               | GET    | Complete    | Get all public rooms                      |

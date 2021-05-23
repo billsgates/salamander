@@ -75,15 +75,15 @@ func (_m *UserRepository) GetByEmailPassword(ctx context.Context, email string, 
 }
 
 // GetByID provides a mock function with given fields: ctx, id
-func (_m *UserRepository) GetByID(ctx context.Context, id string) (*domain.User, error) {
+func (_m *UserRepository) GetByID(ctx context.Context, id string) (*domain.UserInfo, error) {
 	ret := _m.Called(ctx, id)
 
-	var r0 *domain.User
-	if rf, ok := ret.Get(0).(func(context.Context, string) *domain.User); ok {
+	var r0 *domain.UserInfo
+	if rf, ok := ret.Get(0).(func(context.Context, string) *domain.UserInfo); ok {
 		r0 = rf(ctx, id)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*domain.User)
+			r0 = ret.Get(0).(*domain.UserInfo)
 		}
 	}
 

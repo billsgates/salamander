@@ -41,7 +41,7 @@ func (u *userUsecase) FetchAll(c context.Context) (res []domain.User, err error)
 	return res, nil
 }
 
-func (u *userUsecase) GetByID(c context.Context, id string) (res *domain.User, err error) {
+func (u *userUsecase) GetByID(c context.Context, id string) (res *domain.UserInfo, err error) {
 	ctx, cancel := context.WithTimeout(c, u.contextTimeout)
 	defer cancel()
 
