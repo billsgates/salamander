@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/billsgates/salamander.svg?branch=master)](https://travis-ci.com/github/billsgates/salamander)
 # Salamander
-backend api server for our project
+backend api server for bills gate
 
 ## Development
 
@@ -14,21 +14,28 @@ These instructions will get you a copy of the project up and running on your loc
 
 * docker
 * docker-compose
+* git-crypt
 
 ### Quick Start
 
-1. Run the server
+1. Decrypt the repository
+```
+$ git-crypt unlock path/to/key
+```
+
+2. Run the server
 ```
 $ make run
 $ docker ps -a
 ```
 
-There should be four containers running in the background (`backend`, `mysql`, `mysql-adminer`, `swagger-ui`), you can verify it by executing
+There should be five containers running in the background (`backend`, `mysql`, `mysql-adminer`, `swagger-ui`, `rabbitmq`), you can verify it by executing
 
 * for `mysql-adminer`: visit (http://localhost:8080) (server: `mysql`, username: `root`, password: `hermitcrab5566`, database: `hermitcrab_db`)
 * for `swagger-ui`: visit (http://localhost:8081)
+* for `rabbitmq`: visit (http://localhost:15672) (username: `guest`, password: `guest`)
 
-2. Stop the server
+3. Stop the server
 ```
 $ make stop
 ```
