@@ -442,6 +442,14 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  room_id:
+                    type: integer
+                    example: 1
   /rooms/join/{code}:
     post:
       tags:
@@ -461,6 +469,14 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  room_id:
+                    type: integer
+                    example: 1
   /services:
     get:
       tags:
