@@ -130,13 +130,13 @@ func (r *roomUsecase) GetInvitationCodes(c context.Context, roomId int32) (res [
 	return res, nil
 }
 
-func (r *roomUsecase) JoinRoom(c context.Context, code string) (err error) {
+func (r *roomUsecase) JoinRoom(c context.Context, code string) (res int32, err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 
 	roomId, err := r.invitationRepo.ConsumeInvitationCode(ctx, code)
 	if err != nil {
-		return room.ErrInvalidInvitationCode
+		return 0, room.ErrInvalidInvitationCode
 	}
 
 	roomInfo, err := r.participationRepo.GetRoomInfo(ctx, roomId)
@@ -144,7 +144,7 @@ func (r *roomUsecase) JoinRoom(c context.Context, code string) (err error) {
 
 	if len(members) >= int(roomInfo.MaxCount) {
 		r.invitationRepo.ResumeInvitationCode(ctx, code)
-		return room.ErrRoomFull
+		return 0, room.ErrRoomFull
 	}
 
 	user := c.Value(domain.CtxUserKey).(*domain.User)
@@ -157,10 +157,10 @@ func (r *roomUsecase) JoinRoom(c context.Context, code string) (err error) {
 	})
 	if err != nil {
 		r.invitationRepo.ResumeInvitationCode(ctx, code)
-		return room.ErrAlreadyJoined
+		return 0, room.ErrAlreadyJoined
 	}
 
-	return nil
+	return roomId, nil
 }
 
 func (r *roomUsecase) LeaveRoom(c context.Context, roomId int32, userId int32) (err error) {

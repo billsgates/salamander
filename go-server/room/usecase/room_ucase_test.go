@@ -242,7 +242,7 @@ func TestJoinRoom(t *testing.T) {
 			Return(nil)
 
 		mockCtx := context.WithValue(context.Background(), domain.CtxUserKey, &mockUser)
-		err := u.JoinRoom(mockCtx, mockInvitationCode)
+		_, err := u.JoinRoom(mockCtx, mockInvitationCode)
 		assert.NoError(t, err)
 	})
 
@@ -290,7 +290,7 @@ func TestJoinRoom(t *testing.T) {
 			Return(mockRoomMembers, nil)
 
 		mockCtx := context.WithValue(context.Background(), domain.CtxUserKey, &mockUser)
-		err := u.JoinRoom(mockCtx, mockInvitationCode)
+		_, err := u.JoinRoom(mockCtx, mockInvitationCode)
 		assert.Error(t, err)
 	})
 
@@ -349,7 +349,7 @@ func TestJoinRoom(t *testing.T) {
 			Return(room.ErrAlreadyJoined)
 
 		mockCtx := context.WithValue(context.Background(), domain.CtxUserKey, &mockUser)
-		err := u.JoinRoom(mockCtx, mockInvitationCode)
+		_, err := u.JoinRoom(mockCtx, mockInvitationCode)
 		assert.Error(t, err)
 	})
 }
