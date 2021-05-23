@@ -111,3 +111,10 @@ func (m *mysqlParticipationRepository) GetRoomMemberByStartingTime(c context.Con
 
 	return members, nil
 }
+
+func (m *mysqlParticipationRepository) UpdatePaymentStatus(ctx context.Context, roomId int32, userId int32, paymentStatus domain.PaymentStatus) (err error) {
+	if err := m.Conn.Table("participation").Where("room_id = ? AND user_id = ?", roomId, userId).Update("payment_status", paymentStatus).Error; err != nil {
+		return err
+	}
+	return nil
+}

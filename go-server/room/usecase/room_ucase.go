@@ -63,7 +63,7 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 	err = r.participationRepo.Create(ctx, &domain.Participation{
 		UserId:        user.Id,
 		RoomId:        roomId,
-		PaymentStatus: "confirmed",
+		PaymentStatus: domain.CONFIRMED,
 		IsHost:        true,
 	})
 	if err != nil {
@@ -164,7 +164,7 @@ func (r *roomUsecase) JoinRoom(c context.Context, code string) (res int32, err e
 	err = r.participationRepo.Create(ctx, &domain.Participation{
 		UserId:        user.Id,
 		RoomId:        roomId,
-		PaymentStatus: "unpaid",
+		PaymentStatus: domain.UNPAID,
 		IsHost:        false,
 	})
 	if err != nil {
@@ -404,5 +404,25 @@ func (r *roomUsecase) DeleteRound(c context.Context, roomId int32) (err error) {
 	} else {
 		return room.ErrNoRound
 	}
+	return nil
+}
+
+func (r *roomUsecase) UpdatePaymentStatus(c context.Context, roomId int32, userId int32, paymentStatus domain.PaymentStatus) (err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	isAdmin, err := r.participationRepo.IsAdmin(ctx, roomId, user.Id)
+	// only user himself or admin can change payment status
+	if (!isAdmin && user.Id != userId) || err != nil {
+		return room.ErrNotAuthorized
+	}
+
+	err = r.participationRepo.UpdatePaymentStatus(ctx, roomId, userId, paymentStatus)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
