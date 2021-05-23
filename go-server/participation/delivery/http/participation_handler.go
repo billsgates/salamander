@@ -21,6 +21,7 @@ func NewParticipationHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc,
 	roomEndpoints := e.Group("participant", authMiddleware)
 	{
 		roomEndpoints.DELETE("", handler.LeaveRoom)
+		roomEndpoints.PATCH("/status", handler.UpdatePaymentStatus)
 	}
 }
 
@@ -36,6 +37,27 @@ func (p *ParticipationHandler) LeaveRoom(c *gin.Context) {
 	if err != nil {
 		logrus.Error(err)
 		if err == room.ErrNotHost {
+			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
+			return
+		}
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	c.Status(http.StatusOK)
+}
+
+func (p *ParticipationHandler) UpdatePaymentStatus(c *gin.Context) {
+	var body domain.ParticipationStatusRequest
+	if err := c.BindJSON(&body); err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	err := p.RoomUsecase.UpdatePaymentStatus(c, body.RoomId, body.UserId, body.PaymentStatus)
+	if err != nil {
+		logrus.Error(err)
+		if err == room.ErrNotAuthorized {
 			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
 			return
 		}

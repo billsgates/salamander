@@ -103,6 +103,7 @@ type RoomUsecase interface {
 	JoinRoom(ctx context.Context, code string) (roomId int32, err error)
 	LeaveRoom(ctx context.Context, roomId int32, userId int32) error
 	UpdateRoom(ctx context.Context, roomId int32, room *RoomRequest) error
+	UpdatePaymentStatus(ctx context.Context, userId int32, roomId int32, status PaymentStatus) error
 	AddRound(ctx context.Context, roomId int32, round *RoundRequest) error
 	GetRound(ctx context.Context, roomId int32) (res *RoundInfo, err error)
 	DeleteRound(ctx context.Context, roomId int32) error
