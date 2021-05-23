@@ -17,8 +17,29 @@ func NewmysqlServiceRepository(Conn *gorm.DB) domain.ServiceRepository {
 
 func (m *mysqlServiceRepository) FetchAll(ctx context.Context) (res []domain.Service, err error) {
 	var services []domain.Service
-	if err := m.Conn.Table("service_providers").Find(&services).Error; err != nil {
+
+	servicesRow, err := m.Conn.Table("service_providers").Rows()
+	if err != nil {
 		return nil, err
+	}
+	defer servicesRow.Close()
+
+	for servicesRow.Next() {
+		var service domain.Service
+		m.Conn.ScanRows(servicesRow, &service)
+
+		plansRow, err := m.Conn.Table("plans").Where("plans.service_id = ?", service.Id).Rows()
+		if err != nil {
+			return nil, err
+		}
+
+		for plansRow.Next() {
+			var plan domain.Plan
+			m.Conn.ScanRows(plansRow, &plan)
+			service.Plans = append(service.Plans, plan)
+		}
+
+		services = append(services, service)
 	}
 	return services, nil
 }
