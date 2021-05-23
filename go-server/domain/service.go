@@ -5,8 +5,9 @@ import (
 )
 
 type Service struct {
-	Id   int32  `json:"id,omitempty"`
-	Name string `json:"name,omitempty"`
+	Id    int32  `json:"id,omitempty"`
+	Name  string `json:"name,omitempty"`
+	Plans []Plan `json:"plans,omitempty" gorm:"-"`
 }
 
 type ServiceDetail struct {
