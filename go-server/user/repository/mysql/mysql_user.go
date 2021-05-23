@@ -32,9 +32,9 @@ func (m *mysqlUserRepository) FetchAll(ctx context.Context) (res []domain.User, 
 	return users, nil
 }
 
-func (m *mysqlUserRepository) GetByID(ctx context.Context, id string) (res *domain.User, err error) {
-	var user *domain.User
-	if err := m.Conn.First(&user, id).Error; err != nil {
+func (m *mysqlUserRepository) GetByID(ctx context.Context, id string) (res *domain.UserInfo, err error) {
+	var user *domain.UserInfo
+	if err := m.Conn.Table("users").Where("users.id = ?", id).First(&user).Error; err != nil {
 		return nil, err
 	}
 

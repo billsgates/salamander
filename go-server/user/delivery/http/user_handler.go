@@ -3,6 +3,7 @@ package http
 import (
 	"go-server/domain"
 	"net/http"
+	"strconv"
 
 	swagger "go-server/go"
 
@@ -19,12 +20,26 @@ func NewUserHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, userUsec
 		UserUsecase: userUsecase,
 	}
 
-	userEndpoints := e.Group("users", authMiddleware)
+	userEndpoints := e.Group("user", authMiddleware)
 	{
-		userEndpoints.GET("", handler.GetAllUsers)
+		userEndpoints.GET("", handler.GetUser)
+		// userEndpoints.GET("", handler.GetAllUsers)
 		userEndpoints.PATCH("", handler.UpdateUserInfo)
-		userEndpoints.GET("/:userID", handler.GetUserByUserID)
+		// userEndpoints.GET("/:userID", handler.GetUserByUserID)
 	}
+}
+
+func (u *UserHandler) GetUser(c *gin.Context) {
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+	userId := strconv.Itoa(int(user.Id))
+
+	res, err := u.UserUsecase.GetByID(c, userId)
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+	c.JSON(http.StatusOK, res)
 }
 
 func (u *UserHandler) GetAllUsers(c *gin.Context) {
