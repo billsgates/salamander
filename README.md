@@ -58,7 +58,6 @@ $ make stop
 |             | /rooms/join                 | POST   | Complete    | Join room by invitation code              |
 |             | /rooms/join/{code}          | POST   | Complete    | Join room by url                          |
 | services    | /services                   | GET    | Complete    | Get all services                          |
-|             | /services/{service_id}      | GET    | Complete    | Get service detail by service_id          |
 | participant | /participant                | DELETE | Complete    | Delete participant from room              |
 |             | /participant/status         | PATCH  | To Do       | Change participant payment status         |
 | application | /application/accept         | POST   | To Do       | Accept join room application              |
