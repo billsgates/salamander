@@ -66,7 +66,7 @@ func (m *mysqlParticipationRepository) LeaveRoom(ctx context.Context, roomId int
 
 func (m *mysqlParticipationRepository) GetRoomInfo(c context.Context, roomId int32) (res *domain.RoomInfoResponse, err error) {
 	var roomInfo *domain.RoomInfoResponse
-	if err := m.Conn.Table("rooms").Select("service_providers.name as service_name, rooms.room_id, rooms.is_public, rooms.announcement, rooms.max_count, rooms.plan_name, rooms.room_status, rooms.round_id, users.name as admin_name, users.email as admin_email, users.rating as admin_rating, users.phone as admin_phone, plans.cost as payment_fee").
+	if err := m.Conn.Table("rooms").Select("service_providers.name as service_name, service_providers.id as service_id, rooms.room_id, rooms.is_public, rooms.announcement, rooms.max_count, rooms.plan_name, rooms.room_status, rooms.round_id, users.name as admin_name, users.email as admin_email, users.rating as admin_rating, users.phone as admin_phone, plans.cost as payment_fee").
 		Joins("JOIN users ON users.id = rooms.admin_id").
 		Joins("JOIN plans ON plans.plan_name = rooms.plan_name AND plans.service_id = rooms.service_id").
 		Joins("JOIN service_providers ON service_providers.id = plans.service_id").

@@ -61,6 +61,7 @@ type RoomInfoResponse struct {
 	MaxCount     int32           `json:"max_count,omitempty"`
 	RoomStatus   *RoomStatus     `json:"room_status,omitempty"`
 	RoundId      int32           `json:"round_id"`
+	ServiceId    int32           `json:"service_id,omitempty"`
 	ServiceName  string          `json:"service_name,omitempty"`
 	PlanName     string          `json:"plan_name,omitempty"`
 	Role         string          `json:"role,omitempty"`
