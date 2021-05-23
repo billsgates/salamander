@@ -18,10 +18,10 @@ func NewParticipationHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc,
 		RoomUsecase: roomUsecase,
 	}
 
-	roomEndpoints := e.Group("participant", authMiddleware)
+	participantEndpoints := e.Group("participant", authMiddleware)
 	{
-		roomEndpoints.DELETE("", handler.LeaveRoom)
-		roomEndpoints.PATCH("/status", handler.UpdatePaymentStatus)
+		participantEndpoints.DELETE("", handler.LeaveRoom)
+		participantEndpoints.PATCH("/status", handler.UpdatePaymentStatus)
 	}
 }
 

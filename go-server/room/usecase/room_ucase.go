@@ -164,7 +164,7 @@ func (r *roomUsecase) JoinRoom(c context.Context, code string) (res int32, err e
 	err = r.participationRepo.Create(ctx, &domain.Participation{
 		UserId:        user.Id,
 		RoomId:        roomId,
-		PaymentStatus: "unpaid",
+		PaymentStatus: domain.UNPAID,
 		IsHost:        false,
 	})
 	if err != nil {
