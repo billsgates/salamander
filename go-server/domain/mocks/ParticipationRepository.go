@@ -200,3 +200,17 @@ func (_m *ParticipationRepository) LeaveRoom(ctx context.Context, roomId int32, 
 
 	return r0
 }
+
+// UpdatePaymentStatus provides a mock function with given fields: ctx, userId, roomId, status
+func (_m *ParticipationRepository) UpdatePaymentStatus(ctx context.Context, userId int32, roomId int32, status domain.PaymentStatus) error {
+	ret := _m.Called(ctx, userId, roomId, status)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32, int32, domain.PaymentStatus) error); ok {
+		r0 = rf(ctx, userId, roomId, status)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
