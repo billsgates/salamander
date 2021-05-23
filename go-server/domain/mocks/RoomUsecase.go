@@ -253,17 +253,24 @@ func (_m *RoomUsecase) GetTodayStartingMember(c context.Context) ([]domain.Parti
 }
 
 // JoinRoom provides a mock function with given fields: ctx, code
-func (_m *RoomUsecase) JoinRoom(ctx context.Context, code string) error {
+func (_m *RoomUsecase) JoinRoom(ctx context.Context, code string) (int32, error) {
 	ret := _m.Called(ctx, code)
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, string) error); ok {
+	var r0 int32
+	if rf, ok := ret.Get(0).(func(context.Context, string) int32); ok {
 		r0 = rf(ctx, code)
 	} else {
-		r0 = ret.Error(0)
+		r0 = ret.Get(0).(int32)
 	}
 
-	return r0
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, code)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // LeaveRoom provides a mock function with given fields: ctx, roomId, userId

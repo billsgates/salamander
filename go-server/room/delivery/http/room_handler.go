@@ -223,7 +223,7 @@ func (u *RoomHandler) JoinRoom(c *gin.Context) {
 		return
 	}
 
-	err := u.RoomUsecase.JoinRoom(c, body.InvitationCode)
+	roomId, err := u.RoomUsecase.JoinRoom(c, body.InvitationCode)
 	if err != nil {
 		logrus.Error(err)
 		if err == room.ErrRoomFull {
@@ -242,13 +242,13 @@ func (u *RoomHandler) JoinRoom(c *gin.Context) {
 		return
 	}
 
-	c.Status(http.StatusOK)
+	c.JSON(http.StatusOK, gin.H{"room_id": roomId})
 }
 
 func (u *RoomHandler) JoinRoomByUrl(c *gin.Context) {
 	invitationCode := c.Param("invitationCode")
 
-	err := u.RoomUsecase.JoinRoom(c, invitationCode)
+	roomId, err := u.RoomUsecase.JoinRoom(c, invitationCode)
 	if err != nil {
 		logrus.Error(err)
 		if err == room.ErrRoomFull {
@@ -267,7 +267,7 @@ func (u *RoomHandler) JoinRoomByUrl(c *gin.Context) {
 		return
 	}
 
-	c.Status(http.StatusOK)
+	c.JSON(http.StatusOK, gin.H{"room_id": roomId})
 }
 
 func (u *RoomHandler) UpdateRoomInfo(c *gin.Context) {

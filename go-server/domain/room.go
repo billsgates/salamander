@@ -87,7 +87,7 @@ type RoomUsecase interface {
 	GetJoinedRooms(ctx context.Context) ([]RoomItem, error)
 	GenerateInvitationCode(ctx context.Context, roomId int32) (string, error)
 	GetInvitationCodes(ctx context.Context, roomId int32) (res []InvitationCode, err error)
-	JoinRoom(ctx context.Context, code string) error
+	JoinRoom(ctx context.Context, code string) (roomId int32, err error)
 	LeaveRoom(ctx context.Context, roomId int32, userId int32) error
 	UpdateRoom(ctx context.Context, roomId int32, room *RoomRequest) error
 	AddRound(ctx context.Context, roomId int32, round *RoundRequest) error
