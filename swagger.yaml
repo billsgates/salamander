@@ -838,6 +838,9 @@ components:
           example: 4
         room_status:
           $ref: '#/components/schemas/RoomStatus'
+        service_id:
+          type: integer
+          example: 1
         service_name:
           type: string
           example: Netflix

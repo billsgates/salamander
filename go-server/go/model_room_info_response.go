@@ -20,6 +20,8 @@ type RoomInfoResponse struct {
 
 	RoomStatus *RoomStatus `json:"room_status,omitempty"`
 
+	ServiceId int32 `json:"service_id,omitempty"`
+
 	ServiceName string `json:"service_name,omitempty"`
 
 	PlanName string `json:"plan_name,omitempty"`

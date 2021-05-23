@@ -807,6 +807,9 @@ components:
           example: 4
         room_status:
           $ref: '#/components/schemas/RoomStatus'
+        service_id:
+          type: integer
+          example: 1
         service_name:
           type: string
           example: Netflix
@@ -843,6 +846,7 @@ components:
         room_status: created
         max_count: 4
         round_id: 3
+        service_id: 1
         round_info:
           ending_time: 2021/11/17
           round_interval: 5
