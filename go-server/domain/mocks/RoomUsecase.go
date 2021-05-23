@@ -29,17 +29,24 @@ func (_m *RoomUsecase) AddRound(ctx context.Context, roomId int32, round *domain
 }
 
 // Create provides a mock function with given fields: ctx, room
-func (_m *RoomUsecase) Create(ctx context.Context, room *domain.RoomRequest) error {
+func (_m *RoomUsecase) Create(ctx context.Context, room *domain.RoomRequest) (int32, error) {
 	ret := _m.Called(ctx, room)
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, *domain.RoomRequest) error); ok {
+	var r0 int32
+	if rf, ok := ret.Get(0).(func(context.Context, *domain.RoomRequest) int32); ok {
 		r0 = rf(ctx, room)
 	} else {
-		r0 = ret.Error(0)
+		r0 = ret.Get(0).(int32)
 	}
 
-	return r0
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *domain.RoomRequest) error); ok {
+		r1 = rf(ctx, room)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // Delete provides a mock function with given fields: ctx, roomId

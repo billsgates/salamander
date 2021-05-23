@@ -8,7 +8,7 @@
  */
 package swagger
 
-type InlineResponse200 struct {
+type InlineResponse2002 struct {
 
-	RoomId int32 `json:"room_id,omitempty"`
+	Code string `json:"code,omitempty"`
 }

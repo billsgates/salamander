@@ -140,8 +140,12 @@ paths:
               $ref: '#/components/schemas/RoomRequest'
         required: true
       responses:
-        "201":
+        "200":
           description: successfully created a room
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
       security:
       - BearerAuth: []
   /rooms/public:
@@ -322,7 +326,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/inline_response_200'
+                  $ref: '#/components/schemas/inline_response_200_1'
                 x-content-type: application/json
       security:
       - BearerAuth: []
@@ -346,7 +350,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_1'
+                $ref: '#/components/schemas/inline_response_200_2'
       security:
       - BearerAuth: []
   /rooms/{id}/application:
@@ -930,6 +934,14 @@ components:
         image_url:
           type: string
           format: url
+    inline_response_200:
+      type: object
+      properties:
+        room_id:
+          type: integer
+          example: 1
+      example:
+        room_id: 1
     body_1:
       type: object
       properties:
@@ -946,13 +958,13 @@ components:
         is_add_calendar:
           type: boolean
           example: true
-    inline_response_200:
+    inline_response_200_1:
       properties:
         invitation_code:
           type: string
       example:
       - code: skda35d
-    inline_response_200_1:
+    inline_response_200_2:
       type: object
       properties:
         code:

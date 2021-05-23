@@ -32,7 +32,7 @@ func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.Par
 	}
 }
 
-func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest) (err error) {
+func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest) (res int32, err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 
@@ -42,11 +42,11 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 
 	plan, err := r.serviceRepo.GetPlanByKey(ctx, roomRequest.PlanName, fmt.Sprintf("%d", roomRequest.ServiceId))
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	if plan.MaxCount < roomRequest.MaxCount {
-		return room.ErrMaxCountExceed
+		return 0, room.ErrMaxCountExceed
 	}
 
 	roomId, err := r.roomRepo.Create(ctx, &domain.Room{
@@ -57,7 +57,7 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 		IsPublic:  roomRequest.IsPublic,
 	})
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	err = r.participationRepo.Create(ctx, &domain.Participation{
@@ -67,10 +67,10 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 		IsHost:        true,
 	})
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
+	return roomId, nil
 }
 
 func (r *roomUsecase) GetJoinedRooms(c context.Context) (res []domain.RoomItem, err error) {

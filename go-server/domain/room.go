@@ -78,7 +78,7 @@ type RoomRepository interface {
 }
 
 type RoomUsecase interface {
-	Create(ctx context.Context, room *RoomRequest) error
+	Create(ctx context.Context, room *RoomRequest) (roomId int32, err error)
 	Delete(ctx context.Context, roomId int32) error
 	GetRoomInfo(ctx context.Context, roomId int32) (res *RoomInfoResponse, err error)
 	GetRoomAdmin(ctx context.Context, roomId int32) (res *User, err error)
