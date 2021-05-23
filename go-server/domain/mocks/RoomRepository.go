@@ -49,6 +49,29 @@ func (_m *RoomRepository) Delete(ctx context.Context, roomId int32) error {
 	return r0
 }
 
+// GetPublicRooms provides a mock function with given fields: ctx
+func (_m *RoomRepository) GetPublicRooms(ctx context.Context) ([]domain.RoomPublic, error) {
+	ret := _m.Called(ctx)
+
+	var r0 []domain.RoomPublic
+	if rf, ok := ret.Get(0).(func(context.Context) []domain.RoomPublic); ok {
+		r0 = rf(ctx)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]domain.RoomPublic)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = rf(ctx)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Update provides a mock function with given fields: ctx, roomId, room
 func (_m *RoomRepository) Update(ctx context.Context, roomId int32, room *domain.Room) error {
 	ret := _m.Called(ctx, roomId, room)

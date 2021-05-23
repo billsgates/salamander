@@ -724,14 +724,11 @@ components:
     Application:
       type: object
       properties:
-        application_id:
-          type: integer
         user_id:
           type: integer
         name:
           type: string
       example:
-        application_id: 1
         user_id: 1
         name: Kevin Yu
     Member:
@@ -753,8 +750,12 @@ components:
         room_id:
           type: integer
           example: 1
-        admin:
-          $ref: '#/components/schemas/Admin'
+        admin_name:
+          type: string
+          example: Kevin Yu
+        admin_rating:
+          type: integer
+          example: 4
         service_name:
           type: string
           example: Netflix
@@ -775,12 +776,9 @@ components:
         max_count: 4
         cost: 720
         service_name: Netflix
-        admin:
-          name: Kevin Yu
-          email: kevin@ntu.im
-          rating: 4
-          phone: 9.12345678E8
+        admin_name: Kevin Yu
         member_count: 2
+        admin_rating: 4
         plan_name: Premium
     RoomItem:
       type: object

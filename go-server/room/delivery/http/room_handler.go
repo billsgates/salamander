@@ -2,6 +2,7 @@ package http
 
 import (
 	"go-server/domain"
+	"go-server/participation"
 	"go-server/room"
 	"net/http"
 	"strconv"
@@ -11,18 +12,23 @@ import (
 )
 
 type RoomHandler struct {
-	RoomUsecase domain.RoomUsecase
+	RoomUsecase          domain.RoomUsecase
+	ApplicationUsecase   domain.ApplicationUsecase
+	ParticipationUsecase domain.ParticipationUsecase
 }
 
-func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsecase domain.RoomUsecase) {
+func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsecase domain.RoomUsecase, applicationUsecase domain.ApplicationUsecase, participationUsecase domain.ParticipationUsecase) {
 	handler := &RoomHandler{
-		RoomUsecase: roomUsecase,
+		RoomUsecase:          roomUsecase,
+		ApplicationUsecase:   applicationUsecase,
+		ParticipationUsecase: participationUsecase,
 	}
 
 	roomEndpoints := e.Group("rooms", authMiddleware)
 	{
 		roomEndpoints.POST("", handler.CreateRoom)
 		roomEndpoints.GET("", handler.GetJoinedRooms)
+		roomEndpoints.GET("/public", handler.GetPublicRooms)
 		roomEndpoints.GET("/:roomID", handler.GetRoomInfo)
 		roomEndpoints.PATCH("/:roomID", handler.UpdateRoomInfo)
 		roomEndpoints.DELETE("/:roomID", handler.DeleteRoom)
@@ -31,6 +37,8 @@ func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsec
 		roomEndpoints.DELETE("/:roomID/round", handler.DeleteRound)
 		roomEndpoints.POST("/:roomID/invitation", handler.GenerateInvitationCode)
 		roomEndpoints.GET("/:roomID/invitation", handler.GetInvitationCodes)
+		roomEndpoints.POST("/:roomID/application", handler.CreateApplication)
+		roomEndpoints.GET("/:roomID/application", handler.GetApplications)
 		roomEndpoints.POST("/join", handler.JoinRoom)
 		roomEndpoints.POST("/join/:invitationCode", handler.JoinRoomByUrl)
 	}
@@ -57,6 +65,17 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 
 	c.Status(http.StatusCreated)
 	c.JSON(http.StatusCreated, gin.H{"room_id": roomId})
+}
+
+func (u *RoomHandler) GetPublicRooms(c *gin.Context) {
+	rooms, err := u.RoomUsecase.GetPublicRooms(c)
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": rooms})
 }
 
 func (u *RoomHandler) DeleteRoom(c *gin.Context) {
@@ -365,4 +384,62 @@ func (u *RoomHandler) AddRound(c *gin.Context) {
 	}
 
 	c.Status(http.StatusCreated)
+}
+
+func (u *RoomHandler) CreateApplication(c *gin.Context) {
+	roomID, err := strconv.ParseInt(c.Param("roomID"), 10, 32)
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	isMember, err := u.ParticipationUsecase.IsMember(c, int32(roomID))
+	if isMember || err != nil {
+		logrus.Error(err)
+		if err == participation.ErrAlreadyJoined {
+			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
+			return
+		}
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	err = u.ApplicationUsecase.Create(c, int32(roomID))
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	c.Status(http.StatusOK)
+}
+
+func (u *RoomHandler) GetApplications(c *gin.Context) {
+	roomID, err := strconv.ParseInt(c.Param("roomID"), 10, 32)
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	isAdmin, err := u.ParticipationUsecase.IsAdmin(c, int32(roomID))
+	if !isAdmin || err != nil {
+		logrus.Error(err)
+		if err == participation.ErrNotHost {
+			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
+			return
+		}
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	applications, err := u.ApplicationUsecase.FetchAll(c, int32(roomID))
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": applications})
 }

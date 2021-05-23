@@ -44,7 +44,7 @@ $ make stop
 |             | /users/{user_id}            | GET    | Complete    | Get user detail by user_id                |
 | rooms       | /rooms                      | POST   | Complete    | Create a room                             |
 |             | /rooms                      | GET    | Complete    | Get all joined rooms                      |
-|             | /rooms/public               | GET    | To Do       | Get all public rooms                      |
+|             | /rooms/public               | GET    | Complete    | Get all public rooms                      |
 |             | /rooms/{room_id}            | GET    | Complete    | Get room detail by room_id                |
 |             | /rooms/{room_id}            | PATCH  | Complete    | Update room by room_id                    |
 |             | /rooms/{room_id}            | DELETE | Complete    | Delete room by room_id                    |
@@ -53,8 +53,8 @@ $ make stop
 |             | /rooms/{room_id}/round      | DELETE | Complete    | Remove current round of the room          |
 |             | /rooms/{room_id}/invitation | POST   | Complete    | Create an invitation code in room room_id |
 |             | /rooms/{room_id}/invitation | GET    | Complete    | Get all valid invitation codes in room    |
-|             | /rooms/{room_id}/application| POST   | To Do       | Create an application to join room        |
-|             | /rooms/{room_id}/application| GET    | To Do       | Get all applications of the room          |
+|             | /rooms/{room_id}/application| POST   | Complete    | Create an application to join room        |
+|             | /rooms/{room_id}/application| GET    | Complete     | Get all applications of the room          |
 |             | /rooms/join                 | POST   | Complete    | Join room by invitation code              |
 |             | /rooms/join/{code}          | POST   | Complete    | Join room by url                          |
 | services    | /services                   | GET    | Complete    | Get all services                          |

@@ -12,7 +12,9 @@ type RoomPublic struct {
 
 	RoomId int32 `json:"room_id,omitempty"`
 
-	Admin *Admin `json:"admin,omitempty"`
+	AdminName string `json:"admin_name,omitempty"`
+
+	AdminRating int32 `json:"admin_rating,omitempty"`
 
 	ServiceName string `json:"service_name,omitempty"`
 

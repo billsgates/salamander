@@ -70,8 +70,20 @@ type RoomInfoResponse struct {
 	Members      []Participation `json:"members,omitempty" gorm:"-"`
 }
 
+type RoomPublic struct {
+	RoomId      int32  `json:"room_id,omitempty"`
+	AdminName   string `json:"admin_name,omitempty"`
+	AdminRating int32  `json:"admin_rating"`
+	ServiceName string `json:"service_name,omitempty"`
+	PlanName    string `json:"plan_name,omitempty"`
+	MaxCount    int32  `json:"max_count,omitempty"`
+	MemberCount int32  `json:"member_count,omitempty"`
+	Cost        int32  `json:"cost,omitempty"`
+}
+
 type RoomRepository interface {
 	Create(ctx context.Context, room *Room) (roomId int32, err error)
+	GetPublicRooms(ctx context.Context) (res []RoomPublic, err error)
 	Update(ctx context.Context, roomId int32, room *Room) error
 	UpdateRoundId(ctx context.Context, roomId int32, roundId int32) error
 	Delete(ctx context.Context, roomId int32) (err error)
@@ -83,6 +95,7 @@ type RoomUsecase interface {
 	GetRoomInfo(ctx context.Context, roomId int32) (res *RoomInfoResponse, err error)
 	GetRoomAdmin(ctx context.Context, roomId int32) (res *User, err error)
 	GetRoomMembers(ctx context.Context, roomId int32) (res []Participation, err error)
+	GetPublicRooms(ctx context.Context) (res []RoomPublic, err error)
 	GetTodayStartingMember(c context.Context) (res []Participation, err error)
 	GetJoinedRooms(ctx context.Context) ([]RoomItem, error)
 	GenerateInvitationCode(ctx context.Context, roomId int32) (string, error)

@@ -10,6 +10,8 @@ package main
 
 import (
 	"fmt"
+	_applicationRepo "go-server/application/repository/mysql"
+	_applicationUsecase "go-server/application/usecase"
 	_authHandlerHttpDelivery "go-server/auth/delivery/http"
 	_authUsecase "go-server/auth/usecase"
 	_queue "go-server/internal/infrastructure/queue"
@@ -17,6 +19,7 @@ import (
 	_invitationRepo "go-server/invitation/repository/mysql"
 	_participationHandlerHttpDelivery "go-server/participation/delivery/http"
 	_participationRepo "go-server/participation/repository/mysql"
+	_participationUsecase "go-server/participation/usecase"
 	_roomHandlerHttpDelivery "go-server/room/delivery/http"
 	_roomRepo "go-server/room/repository/mysql"
 	_roomUsecase "go-server/room/usecase"
@@ -109,10 +112,13 @@ func main() {
 	participationRepo := _participationRepo.NewmysqlParticipationRepository(db)
 	invitationRepo := _invitationRepo.NewmysqlInvitationRepository(db)
 	roundRepo := _roundRepo.NewmysqlRoundRepository(db)
+	applicationRepo := _applicationRepo.NewmysqlApplicationRepository(db)
 
 	userUsecase := _userUsecase.NewUserUsecase(userRepo, timeoutContext)
 	roomUsecase := _roomUsecase.NewRoomUsecase(roomRepo, participationRepo, serviceRepo, invitationRepo, roundRepo, timeoutContext)
 	serviceUsecase := _serviceUsecase.NewServiceUsecase(serviceRepo, timeoutContext)
+	applicationUsecase := _applicationUsecase.NewApplicationUsecase(applicationRepo, timeoutContext)
+	participationUsecase := _participationUsecase.NewParticipationUsecase(participationRepo, timeoutContext)
 	authUsecase := _authUsecase.NewAuthUseCase(
 		userRepo,
 		viper.GetString("auth.hash_salt"),
@@ -127,7 +133,7 @@ func main() {
 	{
 		_authHandlerHttpDelivery.NewAuthHandler(v1Router, authUsecase)
 		_userHandlerHttpDelivery.NewUserHandler(v1Router, authMiddleware, userUsecase)
-		_roomHandlerHttpDelivery.NewRoomHandler(v1Router, authMiddleware, roomUsecase)
+		_roomHandlerHttpDelivery.NewRoomHandler(v1Router, authMiddleware, roomUsecase, applicationUsecase, participationUsecase)
 		_serviceHandlerHttpDelivery.NewServiceHandler(v1Router, serviceUsecase)
 		_participationHandlerHttpDelivery.NewParticipationHandler(v1Router, authMiddleware, roomUsecase)
 	}
