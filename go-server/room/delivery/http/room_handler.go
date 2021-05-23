@@ -44,7 +44,7 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 		return
 	}
 
-	err := u.RoomUsecase.Create(c, &body)
+	roomId, err := u.RoomUsecase.Create(c, &body)
 	if err != nil {
 		logrus.Error(err)
 		if err == room.ErrMaxCountExceed {
@@ -56,6 +56,7 @@ func (u *RoomHandler) CreateRoom(c *gin.Context) {
 	}
 
 	c.Status(http.StatusCreated)
+	c.JSON(http.StatusCreated, gin.H{"room_id": roomId})
 }
 
 func (u *RoomHandler) DeleteRoom(c *gin.Context) {

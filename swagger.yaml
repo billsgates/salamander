@@ -145,8 +145,16 @@ paths:
             schema:
               $ref: '#/components/schemas/RoomRequest'
       responses:
-        "201":
+        "200":
           description: successfully created a room
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  room_id:
+                    type: integer
+                    example: 1
     get:
       tags:
         - rooms

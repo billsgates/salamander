@@ -68,7 +68,7 @@ func TestCreate(t *testing.T) {
 			Return(nil)
 
 		mockCtx := context.WithValue(context.Background(), domain.CtxUserKey, &mockUser)
-		err := u.Create(mockCtx, &mockRoomRequest)
+		_, err := u.Create(mockCtx, &mockRoomRequest)
 		assert.NoError(t, err)
 	})
 
@@ -119,7 +119,7 @@ func TestCreate(t *testing.T) {
 			Return(nil)
 
 		mockCtx := context.WithValue(context.Background(), domain.CtxUserKey, &mockUser)
-		err := u.Create(mockCtx, &mockRoomRequest)
+		_, err := u.Create(mockCtx, &mockRoomRequest)
 		assert.Error(t, err)
 	})
 }
