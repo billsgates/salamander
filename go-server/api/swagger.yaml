@@ -8,8 +8,8 @@ servers:
 tags:
 - name: auth
   description: Authentication
-- name: users
-  description: Users
+- name: user
+  description: User
 - name: rooms
   description: Rooms
 - name: services
@@ -55,27 +55,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginResponse'
-  /users:
+  /user:
     get:
       tags:
-      - users
-      summary: get users
-      operationId: getUsers
+      - user
+      summary: get user
+      operationId: getUser
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-                x-content-type: application/json
+                $ref: '#/components/schemas/User'
       security:
       - BearerAuth: []
     patch:
       tags:
-      - users
+      - user
       summary: update user info
       operationId: updateUser
       requestBody:
@@ -87,30 +84,6 @@ paths:
       responses:
         "201":
           description: successfully update user
-      security:
-      - BearerAuth: []
-  /users/{id}:
-    get:
-      tags:
-      - users
-      summary: get user by id
-      operationId: getUser
-      parameters:
-      - name: id
-        in: path
-        description: User ID
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
       security:
       - BearerAuth: []
   /rooms:
@@ -414,6 +387,10 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
       security:
       - BearerAuth: []
   /rooms/join/{code}:
@@ -434,6 +411,10 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
       security:
       - BearerAuth: []
   /services:
@@ -540,25 +521,17 @@ components:
           type: string
           format: email
           example: kevin@ntu.im
-        password_digest:
+        phone:
           type: string
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzEwMzgyMjQuNzQ0MzI0MiwidXNlciI6eyJJRCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIlVzZXJuYW1lIjoiemhhc2hrZXZ5Y2giLCJQYXNzd29yZCI6IjQyODYwMTc5ZmFiMTQ2YzZiZDAyNjlkMDViZTM0ZWNmYmY5Zjk3YjUifX0.3dsyKJQ-HZJxdvBMui0Mzgw6yb6If9aB8imGhxMOjsk
+          example: "912345678"
         rating:
           type: integer
           example: 5
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
       example:
-        updated_at: 2000-01-23T04:56:07.000+00:00
+        phone: "912345678"
         name: kevin yu
         rating: 5
-        created_at: 2000-01-23T04:56:07.000+00:00
         id: 1
-        password_digest: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzEwMzgyMjQuNzQ0MzI0MiwidXNlciI6eyJJRCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIlVzZXJuYW1lIjoiemhhc2hrZXZ5Y2giLCJQYXNzd29yZCI6IjQyODYwMTc5ZmFiMTQ2YzZiZDAyNjlkMDViZTM0ZWNmYmY5Zjk3YjUifX0.3dsyKJQ-HZJxdvBMui0Mzgw6yb6If9aB8imGhxMOjsk
         email: kevin@ntu.im
     SignupRequest:
       required:

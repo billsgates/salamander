@@ -8,8 +8,8 @@ servers:
 tags:
   - name: auth
     description: Authentication
-  - name: users
-    description: Users
+  - name: user
+    description: User
   - name: rooms
     description: Rooms
   - name: services
@@ -59,13 +59,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginResponse'
-  /users:
+  /user:
     get:
       tags:
-        - users
-      summary: get users
+        - user
+      summary: get user
       description: ''
-      operationId: getUsers
+      operationId: getUser
       security:
         - BearerAuth: []
       responses:
@@ -74,12 +74,10 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/User'
     patch:
       tags:
-        - users
+        - user
       summary: update user info
       description: ''
       operationId: updateUser
@@ -105,29 +103,6 @@ paths:
       responses:
         "201":
           description: successfully update user
-  /users/{id}:
-    get:
-      tags:
-        - users
-      summary: get user by id
-      description: ''
-      operationId: getUser
-      security:
-        - BearerAuth: []
-      parameters:
-        - in: path
-          name: id
-          description: User ID
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
   /rooms:
     post:
       tags:
@@ -617,18 +592,12 @@ components:
           type: string
           format: email
           example: kevin@ntu.im
-        password_digest:
+        phone:
           type: string
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzEwMzgyMjQuNzQ0MzI0MiwidXNlciI6eyJJRCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIlVzZXJuYW1lIjoiemhhc2hrZXZ5Y2giLCJQYXNzd29yZCI6IjQyODYwMTc5ZmFiMTQ2YzZiZDAyNjlkMDViZTM0ZWNmYmY5Zjk3YjUifX0.3dsyKJQ-HZJxdvBMui0Mzgw6yb6If9aB8imGhxMOjsk
+          example: 0912345678
         rating:
           type: integer
           example: 5
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
     SignupRequest:
       type: object
       properties:
