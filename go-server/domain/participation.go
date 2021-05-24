@@ -26,7 +26,8 @@ type ParticipationInfo struct {
 	UserName        string `json:"user_name,omitempty"`
 	UserEmail       string `json:"user_email,omitempty"`
 	ServiceProvider string `json:"service_provider,omitempty"`
-	Plan_name       string `json:"plan_name,omitempty"`
+	PlanName        string `json:"plan_name,omitempty"`
+	OwedFee         int32  `json:"owed_fee,omitempty"`
 	RoomId          int32  `json:"room_id,omitempty"`
 	AdminId         int32  `json:"admin_id,omitempty"`
 	AdminName       string `json:"admin_name,omitempty"`
@@ -49,6 +50,7 @@ type ParticipationRepository interface {
 	GetRoomAdmin(ctx context.Context, roomId int32) (res *User, err error)
 	GetRoomMembers(ctx context.Context, roomId int32) (res []Participation, err error)
 	GetJoinedRooms(ctx context.Context, userId int32) ([]RoomItem, error)
+	GetRoomFeeInfo(ctx context.Context, roomId int32) (res *RoomFeeInfo, err error)
 	GetRoomMemberByStartingTime(ctx context.Context, starting_time time.Time) (res []ParticipationInfo, err error)
 	GetRoomMemberByDueTime(ctx context.Context, due_time time.Time) (res []ParticipationInfo, err error)
 	IsAdmin(ctx context.Context, roomId int32, userId int32) (bool, error)

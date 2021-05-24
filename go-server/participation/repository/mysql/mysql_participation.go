@@ -77,6 +77,19 @@ func (m *mysqlParticipationRepository) GetRoomInfo(c context.Context, roomId int
 	return roomInfo, nil
 }
 
+func (m *mysqlParticipationRepository) GetRoomFeeInfo(ctx context.Context, roomId int32) (res *domain.RoomFeeInfo, err error) {
+	var roomFeeInfo *domain.RoomFeeInfo
+	if err := m.Conn.Table("rooms").Select("service_providers.name as service_name, rooms.room_id, plans.plan_name, plans.cost, rounds.round_interval").
+		Joins("JOIN plans ON plans.plan_name = rooms.plan_name AND plans.service_id = rooms.service_id").
+		Joins("JOIN service_providers ON service_providers.id = plans.service_id").
+		Joins("JOIN rounds ON rounds.round_id = rooms.round_id").
+		Where("rooms.room_id = ?", roomId).First(&roomFeeInfo).Error; err != nil {
+		return nil, err
+	}
+
+	return roomFeeInfo, nil
+}
+
 func (m *mysqlParticipationRepository) GetRoomAdmin(c context.Context, roomId int32) (res *domain.User, err error) {
 	var admin *domain.User
 	if err := m.Conn.Table("participation").Select("users.name AS name, users.email AS email, users.rating AS rating, users.phone AS phone").

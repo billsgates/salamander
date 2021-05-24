@@ -64,12 +64,14 @@ func (w *PaymentCheckWorker) SendEmail(info *domain.ParticipationInfo) {
 		Plan            string
 		AdminName       string
 		AdminEmail      string
+		OwedFee         int32
 	}{
 		ReceiverName:    info.UserName,
 		ServiceProvider: info.ServiceProvider,
-		Plan:            info.Plan_name,
+		Plan:            info.PlanName,
 		AdminName:       info.AdminName,
 		AdminEmail:      info.AdminEmail,
+		OwedFee:         info.OwedFee,
 	}
 	status, err := w.GmailHandler.SendEmailOAUTH2("frankchen93011@gmail.com", data, "payment_due_template.txt")
 	if err != nil {
