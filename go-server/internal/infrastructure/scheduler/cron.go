@@ -32,6 +32,14 @@ func NewScheduler(roomUsecase domain.RoomUsecase, timeout time.Duration) *Schedu
 	return s
 }
 
+func (s *Scheduler) Run() {
+	ctx, cancel := context.WithTimeout(context.Background(), s.contextTimeout)
+	defer cancel()
+	// add function to cron
+	s.sendEmailToStartingMembers(ctx)
+	s.sendEmailToPaymentDueMembers(ctx)
+}
+
 // private, find room member that the starting date is today
 func (s *Scheduler) sendEmailToStartingMembers(c context.Context) (err error) {
 	logrus.Info("sendEmailToStartingMembers")
@@ -43,9 +51,13 @@ func (s *Scheduler) sendEmailToStartingMembers(c context.Context) (err error) {
 	return nil
 }
 
-func (s *Scheduler) Run() {
-	ctx, cancel := context.WithTimeout(context.Background(), s.contextTimeout)
-	defer cancel()
-	// add function to cron
-	s.sendEmailToStartingMembers(ctx)
+// private, find room member that the payment date is due
+func (s *Scheduler) sendEmailToPaymentDueMembers(c context.Context) (err error) {
+	logrus.Info("sendEmailToPaymentDueMembers")
+	members, err := s.roomUsecase.GetTodayPaymentDueMember(c)
+	if err != nil {
+		return err
+	}
+	logrus.Info(members)
+	return nil
 }

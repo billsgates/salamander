@@ -105,7 +105,21 @@ func (m *mysqlParticipationRepository) GetRoomMemberByStartingTime(c context.Con
 	if err := m.Conn.Table("participation").Select("users.id AS user_id, users.name AS user_name, participation.payment_status").
 		Joins("JOIN users ON users.id = participation.user_id").
 		Joins("JOIN rooms ON rooms.room_id = participation.room_id").
-		Where("rooms.starting_time = ?", starting_time).Scan(&members).Error; err != nil {
+		Joins("JOIN rounds ON rounds.round_id = rooms.round_id").
+		Where("rounds.starting_time = ?", starting_time).Scan(&members).Error; err != nil {
+		return nil, err
+	}
+
+	return members, nil
+}
+
+func (m *mysqlParticipationRepository) GetRoomMemberByDueTime(c context.Context, due_time time.Time) (res []domain.Participation, err error) {
+	var members []domain.Participation
+	if err := m.Conn.Table("participation").Select("users.id AS user_id, users.name AS user_name, participation.payment_status").
+		Joins("JOIN users ON users.id = participation.user_id").
+		Joins("JOIN rooms ON rooms.room_id = participation.room_id").
+		Joins("JOIN rounds ON rounds.round_id = rooms.round_id").
+		Where("rounds.payment_deadline = ?", due_time).Scan(&members).Error; err != nil {
 		return nil, err
 	}
 

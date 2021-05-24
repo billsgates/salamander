@@ -97,6 +97,7 @@ type RoomUsecase interface {
 	GetRoomMembers(ctx context.Context, roomId int32) (res []Participation, err error)
 	GetPublicRooms(ctx context.Context) (res []RoomPublic, err error)
 	GetTodayStartingMember(c context.Context) (res []Participation, err error)
+	GetTodayPaymentDueMember(c context.Context) (res []Participation, err error)
 	GetJoinedRooms(ctx context.Context) ([]RoomItem, error)
 	GenerateInvitationCode(ctx context.Context, roomId int32) (string, error)
 	GetInvitationCodes(ctx context.Context, roomId int32) (res []InvitationCode, err error)
