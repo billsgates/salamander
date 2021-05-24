@@ -65,5 +65,5 @@ $ make stop
 |             | /rooms/join/{code}          | POST   | Complete    | Join room by url                          |
 | services    | /services                   | GET    | Complete    | Get all services                          |
 | participant | /participant                | DELETE | Complete    | Delete participant from room              |
-|             | /participant/status         | PATCH  | To Do       | Change participant payment status         |
+|             | /participant/status         | PATCH  | Complete    | Change participant payment status         |
 | application | /application/accept         | POST   | To Do       | Accept join room application              |
