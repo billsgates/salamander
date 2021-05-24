@@ -306,7 +306,7 @@ func (r *roomUsecase) Delete(c context.Context, roomId int32) (err error) {
 	return nil
 }
 
-func (r *roomUsecase) GetTodayStartingMember(c context.Context) (res []domain.Participation, err error) {
+func (r *roomUsecase) GetTodayStartingMember(c context.Context) (res []domain.ParticipationInfo, err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 	// truncate timestamp to date only
@@ -315,11 +315,19 @@ func (r *roomUsecase) GetTodayStartingMember(c context.Context) (res []domain.Pa
 	if err != nil {
 		return nil, err
 	}
+	for i, participantInfo := range res {
+		adminRes, err := r.participationRepo.GetRoomAdmin(c, participantInfo.RoomId)
+		if err != nil {
+			return nil, err
+		}
+		res[i].AdminName = adminRes.Name
+		res[i].AdminEmail = adminRes.Email
+	}
 
 	return res, nil
 }
 
-func (r *roomUsecase) GetTodayPaymentDueMember(c context.Context) (res []domain.Participation, err error) {
+func (r *roomUsecase) GetTodayPaymentDueMember(c context.Context) (res []domain.ParticipationInfo, err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 	// truncate timestamp to date only
@@ -327,6 +335,14 @@ func (r *roomUsecase) GetTodayPaymentDueMember(c context.Context) (res []domain.
 	res, err = r.participationRepo.GetRoomMemberByDueTime(ctx, now)
 	if err != nil {
 		return nil, err
+	}
+	for i, participantInfo := range res {
+		adminRes, err := r.participationRepo.GetRoomAdmin(c, participantInfo.RoomId)
+		if err != nil {
+			return nil, err
+		}
+		res[i].AdminName = adminRes.Name
+		res[i].AdminEmail = adminRes.Email
 	}
 
 	return res, nil

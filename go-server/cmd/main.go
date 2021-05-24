@@ -102,6 +102,9 @@ func main() {
 	emailWorker := _queue.NewWorker(rabbitMQHandler, gmailHandler)
 	go emailWorker.Start()
 
+	paymentCheckWorker := _queue.NewPaymentCheckWorker(rabbitMQHandler, gmailHandler)
+	go paymentCheckWorker.Start()
+
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
@@ -148,7 +151,7 @@ func main() {
 		_participationHandlerHttpDelivery.NewParticipationHandler(v1Router, authMiddleware, roomUsecase)
 	}
 
-	_scheduler.NewScheduler(roomUsecase, timeoutContext)
+	_scheduler.NewScheduler(roomUsecase, timeoutContext, rabbitMQHandler)
 
 	logrus.Fatal(r.Run(":" + viper.GetString("server.address")))
 }

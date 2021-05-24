@@ -1,0 +1,6 @@
+Hi {{.ReceiverName}},
+You Recently Joined the {{.ServiceProvider}} - {{.Plan}} with other members in Bills Gates.
+And we are here to remind you that you havn't finished the payment process.
+Please contact the Room Admin {{.AdminName}} - {{.AdminEmail}} for more information.
+
+Thank you.

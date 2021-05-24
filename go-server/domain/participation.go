@@ -21,6 +21,18 @@ type Participation struct {
 	IsHost        bool   `json:"is_host,omitempty"`
 }
 
+type ParticipationInfo struct {
+	UserId          int32  `json:"user_id,omitempty"`
+	UserName        string `json:"user_name,omitempty"`
+	UserEmail       string `json:"user_email,omitempty"`
+	ServiceProvider string `json:"service_provider,omitempty"`
+	Plan_name       string `json:"plan_name,omitempty"`
+	RoomId          int32  `json:"room_id,omitempty"`
+	AdminId         int32  `json:"admin_id,omitempty"`
+	AdminName       string `json:"admin_name,omitempty"`
+	AdminEmail      string `json:"admin_email,omitempty"`
+}
+
 type ParticipationRequest struct {
 	UserId int32 `json:"user_id,omitempty" binding:"required"`
 	RoomId int32 `json:"room_id,omitempty" binding:"required"`
@@ -37,8 +49,8 @@ type ParticipationRepository interface {
 	GetRoomAdmin(ctx context.Context, roomId int32) (res *User, err error)
 	GetRoomMembers(ctx context.Context, roomId int32) (res []Participation, err error)
 	GetJoinedRooms(ctx context.Context, userId int32) ([]RoomItem, error)
-	GetRoomMemberByStartingTime(ctx context.Context, starting_time time.Time) (res []Participation, err error)
-	GetRoomMemberByDueTime(ctx context.Context, due_time time.Time) (res []Participation, err error)
+	GetRoomMemberByStartingTime(ctx context.Context, starting_time time.Time) (res []ParticipationInfo, err error)
+	GetRoomMemberByDueTime(ctx context.Context, due_time time.Time) (res []ParticipationInfo, err error)
 	IsAdmin(ctx context.Context, roomId int32, userId int32) (bool, error)
 	IsMember(ctx context.Context, roomId int32, userId int32) (bool, error)
 	LeaveRoom(ctx context.Context, roomId int32, userId int32) error
