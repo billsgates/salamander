@@ -236,6 +236,27 @@ func (_m *RoomUsecase) GetRoomMembers(ctx context.Context, roomId int32) ([]doma
 	return r0, r1
 }
 
+// GetRoomSplitFee provides a mock function with given fields: ctx, roomId
+func (_m *RoomUsecase) GetRoomSplitFee(ctx context.Context, roomId int32) (int32, error) {
+	ret := _m.Called(ctx, roomId)
+
+	var r0 int32
+	if rf, ok := ret.Get(0).(func(context.Context, int32) int32); ok {
+		r0 = rf(ctx, roomId)
+	} else {
+		r0 = ret.Get(0).(int32)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, roomId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetRound provides a mock function with given fields: ctx, roomId
 func (_m *RoomUsecase) GetRound(ctx context.Context, roomId int32) (*domain.RoundInfo, error) {
 	ret := _m.Called(ctx, roomId)
@@ -259,16 +280,39 @@ func (_m *RoomUsecase) GetRound(ctx context.Context, roomId int32) (*domain.Roun
 	return r0, r1
 }
 
-// GetTodayStartingMember provides a mock function with given fields: c
-func (_m *RoomUsecase) GetTodayStartingMember(c context.Context) ([]domain.Participation, error) {
+// GetTodayPaymentDueMember provides a mock function with given fields: c
+func (_m *RoomUsecase) GetTodayPaymentDueMember(c context.Context) ([]domain.ParticipationInfo, error) {
 	ret := _m.Called(c)
 
-	var r0 []domain.Participation
-	if rf, ok := ret.Get(0).(func(context.Context) []domain.Participation); ok {
+	var r0 []domain.ParticipationInfo
+	if rf, ok := ret.Get(0).(func(context.Context) []domain.ParticipationInfo); ok {
 		r0 = rf(c)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]domain.Participation)
+			r0 = ret.Get(0).([]domain.ParticipationInfo)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = rf(c)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetTodayStartingMember provides a mock function with given fields: c
+func (_m *RoomUsecase) GetTodayStartingMember(c context.Context) ([]domain.ParticipationInfo, error) {
+	ret := _m.Called(c)
+
+	var r0 []domain.ParticipationInfo
+	if rf, ok := ret.Get(0).(func(context.Context) []domain.ParticipationInfo); ok {
+		r0 = rf(c)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]domain.ParticipationInfo)
 		}
 	}
 
