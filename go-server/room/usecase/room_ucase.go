@@ -251,6 +251,19 @@ func (r *roomUsecase) GetRoomMembers(c context.Context, roomId int32) (res []dom
 	return res, nil
 }
 
+func (r *roomUsecase) GetRoomSplitFee(c context.Context, roomId int32) (res int32, err error) {
+	members, err := r.participationRepo.GetRoomMembers(c, roomId)
+	if err != nil {
+		return 0, err
+	}
+	roomFeeInfo, err := r.participationRepo.GetRoomFeeInfo(c, roomId)
+	if err != nil {
+		return 0, err
+	}
+	var avgFee = (roomFeeInfo.Cost * roomFeeInfo.RoundInterval) / int32(len(members))
+	return avgFee, nil
+}
+
 func (r *roomUsecase) UpdateRoom(c context.Context, roomId int32, roomRequest *domain.RoomRequest) (err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
@@ -306,7 +319,7 @@ func (r *roomUsecase) Delete(c context.Context, roomId int32) (err error) {
 	return nil
 }
 
-func (r *roomUsecase) GetTodayStartingMember(c context.Context) (res []domain.Participation, err error) {
+func (r *roomUsecase) GetTodayStartingMember(c context.Context) (res []domain.ParticipationInfo, err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
 	// truncate timestamp to date only
@@ -314,6 +327,49 @@ func (r *roomUsecase) GetTodayStartingMember(c context.Context) (res []domain.Pa
 	res, err = r.participationRepo.GetRoomMemberByStartingTime(ctx, now)
 	if err != nil {
 		return nil, err
+	}
+	for i, participantInfo := range res {
+		// get average fee of the room
+		owed_fee, err := r.GetRoomSplitFee(c, participantInfo.RoomId)
+		if err != nil {
+			return nil, err
+		}
+		res[i].OwedFee = owed_fee
+		// get admin Info
+		adminRes, err := r.participationRepo.GetRoomAdmin(c, participantInfo.RoomId)
+		if err != nil {
+			return nil, err
+		}
+		res[i].AdminName = adminRes.Name
+		res[i].AdminEmail = adminRes.Email
+	}
+
+	return res, nil
+}
+
+func (r *roomUsecase) GetTodayPaymentDueMember(c context.Context) (res []domain.ParticipationInfo, err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+	// truncate timestamp to date only
+	now := time.Now().Truncate(24 * time.Hour)
+	res, err = r.participationRepo.GetRoomMemberByDueTime(ctx, now)
+	if err != nil {
+		return nil, err
+	}
+	for i, participantInfo := range res {
+		// get average fee of the room
+		owed_fee, err := r.GetRoomSplitFee(c, participantInfo.RoomId)
+		if err != nil {
+			return nil, err
+		}
+		res[i].OwedFee = owed_fee
+		// get admin Info
+		adminRes, err := r.participationRepo.GetRoomAdmin(c, participantInfo.RoomId)
+		if err != nil {
+			return nil, err
+		}
+		res[i].AdminName = adminRes.Name
+		res[i].AdminEmail = adminRes.Email
 	}
 
 	return res, nil

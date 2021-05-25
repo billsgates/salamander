@@ -36,6 +36,19 @@ func NewRabbitMQHandler() *RabbitMQHandler {
 		logrus.Fatal(err)
 	}
 
+	// [TODO] cleaner method
+	queue, err = channel.QueueDeclare(
+		"paymentCheck", // name
+		false,          // durable
+		false,          // delete when unused
+		false,          // exclusive
+		false,          // no-wait
+		nil,            //arguments
+	)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+
 	return &RabbitMQHandler{
 		conn:    conn,
 		queue:   queue,

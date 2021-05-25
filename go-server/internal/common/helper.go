@@ -50,3 +50,13 @@ func DecodeToUser(s []byte) domain.User {
 	}
 	return u
 }
+
+func DecodeToParticipationInfo(s []byte) domain.ParticipationInfo {
+	u := domain.ParticipationInfo{}
+	dec := gob.NewDecoder(bytes.NewReader(s))
+	err := dec.Decode(&u)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return u
+}

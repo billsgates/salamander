@@ -76,6 +76,29 @@ func (_m *ParticipationRepository) GetRoomAdmin(ctx context.Context, roomId int3
 	return r0, r1
 }
 
+// GetRoomFeeInfo provides a mock function with given fields: ctx, roomId
+func (_m *ParticipationRepository) GetRoomFeeInfo(ctx context.Context, roomId int32) (*domain.RoomFeeInfo, error) {
+	ret := _m.Called(ctx, roomId)
+
+	var r0 *domain.RoomFeeInfo
+	if rf, ok := ret.Get(0).(func(context.Context, int32) *domain.RoomFeeInfo); ok {
+		r0 = rf(ctx, roomId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.RoomFeeInfo)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, int32) error); ok {
+		r1 = rf(ctx, roomId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetRoomInfo provides a mock function with given fields: ctx, roomId
 func (_m *ParticipationRepository) GetRoomInfo(ctx context.Context, roomId int32) (*domain.RoomInfoResponse, error) {
 	ret := _m.Called(ctx, roomId)
@@ -99,16 +122,39 @@ func (_m *ParticipationRepository) GetRoomInfo(ctx context.Context, roomId int32
 	return r0, r1
 }
 
+// GetRoomMemberByDueTime provides a mock function with given fields: ctx, due_time
+func (_m *ParticipationRepository) GetRoomMemberByDueTime(ctx context.Context, due_time time.Time) ([]domain.ParticipationInfo, error) {
+	ret := _m.Called(ctx, due_time)
+
+	var r0 []domain.ParticipationInfo
+	if rf, ok := ret.Get(0).(func(context.Context, time.Time) []domain.ParticipationInfo); ok {
+		r0 = rf(ctx, due_time)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]domain.ParticipationInfo)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, time.Time) error); ok {
+		r1 = rf(ctx, due_time)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetRoomMemberByStartingTime provides a mock function with given fields: ctx, starting_time
-func (_m *ParticipationRepository) GetRoomMemberByStartingTime(ctx context.Context, starting_time time.Time) ([]domain.Participation, error) {
+func (_m *ParticipationRepository) GetRoomMemberByStartingTime(ctx context.Context, starting_time time.Time) ([]domain.ParticipationInfo, error) {
 	ret := _m.Called(ctx, starting_time)
 
-	var r0 []domain.Participation
-	if rf, ok := ret.Get(0).(func(context.Context, time.Time) []domain.Participation); ok {
+	var r0 []domain.ParticipationInfo
+	if rf, ok := ret.Get(0).(func(context.Context, time.Time) []domain.ParticipationInfo); ok {
 		r0 = rf(ctx, starting_time)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]domain.Participation)
+			r0 = ret.Get(0).([]domain.ParticipationInfo)
 		}
 	}
 
