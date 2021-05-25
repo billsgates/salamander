@@ -519,13 +519,13 @@ paths:
             schema:
                 type: object
                 properties:
-                  userId: 
+                  user_id: 
                     type: integer
                     example: 1
-                  roomId:
+                  room_id:
                     type: integer
                     example: 2
-                  status:
+                  payment_status:
                     $ref: '#/components/schemas/PaymentStatus'
       responses:
         "201":

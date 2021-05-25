@@ -10,9 +10,9 @@ package swagger
 
 type Body3 struct {
 
-	UserId int32 `json:"userId,omitempty"`
+	UserId int32 `json:"user_id,omitempty"`
 
-	RoomId int32 `json:"roomId,omitempty"`
+	RoomId int32 `json:"room_id,omitempty"`
 
-	Status *PaymentStatus `json:"status,omitempty"`
+	PaymentStatus *PaymentStatus `json:"payment_status,omitempty"`
 }
