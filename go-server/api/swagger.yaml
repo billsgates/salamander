@@ -955,13 +955,13 @@ components:
     body_3:
       type: object
       properties:
-        userId:
+        user_id:
           type: integer
           example: 1
-        roomId:
+        room_id:
           type: integer
           example: 2
-        status:
+        payment_status:
           $ref: '#/components/schemas/PaymentStatus'
     body_4:
       type: object
