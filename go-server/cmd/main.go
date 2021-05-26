@@ -114,8 +114,8 @@ func main() {
 			"Access-Control-Request-Method", "Access-Control-Request-Headers"},
 		AllowCredentials: true,
 	}))
-	r.GET("/", sayHello)
-	r.GET("/ping", sayPongJSON)
+	r.GET("/api/v1/", sayHello)
+	r.GET("/api/v1//ping", sayPongJSON)
 
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
