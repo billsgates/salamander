@@ -10,11 +10,5 @@ package swagger
 
 type Body1 struct {
 
-	StartingTime string `json:"starting_time,omitempty"`
-
-	RoundInterval int32 `json:"round_interval,omitempty"`
-
-	PaymentDeadline int32 `json:"payment_deadline,omitempty"`
-
-	IsAddCalendar bool `json:"is_add_calendar,omitempty"`
+	Rating int32 `json:"rating,omitempty"`
 }

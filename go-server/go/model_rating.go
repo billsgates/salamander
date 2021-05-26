@@ -8,9 +8,9 @@
  */
 package swagger
 
-type Body3 struct {
+type Rating struct {
 
-	UserId int32 `json:"user_id,omitempty"`
+	Rating float64 `json:"rating,omitempty"`
 
-	RoomId int32 `json:"room_id,omitempty"`
+	RatingCount int32 `json:"rating_count,omitempty"`
 }

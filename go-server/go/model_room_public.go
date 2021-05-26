@@ -14,7 +14,7 @@ type RoomPublic struct {
 
 	AdminName string `json:"admin_name,omitempty"`
 
-	AdminRating int32 `json:"admin_rating,omitempty"`
+	AdminRating float64 `json:"admin_rating,omitempty"`
 
 	ServiceName string `json:"service_name,omitempty"`
 

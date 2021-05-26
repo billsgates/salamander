@@ -14,7 +14,7 @@ type Admin struct {
 
 	Email string `json:"email,omitempty"`
 
-	Rating int32 `json:"rating,omitempty"`
+	Rating float64 `json:"rating,omitempty"`
 
 	Phone string `json:"phone,omitempty"`
 }

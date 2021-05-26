@@ -10,7 +10,11 @@ package swagger
 
 type Body2 struct {
 
-	UserId int32 `json:"user_id,omitempty"`
+	StartingTime string `json:"starting_time,omitempty"`
 
-	RoomId int32 `json:"room_id,omitempty"`
+	RoundInterval int32 `json:"round_interval,omitempty"`
+
+	PaymentDeadline int32 `json:"payment_deadline,omitempty"`
+
+	IsAddCalendar bool `json:"is_add_calendar,omitempty"`
 }
