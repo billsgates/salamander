@@ -92,6 +92,13 @@ func (r *roomUsecase) GetJoinedRooms(c context.Context) (res []domain.RoomItem, 
 	user := c.Value(domain.CtxUserKey).(*domain.User)
 
 	res, err = r.participationRepo.GetJoinedRooms(ctx, user.Id)
+	for i, roomItem := range res {
+		itemSplitCost, err := r.GetRoomSplitFee(ctx, roomItem.RoomId)
+		if err != nil {
+			continue
+		}
+		res[i].Cost = itemSplitCost
+	}
 	if err != nil {
 		return nil, err
 	}

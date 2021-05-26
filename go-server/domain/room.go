@@ -51,7 +51,7 @@ type RoomItem struct {
 	IsHost        bool           `json:"is_host"`
 	PaymentStatus *PaymentStatus `json:"payment_status"`
 	RoomStatus    *RoomStatus    `json:"room_status"`
-	Cost          int32          `json:"cost"`
+	Cost          int32          `json:"cost,omitempty"`
 }
 
 type RoomInfoResponse struct {
