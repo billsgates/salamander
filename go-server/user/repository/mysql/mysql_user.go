@@ -60,3 +60,14 @@ func (m *mysqlUserRepository) Update(ctx context.Context, user *domain.UserReque
 
 	return nil
 }
+
+func (m *mysqlUserRepository) UpdateRating(ctx context.Context, id string, rating float32) (err error) {
+	if err := m.Conn.Table("users").
+		Where("id = ?", id).
+		Update("rating", rating).
+		Update("rating_count", gorm.Expr("rating_count + ?", 1)).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

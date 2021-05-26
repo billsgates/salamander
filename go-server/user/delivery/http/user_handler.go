@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"strconv"
 
-	swagger "go-server/go"
-
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
@@ -26,6 +24,8 @@ func NewUserHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, userUsec
 		// userEndpoints.GET("", handler.GetAllUsers)
 		userEndpoints.PATCH("", handler.UpdateUserInfo)
 		// userEndpoints.GET("/:userID", handler.GetUserByUserID)
+		userEndpoints.GET("/:userID/rating", handler.GetUserRating)
+		userEndpoints.PATCH("/:userID/rating", handler.UpdateUserRating)
 	}
 }
 
@@ -62,7 +62,7 @@ func (u *UserHandler) GetUserByUserID(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, swagger.User{
+	c.JSON(http.StatusOK, domain.UserInfo{
 		Id:     anUser.Id,
 		Name:   anUser.Name,
 		Email:  anUser.Email,
@@ -86,5 +86,36 @@ func (u *UserHandler) UpdateUserInfo(c *gin.Context) {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
+	c.Status(http.StatusCreated)
+}
+
+func (u *UserHandler) GetUserRating(c *gin.Context) {
+	userID := c.Param("userID")
+	res, err := u.UserUsecase.GetUserRating(c, userID)
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+
+func (u *UserHandler) UpdateUserRating(c *gin.Context) {
+	var body domain.RatingRequest
+	if err := c.BindJSON(&body); err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	userID := c.Param("userID")
+	logrus.Info("UpdateUserRating userId", userID, body)
+	err := u.UserUsecase.UpdateRating(c, userID, body.Rating)
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+
 	c.Status(http.StatusCreated)
 }
