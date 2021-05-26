@@ -18,5 +18,7 @@ type User struct {
 
 	Phone string `json:"phone,omitempty"`
 
-	Rating int32 `json:"rating,omitempty"`
+	Rating float64 `json:"rating,omitempty"`
+
+	RatingCount int32 `json:"rating_count,omitempty"`
 }

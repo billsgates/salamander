@@ -8,13 +8,9 @@
  */
 package swagger
 
-type Admin struct {
-
-	Name string `json:"name,omitempty"`
-
-	Email string `json:"email,omitempty"`
+type Rating struct {
 
 	Rating float64 `json:"rating,omitempty"`
 
-	Phone string `json:"phone,omitempty"`
+	RatingCount int32 `json:"rating_count,omitempty"`
 }
