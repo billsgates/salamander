@@ -4,7 +4,11 @@ info:
   description: Salamander is the backend api server for Bills Gate.
   version: 1.0.1
 servers:
+<<<<<<< HEAD
 - url: http://localhost:80/api/v1
+=======
+- url: http://billsgate.club:5000/api/v1
+>>>>>>> Update swagger.yaml server url
 tags:
 - name: auth
   description: Authentication
