@@ -5,10 +5,14 @@ info:
   version: 1.0.1
 servers:
 <<<<<<< HEAD
+<<<<<<< HEAD
 - url: http://localhost:80/api/v1
 =======
 - url: http://billsgate.club:5000/api/v1
 >>>>>>> Update swagger.yaml server url
+=======
+- url: http://billsgate.club:5000/api/v1
+>>>>>>> ce8b153216d63526f184d6cb7e1485361d46bd25
 tags:
 - name: auth
   description: Authentication
