@@ -86,6 +86,55 @@ paths:
           description: successfully update user
       security:
       - BearerAuth: []
+  /user/{id}/rating:
+    get:
+      tags:
+      - user
+      summary: get user rating by id
+      operationId: getUserRating
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rating'
+      security:
+      - BearerAuth: []
+    patch:
+      tags:
+      - user
+      summary: update user rating
+      operationId: updateRating
+      parameters:
+      - name: id
+        in: path
+        description: User ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_1'
+        required: true
+      responses:
+        "201":
+          description: successfully update user rating
+      security:
+      - BearerAuth: []
   /rooms:
     get:
       tags:
@@ -250,7 +299,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/body_1'
+              $ref: '#/components/schemas/body_2'
         required: true
       responses:
         "201":
@@ -443,7 +492,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/body_2'
+              $ref: '#/components/schemas/body_3'
         required: true
       responses:
         "204":
@@ -460,7 +509,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/body_3'
+              $ref: '#/components/schemas/body_4'
         required: true
       responses:
         "201":
@@ -477,7 +526,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/body_4'
+              $ref: '#/components/schemas/body_5'
         required: true
       responses:
         "200":
@@ -503,14 +552,30 @@ components:
           type: string
           example: "912345678"
         rating:
+          type: number
+          example: 4.6
+        rating_count:
           type: integer
-          example: 5
+          example: 10
       example:
         phone: "912345678"
         name: kevin yu
-        rating: 5
+        rating: 4.6
         id: 1
         email: kevin@ntu.im
+        rating_count: 10
+    Rating:
+      type: object
+      properties:
+        rating:
+          type: number
+          example: 4.8
+        rating_count:
+          type: integer
+          example: 10
+      example:
+        rating: 4.8
+        rating_count: 10
     SignupRequest:
       required:
       - email
@@ -683,13 +748,13 @@ components:
         email:
           type: string
         rating:
-          type: integer
+          type: number
         phone:
           type: string
       example:
         name: Kevin Yu
         email: kevin@ntu.im
-        rating: 4
+        rating: 4.2
         phone: 9.12345678E8
     Application:
       type: object
@@ -724,8 +789,8 @@ components:
           type: string
           example: Kevin Yu
         admin_rating:
-          type: integer
-          example: 4
+          type: number
+          example: 4.2
         service_name:
           type: string
           example: Netflix
@@ -748,7 +813,7 @@ components:
         service_name: Netflix
         admin_name: Kevin Yu
         member_count: 2
-        admin_rating: 4
+        admin_rating: 4.2
         plan_name: Premium
     RoomItem:
       type: object
@@ -840,7 +905,7 @@ components:
         admin:
           name: Kevin Yu
           email: kevin@ntu.im
-          rating: 4
+          rating: 4.2
           phone: 9.12345678E8
         plan_name: Premium
         room_status: created
@@ -906,6 +971,12 @@ components:
         image_url:
           type: string
           format: url
+    body_1:
+      type: object
+      properties:
+        rating:
+          type: integer
+          example: 4
     inline_response_200:
       type: object
       properties:
@@ -914,7 +985,7 @@ components:
           example: 1
       example:
         room_id: 1
-    body_1:
+    body_2:
       type: object
       properties:
         starting_time:
@@ -943,7 +1014,7 @@ components:
           type: string
       example:
         code: code
-    body_2:
+    body_3:
       type: object
       properties:
         user_id:
@@ -952,7 +1023,7 @@ components:
         room_id:
           type: integer
           example: 2
-    body_3:
+    body_4:
       type: object
       properties:
         user_id:
@@ -963,7 +1034,7 @@ components:
           example: 2
         payment_status:
           $ref: '#/components/schemas/PaymentStatus'
-    body_4:
+    body_5:
       type: object
       properties:
         application_id:

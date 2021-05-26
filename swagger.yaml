@@ -103,6 +103,58 @@ paths:
       responses:
         "201":
           description: successfully update user
+  /user/{id}/rating:
+    get:
+      tags:
+        - user
+      summary: get user rating by id
+      description: ''
+      operationId: getUserRating
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rating'
+    patch:
+      tags:
+        - user
+      summary: update user rating
+      description: ''
+      operationId: updateRating
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: User ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+                  example: 4
+      responses:
+        "201":
+          description: successfully update user rating
   /rooms:
     post:
       tags:
@@ -575,8 +627,20 @@ components:
           type: string
           example: 0912345678
         rating:
+          type: number
+          example: 4.6
+        rating_count:
           type: integer
-          example: 5
+          example: 10
+    Rating:
+      type: object
+      properties:
+        rating:
+          type: number
+          example: 4.8
+        rating_count:
+          type: integer
+          example: 10
     SignupRequest:
       type: object
       properties:
@@ -733,13 +797,13 @@ components:
         email:
           type: string
         rating:
-          type: integer
+          type: number
         phone:
           type: string
       example:
         name: Kevin Yu
         email: kevin@ntu.im
-        rating: 4
+        rating: 4.2
         phone: 0912345678
     Application:
       type: object
@@ -774,8 +838,8 @@ components:
           type: string
           example: Kevin Yu
         admin_rating:
-          type: integer
-          example: 4
+          type: number
+          example: 4.2
         service_name:
           type: string
           example: Netflix

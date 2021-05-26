@@ -48,6 +48,8 @@ $ make stop
 |             | /auth/signin                | POST   | Complete    | User login                                |
 | users       | /user                       | GET    | Complete    | Get user info                             |
 |             | /user                       | PATCH  | Complete    | Update user info                          |
+|             | /user/{user_id}/rating      | GET    | Complete    | Get user Rating                          |
+|             | /user/{user_id}/rating      | PATCH  | Complete    | Update user Rating                     |
 | rooms       | /rooms                      | POST   | Complete    | Create a room                             |
 |             | /rooms                      | GET    | Complete    | Get all joined rooms                      |
 |             | /rooms/public               | GET    | Complete    | Get all public rooms                      |

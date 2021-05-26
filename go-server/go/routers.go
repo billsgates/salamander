@@ -209,6 +209,20 @@ var routes = Routes{
 	},
 
 	Route{
+		"GetUserRating",
+		strings.ToUpper("Get"),
+		"/api/v1/user/{id}/rating",
+		GetUserRating,
+	},
+
+	Route{
+		"UpdateRating",
+		strings.ToUpper("Patch"),
+		"/api/v1/user/{id}/rating",
+		UpdateRating,
+	},
+
+	Route{
 		"UpdateUser",
 		strings.ToUpper("Patch"),
 		"/api/v1/user",

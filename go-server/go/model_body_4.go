@@ -10,5 +10,9 @@ package swagger
 
 type Body4 struct {
 
-	ApplicationId int32 `json:"application_id,omitempty"`
+	UserId int32 `json:"user_id,omitempty"`
+
+	RoomId int32 `json:"room_id,omitempty"`
+
+	PaymentStatus *PaymentStatus `json:"payment_status,omitempty"`
 }

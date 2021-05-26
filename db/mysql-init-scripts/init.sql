@@ -23,7 +23,8 @@ CREATE TABLE users (
  phone VARCHAR(200),
  image_url VARCHAR(1000),
  password_digest VARCHAR(1000) NOT NULL,
- rating INT DEFAULT 0 NOT NULL,
+ rating FLOAT DEFAULT 0 NOT NULL,
+ rating_count INT DEFAULT 0 NOT NULL,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
  updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 
