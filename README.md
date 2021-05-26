@@ -29,11 +29,11 @@ $ make run
 $ docker ps -a
 ```
 
-There should be five containers running in the background (`backend`, `mysql`, `mysql-adminer`, `swagger-ui`, `rabbitmq`), you can verify it by executing
+There should be six containers running in the background (`nginx`, `backend`, `mysql`, `mysql-adminer`, `swagger-ui`, `rabbitmq`), you can verify it by executing
 
-* for `mysql-adminer`: visit (http://localhost:8080) (server: `mysql`, username: `root`, password: `hermitcrab5566`, database: `hermitcrab_db`)
-* for `swagger-ui`: visit (http://localhost:8081)
-* for `rabbitmq`: visit (http://localhost:15672) (username: `guest`, password: `guest`)
+* for `mysql-adminer`: visit (http://localhost:80/mysql-adminer) (server: `mysql`, username: `root`, password: `hermitcrab5566`, database: `hermitcrab_db`)
+* for `swagger-ui`: visit (http://localhost:80/swagger-ui)
+* for `rabbitmq`: visit (http://localhost:80/rabbitmq) (username: `guest`, password: `guest`)
 
 3. Stop the server
 ```

@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  description: Salamander is the backend api server for HermitCrab.
+  description: Salamander is the backend api server for Bills Gate.
   version: 1.0.1
   title: Salamander api server
 servers:
