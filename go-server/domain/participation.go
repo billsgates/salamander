@@ -46,6 +46,7 @@ type ParticipationStatusRequest struct {
 }
 
 type ParticipationUsecase interface {
+	Create(ctx context.Context, participation *Participation) error
 	IsMember(ctx context.Context, roomId int32) (bool, error)
 	IsAdmin(ctx context.Context, roomId int32) (bool, error)
 }

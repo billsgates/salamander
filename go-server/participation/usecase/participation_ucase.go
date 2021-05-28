@@ -20,6 +20,17 @@ func NewParticipationUsecase(participationRepo domain.ParticipationRepository, t
 	}
 }
 
+func (p *participationUsecase) Create(c context.Context, participation *domain.Participation) (err error) {
+	ctx, cancel := context.WithTimeout(c, p.contextTimeout)
+	defer cancel()
+
+	err = p.participationRepo.Create(ctx, participation)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (p *participationUsecase) IsAdmin(c context.Context, roomId int32) (res bool, err error) {
 	ctx, cancel := context.WithTimeout(c, p.contextTimeout)
 	defer cancel()
