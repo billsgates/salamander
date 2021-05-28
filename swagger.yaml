@@ -433,6 +433,17 @@ paths:
           required: true
           schema:
             type: integer
+      requestBody:
+        required: true
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                application_message:
+                  type: string
+                  example: "let me in plz"
       responses:
         "200":
           description: OK
@@ -847,9 +858,12 @@ components:
           type: integer
         name:
           type: string
+        application_message:
+          type: string
       example:
         user_id: 1
         name: Kevin Yu
+        application_message: "let me in plz"
     Member:
       type: object
       properties:

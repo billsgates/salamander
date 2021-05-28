@@ -20,13 +20,18 @@ func NewApplicationUsecase(applicationRepo domain.ApplicationRepository, timeout
 	}
 }
 
-func (a *applicationUsecase) Create(c context.Context, roomId int32) (err error) {
+func (a *applicationUsecase) Create(c context.Context, roomId int32, message string) (err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 
 	user := c.Value(domain.CtxUserKey).(*domain.User)
 
-	err = a.applicationRepo.Create(ctx, roomId, user.Id)
+	// err = a.applicationRepo.Create(ctx, roomId, user.Id)
+	err = a.applicationRepo.Create(ctx, &domain.ApplicationRequest{
+		RoomId:             roomId,
+		UserId:             user.Id,
+		ApplicationMessage: message,
+	})
 	if err != nil {
 		return err
 	}

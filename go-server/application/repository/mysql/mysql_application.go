@@ -15,12 +15,8 @@ func NewmysqlApplicationRepository(Conn *gorm.DB) domain.ApplicationRepository {
 	return &mysqlApplicationRepository{Conn}
 }
 
-func (m *mysqlApplicationRepository) Create(ctx context.Context, roomId int32, userId int32) (err error) {
-	application := &domain.Application{
-		RoomId: roomId,
-		UserId: userId,
-	}
-	if err := m.Conn.Table("applications").Select("room_id", "user_id").Create(&application).Error; err != nil {
+func (m *mysqlApplicationRepository) Create(ctx context.Context, applicationRequest *domain.ApplicationRequest) (err error) {
+	if err := m.Conn.Table("applications").Create(&applicationRequest).Error; err != nil {
 		return err
 	}
 
@@ -30,7 +26,7 @@ func (m *mysqlApplicationRepository) Create(ctx context.Context, roomId int32, u
 func (m *mysqlApplicationRepository) FetchAll(ctx context.Context, roomId int32) (res []domain.Application, err error) {
 	var applications []domain.Application
 
-	if err := m.Conn.Table("applications").Select("applications.created_at as application_date, applications.is_accepted, users.id as user_id, users.name as user_name, users.rating as user_rating").
+	if err := m.Conn.Table("applications").Select("applications.created_at as application_date, applications.is_accepted, applications.application_message, users.id as user_id, users.name as user_name, users.rating as user_rating").
 		Joins("JOIN users ON users.id = applications.user_id").
 		Where("room_id = ?", roomId).Scan(&applications).Error; err != nil {
 		return nil, err

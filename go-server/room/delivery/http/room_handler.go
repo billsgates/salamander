@@ -394,6 +394,13 @@ func (u *RoomHandler) CreateApplication(c *gin.Context) {
 		return
 	}
 
+	var body domain.ApplicationRequest
+	if err := c.BindJSON(&body); err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
 	isPublic, err := u.RoomUsecase.IsPublic(c, int32(roomID))
 	if !(isPublic) || err != nil {
 		c.AbortWithStatusJSON(http.StatusForbidden, room.ErrNotPublic.Error())
@@ -411,7 +418,7 @@ func (u *RoomHandler) CreateApplication(c *gin.Context) {
 		return
 	}
 
-	err = u.ApplicationUsecase.Create(c, int32(roomID))
+	err = u.ApplicationUsecase.Create(c, int32(roomID), body.ApplicationMessage)
 	if err != nil {
 		logrus.Error(err)
 		c.AbortWithStatus(http.StatusBadRequest)
