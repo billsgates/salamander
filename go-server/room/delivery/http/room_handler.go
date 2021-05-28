@@ -407,6 +407,10 @@ func (u *RoomHandler) CreateApplication(c *gin.Context) {
 			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
 			return
 		}
+		if err == participation.ErrAlreadyApplied {
+			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
+			return
+		}
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}

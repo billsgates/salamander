@@ -41,7 +41,7 @@ func (p *participationUsecase) IsMember(c context.Context, roomId int32) (res bo
 
 	res, err = p.participationRepo.IsMember(ctx, roomId, user.Id)
 	if err != nil {
-		return false, nil
+		return false, participation.ErrAlreadyApplied
 	}
 	if res {
 		return false, participation.ErrAlreadyJoined
