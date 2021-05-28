@@ -731,6 +731,10 @@ components:
           type: boolean
         announcement:
           type: string
+        matching_deadline:
+          type: string
+        public_message:
+          type: string
       required:
       - max_count
       - service_id
@@ -741,6 +745,8 @@ components:
         service_id: 1
         plan_name: Premium
         is_public: true
+        matching_deadline: 2021-06-17
+        public_message: Welcome
     RoomJoinRequest:
       type: object
       properties:
@@ -856,6 +862,12 @@ components:
         member_count:
           type: integer
           example: 2
+        matching_deadline:
+          type: string
+          example: 2020/06/15
+        public_message:
+          type: string
+          example: welcome!
     RoomItem:
       type: object
       properties:

@@ -2,6 +2,7 @@ package domain
 
 import (
 	"context"
+	"database/sql"
 	"time"
 )
 
@@ -14,30 +15,34 @@ const (
 )
 
 type Room struct {
-	Id            int32       `json:"id,omitempty"`
-	Announcement  string      `json:"announcement,omitempty"`
-	IsPublic      *bool       `json:"is_public,omitempty"`
-	RoomStatus    *RoomStatus `json:"room_status,omitempty"`
-	RoundId       int32       `json:"round_id,omitempty"`
-	StartingTime  time.Time   `json:"starting_time,omitempty"`
-	EndingTime    time.Time   `json:"ending_time,omitempty"`
-	PaymentPeriod int32       `json:"payment_period"`
-	CreatedAt     time.Time   `json:"created_at,omitempty"`
-	UpdatedAt     time.Time   `json:"updated_at,omitempty"`
-	MaxCount      int32       `json:"max_count,omitempty"`
-	AdminId       int32       `json:"admin_id,omitempty"`
-	ServiceId     int32       `json:"service_id,omitempty"`
-	PlanName      string      `json:"plan_name,omitempty"`
+	Id           int32  `json:"id,omitempty"`
+	Announcement string `json:"announcement,omitempty"`
+	IsPublic     *bool  `json:"is_public,omitempty"`
+	// RoomStatus   *RoomStatus `json:"room_status,omitempty"`
+	// RoundId      int32       `json:"round_id,omitempty"`
+	// StartingTime     time.Time   `json:"starting_time,omitempty"`
+	// EndingTime       time.Time   `json:"ending_time,omitempty"`
+	// PaymentPeriod    int32       `json:"payment_period"`
+	CreatedAt        time.Time      `json:"created_at,omitempty"`
+	UpdatedAt        time.Time      `json:"updated_at,omitempty"`
+	MaxCount         int32          `json:"max_count,omitempty"`
+	AdminId          int32          `json:"admin_id,omitempty"`
+	ServiceId        int32          `json:"service_id,omitempty"`
+	PlanName         string         `json:"plan_name,omitempty"`
+	PublicMessage    string         `json:"public_message,omitempty"`
+	MatchingDeadline sql.NullString `json:"matching_deadline,omitempty"`
 }
 
 type RoomRequest struct {
-	MaxCount      int32  `json:"max_count" binding:"required"`
-	AdminId       int32  `json:"admin_id,omitempty"`
-	ServiceId     int32  `json:"service_id" binding:"required"`
-	PlanName      string `json:"plan_name" binding:"required"`
-	PaymentPeriod int32  `json:"payment_period"`
-	IsPublic      *bool  `json:"is_public" binding:"required"`
-	Announcement  string `json:"announcement,omitempty"`
+	MaxCount         int32  `json:"max_count" binding:"required"`
+	AdminId          int32  `json:"admin_id,omitempty"`
+	ServiceId        int32  `json:"service_id" binding:"required"`
+	PlanName         string `json:"plan_name" binding:"required"`
+	PaymentPeriod    int32  `json:"payment_period"`
+	IsPublic         *bool  `json:"is_public" binding:"required"`
+	Announcement     string `json:"announcement,omitempty"`
+	PublicMessage    string `json:"public_message,omitempty"`
+	MatchingDeadline string `json:"matching_deadline,omitempty"`
 }
 
 type RoomJoinRequest struct {
@@ -72,14 +77,16 @@ type RoomInfoResponse struct {
 }
 
 type RoomPublic struct {
-	RoomId      int32  `json:"room_id,omitempty"`
-	AdminName   string `json:"admin_name,omitempty"`
-	AdminRating int32  `json:"admin_rating"`
-	ServiceName string `json:"service_name,omitempty"`
-	PlanName    string `json:"plan_name,omitempty"`
-	MaxCount    int32  `json:"max_count,omitempty"`
-	MemberCount int32  `json:"member_count,omitempty"`
-	Cost        int32  `json:"cost,omitempty"`
+	RoomId           int32  `json:"room_id,omitempty"`
+	AdminName        string `json:"admin_name,omitempty"`
+	AdminRating      int32  `json:"admin_rating"`
+	ServiceName      string `json:"service_name,omitempty"`
+	PlanName         string `json:"plan_name,omitempty"`
+	MaxCount         int32  `json:"max_count,omitempty"`
+	MemberCount      int32  `json:"member_count,omitempty"`
+	Cost             int32  `json:"cost,omitempty"`
+	MatchingDeadline string `json:"matching_deadline,omitempty"`
+	PublicMessage    string `json:"public_message,omitempty"`
 }
 
 type RoomFeeInfo struct {

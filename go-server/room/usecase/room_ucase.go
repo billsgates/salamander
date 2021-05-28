@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"crypto/sha1"
+	"database/sql"
 	"fmt"
 	"time"
 
@@ -49,13 +50,20 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 		return 0, room.ErrMaxCountExceed
 	}
 
-	roomId, err := r.roomRepo.Create(ctx, &domain.Room{
+	room := &domain.Room{
 		ServiceId: roomRequest.ServiceId,
 		PlanName:  roomRequest.PlanName,
 		MaxCount:  roomRequest.MaxCount,
 		AdminId:   roomRequest.AdminId,
 		IsPublic:  roomRequest.IsPublic,
-	})
+	}
+
+	if *room.IsPublic {
+		room.PublicMessage = roomRequest.PublicMessage
+		room.MatchingDeadline = sql.NullString{String: roomRequest.MatchingDeadline, Valid: true}
+	}
+
+	roomId, err := r.roomRepo.Create(ctx, room)
 	if err != nil {
 		return 0, err
 	}
@@ -80,6 +88,13 @@ func (r *roomUsecase) GetPublicRooms(c context.Context) (res []domain.RoomPublic
 	res, err = r.roomRepo.GetPublicRooms(ctx)
 	if err != nil {
 		return nil, err
+	}
+
+	for i, room := range res {
+		if room.MatchingDeadline != "" {
+			matchingDeadline, _ := time.Parse(time.RFC3339, room.MatchingDeadline)
+			res[i].MatchingDeadline = fmt.Sprintf("%d/%02d/%02d", matchingDeadline.Year(), matchingDeadline.Month(), matchingDeadline.Day())
+		}
 	}
 
 	return res, nil
@@ -292,12 +307,11 @@ func (r *roomUsecase) UpdateRoom(c context.Context, roomId int32, roomRequest *d
 	}
 
 	err = r.roomRepo.Update(ctx, roomId, &domain.Room{
-		ServiceId:     roomRequest.ServiceId,
-		PlanName:      roomRequest.PlanName,
-		MaxCount:      roomRequest.MaxCount,
-		PaymentPeriod: roomRequest.PaymentPeriod,
-		IsPublic:      roomRequest.IsPublic,
-		Announcement:  roomRequest.Announcement,
+		ServiceId:    roomRequest.ServiceId,
+		PlanName:     roomRequest.PlanName,
+		MaxCount:     roomRequest.MaxCount,
+		IsPublic:     roomRequest.IsPublic,
+		Announcement: roomRequest.Announcement,
 	})
 
 	if err != nil {
