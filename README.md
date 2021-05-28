@@ -48,8 +48,8 @@ $ make stop
 |             | /auth/signin                | POST   | Complete    | User login                                |
 | users       | /user                       | GET    | Complete    | Get user info                             |
 |             | /user                       | PATCH  | Complete    | Update user info                          |
-|             | /user/{user_id}/rating      | GET    | Complete    | Get user Rating                          |
-|             | /user/{user_id}/rating      | PATCH  | Complete    | Update user Rating                     |
+|             | /user/{user_id}/rating      | GET    | Complete    | Get user Rating                           |
+|             | /user/{user_id}/rating      | PATCH  | Complete    | Update user Rating                        |
 | rooms       | /rooms                      | POST   | Complete    | Create a room                             |
 |             | /rooms                      | GET    | Complete    | Get all joined rooms                      |
 |             | /rooms/public               | GET    | Complete    | Get all public rooms                      |
@@ -62,11 +62,11 @@ $ make stop
 |             | /rooms/{room_id}/invitation | POST   | Complete    | Create an invitation code in room room_id |
 |             | /rooms/{room_id}/invitation | GET    | Complete    | Get all valid invitation codes in room    |
 |             | /rooms/{room_id}/application| POST   | Complete    | Create an application to join room        |
-|             | /rooms/{room_id}/application| GET    | Complete     | Get all applications of the room          |
+|             | /rooms/{room_id}/application| GET    | Complete    | Get all applications of the room          |
 |             | /rooms/join                 | POST   | Complete    | Join room by invitation code              |
 |             | /rooms/join/{code}          | POST   | Complete    | Join room by url                          |
 | services    | /services                   | GET    | Complete    | Get all services                          |
 | participant | /participant                | DELETE | Complete    | Delete participant from room              |
 |             | /participant/status         | PATCH  | Complete    | Change participant payment status         |
-| application | /application/accept         | POST   | To Do       | Accept join room application              |
-| application | /application/delete         | DELETE | To Do       | Delete join room application              |
+| application | /application/accept         | POST   | Complete    | Accept join room application              |
+| application | /application/delete         | DELETE | Complete    | Delete join room application              |
