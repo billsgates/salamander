@@ -5,9 +5,11 @@ import (
 )
 
 type Application struct {
-	ApplicationId int32 `json:"application_id,omitempty"`
-	UserId        int32 `json:"user_id,omitempty"`
-	RoomId        int32 `json:"room_id,omitempty"`
+	UserId          int32  `json:"user_id,omitempty"`
+	UserName        string `json:"user_name,omitempty"`
+	UserRating      int32  `json:"user_rating,omitempty"`
+	ApplicationDate string `json:"application_date,omitempty"`
+	RoomId          int32  `json:"room_id,omitempty"`
 }
 
 type ApplicationUsecase interface {

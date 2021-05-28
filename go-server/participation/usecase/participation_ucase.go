@@ -40,11 +40,5 @@ func (p *participationUsecase) IsMember(c context.Context, roomId int32) (res bo
 	user := c.Value(domain.CtxUserKey).(*domain.User)
 
 	res, err = p.participationRepo.IsMember(ctx, roomId, user.Id)
-	if err != nil {
-		return false, participation.ErrAlreadyApplied
-	}
-	if res {
-		return false, participation.ErrAlreadyJoined
-	}
-	return res, nil
+	return res, err
 }

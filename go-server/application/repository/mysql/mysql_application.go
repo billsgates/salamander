@@ -30,7 +30,9 @@ func (m *mysqlApplicationRepository) Create(ctx context.Context, roomId int32, u
 func (m *mysqlApplicationRepository) FetchAll(ctx context.Context, roomId int32) (res []domain.Application, err error) {
 	var applications []domain.Application
 
-	if err := m.Conn.Table("applications").Where("room_id = ?", roomId).Scan(&applications).Error; err != nil {
+	if err := m.Conn.Table("applications").Select("applications.created_at as application_date, users.id as user_id, users.name as user_name, users.rating as user_rating").
+		Joins("JOIN users ON users.id = applications.user_id").
+		Where("room_id = ?", roomId).Scan(&applications).Error; err != nil {
 		return nil, err
 	}
 

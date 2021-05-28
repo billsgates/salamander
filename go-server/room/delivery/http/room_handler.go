@@ -401,13 +401,9 @@ func (u *RoomHandler) CreateApplication(c *gin.Context) {
 	}
 
 	isMember, err := u.ParticipationUsecase.IsMember(c, int32(roomID))
-	if isMember || err != nil {
+	if isMember {
 		logrus.Error(err)
 		if err == participation.ErrAlreadyJoined {
-			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
-			return
-		}
-		if err == participation.ErrAlreadyApplied {
 			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
 			return
 		}

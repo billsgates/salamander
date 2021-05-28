@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"go-server/domain"
@@ -40,5 +41,11 @@ func (a *applicationUsecase) FetchAll(c context.Context, roomId int32) (res []do
 	if err != nil {
 		return nil, err
 	}
+
+	for i, application := range res {
+		applicationTime, _ := time.Parse(time.RFC3339, application.ApplicationDate)
+		res[i].ApplicationDate = fmt.Sprintf("%d/%02d/%02d", applicationTime.Year(), applicationTime.Month(), applicationTime.Day())
+	}
+
 	return res, nil
 }
