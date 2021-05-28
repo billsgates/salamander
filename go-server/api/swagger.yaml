@@ -5,6 +5,7 @@ info:
   version: 1.0.1
 servers:
 - url: http://localhost:80/api/v1
+- url: https://billsgate.club:443/api/v1
 tags:
 - name: auth
   description: Authentication
