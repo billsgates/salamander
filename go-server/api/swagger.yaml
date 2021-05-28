@@ -673,11 +673,17 @@ components:
           type: boolean
         announcement:
           type: string
+        matching_deadline:
+          type: string
+        public_message:
+          type: string
       example:
-        max_count: 5
+        max_count: 4
         service_id: 1
         plan_name: Premium
         is_public: true
+        matching_deadline: 2021-06-17
+        public_message: Welcome
     RoomJoinRequest:
       required:
       - invitation_code
@@ -807,11 +813,19 @@ components:
         member_count:
           type: integer
           example: 2
+        matching_deadline:
+          type: string
+          example: 2020/06/15
+        public_message:
+          type: string
+          example: welcome!
       example:
         room_id: 1
         max_count: 4
         cost: 720
         service_name: Netflix
+        matching_deadline: 2020/06/15
+        public_message: welcome!
         admin_name: Kevin Yu
         member_count: 2
         admin_rating: 4.2

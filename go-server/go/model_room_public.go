@@ -25,4 +25,8 @@ type RoomPublic struct {
 	MaxCount int32 `json:"max_count,omitempty"`
 
 	MemberCount int32 `json:"member_count,omitempty"`
+
+	MatchingDeadline string `json:"matching_deadline,omitempty"`
+
+	PublicMessage string `json:"public_message,omitempty"`
 }

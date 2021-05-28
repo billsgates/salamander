@@ -4,6 +4,7 @@ import (
 	"context"
 	"go-server/domain"
 
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
 
@@ -16,7 +17,9 @@ func NewmysqlRoomRepository(Conn *gorm.DB) domain.RoomRepository {
 }
 
 func (m *mysqlRoomRepository) Create(ctx context.Context, room *domain.Room) (roomId int32, err error) {
-	if err := m.Conn.Select("max_count", "admin_id", "service_id", "plan_name", "is_public").Create(&room).Error; err != nil {
+	logrus.Info("room matching deadline: ", room.MatchingDeadline)
+	logrus.Info("room: ", room)
+	if err := m.Conn.Table("rooms").Create(&room).Error; err != nil {
 		return -1, err
 	}
 
@@ -25,7 +28,7 @@ func (m *mysqlRoomRepository) Create(ctx context.Context, room *domain.Room) (ro
 
 func (m *mysqlRoomRepository) GetPublicRooms(ctx context.Context) (res []domain.RoomPublic, err error) {
 	var rooms []domain.RoomPublic
-	if err := m.Conn.Table("rooms").Select("service_providers.name as service_name, rooms.room_id, rooms.plan_name, rooms.max_count, COUNT(participation.user_id) as member_count, plans.cost, users.name as admin_name, users.rating as admin_rating").
+	if err := m.Conn.Table("rooms").Select("service_providers.name as service_name, rooms.room_id, rooms.plan_name, rooms.max_count, rooms.matching_deadline, rooms.public_message, COUNT(participation.user_id) as member_count, plans.cost, users.name as admin_name, users.rating as admin_rating").
 		Joins("JOIN service_providers ON service_providers.id = rooms.service_id").
 		Joins("JOIN participation ON participation.room_id = rooms.room_id").
 		Joins("JOIN plans ON plans.plan_name = rooms.plan_name AND plans.service_id = rooms.service_id").

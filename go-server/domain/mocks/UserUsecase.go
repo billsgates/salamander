@@ -97,6 +97,29 @@ func (_m *UserUsecase) GetByID(ctx context.Context, id string) (*domain.UserInfo
 	return r0, r1
 }
 
+// GetUserRating provides a mock function with given fields: ctx, id
+func (_m *UserUsecase) GetUserRating(ctx context.Context, id string) (*domain.RatingResponse, error) {
+	ret := _m.Called(ctx, id)
+
+	var r0 *domain.RatingResponse
+	if rf, ok := ret.Get(0).(func(context.Context, string) *domain.RatingResponse); ok {
+		r0 = rf(ctx, id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*domain.RatingResponse)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Update provides a mock function with given fields: ctx, user
 func (_m *UserUsecase) Update(ctx context.Context, user *domain.UserRequest) error {
 	ret := _m.Called(ctx, user)
@@ -104,6 +127,20 @@ func (_m *UserUsecase) Update(ctx context.Context, user *domain.UserRequest) err
 	var r0 error
 	if rf, ok := ret.Get(0).(func(context.Context, *domain.UserRequest) error); ok {
 		r0 = rf(ctx, user)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// UpdateRating provides a mock function with given fields: ctx, id, rating
+func (_m *UserUsecase) UpdateRating(ctx context.Context, id string, rating int32) error {
+	ret := _m.Called(ctx, id, rating)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, string, int32) error); ok {
+		r0 = rf(ctx, id, rating)
 	} else {
 		r0 = ret.Error(0)
 	}
