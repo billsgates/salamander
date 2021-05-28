@@ -433,6 +433,17 @@ paths:
           required: true
           schema:
             type: integer
+      requestBody:
+        required: true
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                application_message:
+                  type: string
+                  example: "let me in plz"
       responses:
         "200":
           description: OK
@@ -599,7 +610,35 @@ paths:
             schema:
                 type: object
                 properties:
-                  application_id: 
+                  room_id: 
+                    type: integer
+                    example: 3
+                  user_id:
+                    type: integer
+                    example: 1
+      responses:
+        "200":
+          description: OK
+  /application/delete:
+    delete:
+      tags:
+        - applications
+      summary: delete room application
+      description: ''
+      operationId: deleteApplication
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  room_id: 
+                    type: integer
+                    example: 3
+                  user_id:
                     type: integer
                     example: 1
       responses:
@@ -819,9 +858,12 @@ components:
           type: integer
         name:
           type: string
+        application_message:
+          type: string
       example:
         user_id: 1
         name: Kevin Yu
+        application_message: "let me in plz"
     Member:
       type: object
       properties:

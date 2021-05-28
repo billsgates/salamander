@@ -102,6 +102,8 @@ CREATE TABLE participation (
 CREATE TABLE applications (
  user_id INT,
  room_id INT,
+ application_message VARCHAR(1000),
+ is_accepted BOOLEAN NOT NULL DEFAULT false,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
  updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 
@@ -187,3 +189,8 @@ INSERT INTO participation (user_id, room_id, payment_status, is_host) VALUES
 (3,	6,	'unpaid',	0),
 (4,	2,	'unpaid',	0),
 (4,	5,	'unpaid',	0);
+
+INSERT INTO applications (user_id, room_id, application_message, is_accepted) VALUES
+(1,	3,	'let me in plz',	0),
+(2,	3,	'yo',	0),
+(4,	3,	'',	0);

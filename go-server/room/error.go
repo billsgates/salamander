@@ -12,4 +12,5 @@ var (
 	ErrAlreadyJoined         = errors.New("already joined")
 	ErrRoundAlreadyCreated   = errors.New("already created round")
 	ErrNoRound               = errors.New("no round created")
+	ErrNotPublic             = errors.New("room not public")
 )

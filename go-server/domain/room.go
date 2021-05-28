@@ -62,7 +62,7 @@ type RoomItem struct {
 
 type RoomInfoResponse struct {
 	RoomId       int32           `json:"room_id,omitempty"`
-	IsPublic     bool            `json:"is_public"`
+	IsPublic     *bool           `json:"is_public"`
 	Announcement string          `json:"announcement"`
 	MaxCount     int32           `json:"max_count,omitempty"`
 	RoomStatus   *RoomStatus     `json:"room_status,omitempty"`
@@ -104,6 +104,7 @@ type RoomRepository interface {
 	Update(ctx context.Context, roomId int32, room *Room) error
 	UpdateRoundId(ctx context.Context, roomId int32, roundId int32) error
 	Delete(ctx context.Context, roomId int32) (err error)
+	IsPublic(ctx context.Context, roomId int32) (res bool, err error)
 }
 
 type RoomUsecase interface {
@@ -126,4 +127,5 @@ type RoomUsecase interface {
 	AddRound(ctx context.Context, roomId int32, round *RoundRequest) error
 	GetRound(ctx context.Context, roomId int32) (res *RoundInfo, err error)
 	DeleteRound(ctx context.Context, roomId int32) error
+	IsPublic(ctx context.Context, roomId int32) (res bool, err error)
 }
