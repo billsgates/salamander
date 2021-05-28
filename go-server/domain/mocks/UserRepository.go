@@ -110,3 +110,17 @@ func (_m *UserRepository) Update(ctx context.Context, user *domain.UserRequest) 
 
 	return r0
 }
+
+// UpdateRating provides a mock function with given fields: ctx, id, rating
+func (_m *UserRepository) UpdateRating(ctx context.Context, id string, rating float32) error {
+	ret := _m.Called(ctx, id, rating)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, string, float32) error); ok {
+		r0 = rf(ctx, id, rating)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}

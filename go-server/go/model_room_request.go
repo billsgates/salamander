@@ -21,4 +21,8 @@ type RoomRequest struct {
 	IsPublic bool `json:"is_public"`
 
 	Announcement string `json:"announcement,omitempty"`
+
+	MatchingDeadline string `json:"matching_deadline,omitempty"`
+
+	PublicMessage string `json:"public_message,omitempty"`
 }
