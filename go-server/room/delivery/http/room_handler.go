@@ -394,6 +394,12 @@ func (u *RoomHandler) CreateApplication(c *gin.Context) {
 		return
 	}
 
+	isPublic, err := u.RoomUsecase.IsPublic(c, int32(roomID))
+	if !(isPublic) || err != nil {
+		c.AbortWithStatusJSON(http.StatusForbidden, room.ErrNotPublic.Error())
+		return
+	}
+
 	isMember, err := u.ParticipationUsecase.IsMember(c, int32(roomID))
 	if isMember || err != nil {
 		logrus.Error(err)

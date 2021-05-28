@@ -503,3 +503,14 @@ func (r *roomUsecase) UpdatePaymentStatus(c context.Context, roomId int32, userI
 
 	return nil
 }
+
+func (r *roomUsecase) IsPublic(c context.Context, roomId int32) (res bool, err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	res, err = r.roomRepo.IsPublic(ctx, roomId)
+	if err != nil {
+		return res, err
+	}
+	return res, nil
+}

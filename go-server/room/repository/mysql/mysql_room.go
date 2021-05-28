@@ -64,3 +64,11 @@ func (m *mysqlRoomRepository) Delete(ctx context.Context, roomId int32) (err err
 
 	return nil
 }
+
+func (m *mysqlRoomRepository) IsPublic(ctx context.Context, roomId int32) (res bool, err error) {
+	if err := m.Conn.Table("rooms").Select("is_public").Where("room_id = ?", roomId).Find(&res).Error; err != nil {
+		return res, err
+	}
+
+	return res, nil
+}
