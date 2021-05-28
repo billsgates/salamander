@@ -57,6 +57,7 @@ type RoomItem struct {
 	PaymentStatus *PaymentStatus `json:"payment_status"`
 	RoomStatus    *RoomStatus    `json:"room_status"`
 	Cost          int32          `json:"cost,omitempty"`
+	IsPublic      bool           `json:"is_public"`
 }
 
 type RoomInfoResponse struct {

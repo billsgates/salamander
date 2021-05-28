@@ -886,6 +886,9 @@ components:
         cost:
           type: integer
           example: 720
+        is_public:
+          type: boolean
+          example: true
         payment_status:
           $ref: '#/components/schemas/PaymentStatus'
         room_status:
