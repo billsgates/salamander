@@ -69,3 +69,4 @@ $ make stop
 | participant | /participant                | DELETE | Complete    | Delete participant from room              |
 |             | /participant/status         | PATCH  | Complete    | Change participant payment status         |
 | application | /application/accept         | POST   | To Do       | Accept join room application              |
+| application | /application/delete         | DELETE | To Do       | Delete join room application              |

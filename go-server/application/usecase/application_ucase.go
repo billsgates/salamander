@@ -61,11 +61,11 @@ func (a *applicationUsecase) AcceptApplication(c context.Context, roomId int32, 
 	return nil
 }
 
-func (a *applicationUsecase) RevokeApplication(c context.Context, roomId int32, userId int32) (err error) {
+func (a *applicationUsecase) DeleteApplication(c context.Context, roomId int32, userId int32) (err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 
-	err = a.applicationRepo.RevokeApplication(ctx, roomId, userId)
+	err = a.applicationRepo.DeleteApplication(ctx, roomId, userId)
 	if err != nil {
 		return err
 	}

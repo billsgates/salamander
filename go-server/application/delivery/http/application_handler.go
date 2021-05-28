@@ -26,6 +26,7 @@ func NewApplicationHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, a
 	applicationEndpoints := e.Group("application", authMiddleware)
 	{
 		applicationEndpoints.POST("/accept", handler.AcceptApplication)
+		applicationEndpoints.DELETE("/delete", handler.DeleteApplication)
 	}
 }
 
@@ -51,7 +52,7 @@ func (a *ApplicationHandler) AcceptApplication(c *gin.Context) {
 	roomInfo, _ := a.RoomUsecase.GetRoomInfo(c, int32(body.RoomId))
 	members, _ := a.RoomUsecase.GetRoomMembers(c, int32(body.RoomId))
 	if len(members) >= int(roomInfo.MaxCount) {
-		c.AbortWithStatusJSON(http.StatusForbidden, room.ErrMaxCountExceed.Error())
+		c.AbortWithStatusJSON(http.StatusForbidden, room.ErrRoomFull.Error())
 		return
 	}
 
@@ -68,6 +69,35 @@ func (a *ApplicationHandler) AcceptApplication(c *gin.Context) {
 		PaymentStatus: domain.UNPAID,
 		IsHost:        false,
 	})
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	c.Status(http.StatusOK)
+}
+
+func (a *ApplicationHandler) DeleteApplication(c *gin.Context) {
+	var body domain.ApplicationRequest
+	if err := c.BindJSON(&body); err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	isAdmin, err := a.ParticipationUsecase.IsAdmin(c, int32(body.RoomId))
+	if !isAdmin || err != nil {
+		logrus.Error(err)
+		if err == participation.ErrNotHost {
+			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
+			return
+		}
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	err = a.ApplicationUsecase.DeleteApplication(c, body.RoomId, body.UserId)
 	if err != nil {
 		logrus.Error(err)
 		c.AbortWithStatus(http.StatusBadRequest)

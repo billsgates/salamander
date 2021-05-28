@@ -608,6 +608,31 @@ paths:
       responses:
         "200":
           description: OK
+  /application/delete:
+    delete:
+      tags:
+        - applications
+      summary: delete room application
+      description: ''
+      operationId: deleteApplication
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  room_id: 
+                    type: integer
+                    example: 3
+                  user_id:
+                    type: integer
+                    example: 1
+      responses:
+        "200":
+          description: OK
 components:
   securitySchemes:
     BearerAuth:

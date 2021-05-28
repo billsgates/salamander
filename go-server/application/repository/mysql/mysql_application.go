@@ -46,8 +46,9 @@ func (m *mysqlApplicationRepository) AcceptApplication(ctx context.Context, room
 	return nil
 }
 
-func (m *mysqlApplicationRepository) RevokeApplication(ctx context.Context, roomId int32, userId int32) (err error) {
-	if err := m.Conn.Table("applications").Where("room_id = ? AND user_id = ?", roomId, userId).Update("is_accepted", false).Error; err != nil {
+func (m *mysqlApplicationRepository) DeleteApplication(ctx context.Context, roomId int32, userId int32) (err error) {
+	var application *domain.Application
+	if err := m.Conn.Table("applications").Where("room_id = ? AND user_id = ?", roomId, userId).Delete(&application).Error; err != nil {
 		return err
 	}
 	return nil
