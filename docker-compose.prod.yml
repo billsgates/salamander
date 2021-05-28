@@ -2,11 +2,26 @@ version: '3.1'
 
 services:
   nginx:
-    build: ./nginx
+    image: nginx:1.15-alpine
     container_name: nginx
+    restart: always
     ports:
       - 80:80
-    restart: always
+      - 443:443
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/conf.d/app.conf
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    restart: unless-stopped
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   backend:
     image: golang:1.16.2-alpine

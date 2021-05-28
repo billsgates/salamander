@@ -1,7 +1,9 @@
 run:
-	docker-compose up --build -d
+	docker-compose -f docker-compose.yml up --build -d
+prod:
+	docker-compose -f docker-compose.prod.yml up --build -d
 stop:
-	docker-compose down -v
+	docker-compose down -v --remove-orphans
 log:
 	docker-compose logs --follow --tail 1 backend
 test:
