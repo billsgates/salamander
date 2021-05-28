@@ -741,11 +741,11 @@ components:
       - plan_name
       - is_public
       example:
-        max_count: 5
+        max_count: 4
         service_id: 1
         plan_name: Premium
         is_public: true
-        matching_deadline: 2021-06-17
+        matching_deadline: '2021-06-17'
         public_message: Welcome
     RoomJoinRequest:
       type: object
