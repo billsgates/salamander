@@ -30,7 +30,7 @@ func (m *mysqlApplicationRepository) Create(ctx context.Context, roomId int32, u
 func (m *mysqlApplicationRepository) FetchAll(ctx context.Context, roomId int32) (res []domain.Application, err error) {
 	var applications []domain.Application
 
-	if err := m.Conn.Table("applications").Select("applications.created_at as application_date, users.id as user_id, users.name as user_name, users.rating as user_rating").
+	if err := m.Conn.Table("applications").Select("applications.created_at as application_date, applications.is_accepted, users.id as user_id, users.name as user_name, users.rating as user_rating").
 		Joins("JOIN users ON users.id = applications.user_id").
 		Where("room_id = ?", roomId).Scan(&applications).Error; err != nil {
 		return nil, err
@@ -40,8 +40,14 @@ func (m *mysqlApplicationRepository) FetchAll(ctx context.Context, roomId int32)
 }
 
 func (m *mysqlApplicationRepository) AcceptApplication(ctx context.Context, roomId int32, userId int32) (err error) {
-	var application *domain.ApplicationRequest
-	if err := m.Conn.Table("applications").Where("room_id = ? AND user_id = ?", roomId, userId).Delete(&application).Error; err != nil {
+	if err := m.Conn.Table("applications").Where("room_id = ? AND user_id = ?", roomId, userId).Update("is_accepted", true).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *mysqlApplicationRepository) RevokeApplication(ctx context.Context, roomId int32, userId int32) (err error) {
+	if err := m.Conn.Table("applications").Where("room_id = ? AND user_id = ?", roomId, userId).Update("is_accepted", false).Error; err != nil {
 		return err
 	}
 	return nil

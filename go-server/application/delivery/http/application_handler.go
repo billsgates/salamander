@@ -3,6 +3,7 @@ package http
 import (
 	"go-server/domain"
 	"go-server/participation"
+	"go-server/room"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,12 +13,14 @@ import (
 type ApplicationHandler struct {
 	ApplicationUsecase   domain.ApplicationUsecase
 	ParticipationUsecase domain.ParticipationUsecase
+	RoomUsecase          domain.RoomUsecase
 }
 
-func NewApplicationHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, applicationUsecase domain.ApplicationUsecase, participationUsecase domain.ParticipationUsecase) {
+func NewApplicationHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, applicationUsecase domain.ApplicationUsecase, participationUsecase domain.ParticipationUsecase, roomUsecase domain.RoomUsecase) {
 	handler := &ApplicationHandler{
 		ApplicationUsecase:   applicationUsecase,
 		ParticipationUsecase: participationUsecase,
+		RoomUsecase:          roomUsecase,
 	}
 
 	applicationEndpoints := e.Group("application", authMiddleware)
@@ -42,6 +45,13 @@ func (a *ApplicationHandler) AcceptApplication(c *gin.Context) {
 			return
 		}
 		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	roomInfo, _ := a.RoomUsecase.GetRoomInfo(c, int32(body.RoomId))
+	members, _ := a.RoomUsecase.GetRoomMembers(c, int32(body.RoomId))
+	if len(members) >= int(roomInfo.MaxCount) {
+		c.AbortWithStatusJSON(http.StatusForbidden, room.ErrMaxCountExceed.Error())
 		return
 	}
 

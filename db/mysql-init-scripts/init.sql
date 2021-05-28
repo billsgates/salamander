@@ -102,6 +102,7 @@ CREATE TABLE participation (
 CREATE TABLE applications (
  user_id INT,
  room_id INT,
+ is_accepted BOOLEAN NOT NULL DEFAULT false,
  created_at TIMESTAMP NOT NULL DEFAULT current_timestamp(),
  updated_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
 

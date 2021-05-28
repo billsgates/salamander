@@ -599,7 +599,10 @@ paths:
             schema:
                 type: object
                 properties:
-                  application_id: 
+                  room_id: 
+                    type: integer
+                    example: 3
+                  user_id:
                     type: integer
                     example: 1
       responses:

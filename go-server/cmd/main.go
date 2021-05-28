@@ -150,7 +150,7 @@ func main() {
 		_roomHandlerHttpDelivery.NewRoomHandler(v1Router, authMiddleware, roomUsecase, applicationUsecase, participationUsecase)
 		_serviceHandlerHttpDelivery.NewServiceHandler(v1Router, serviceUsecase)
 		_participationHandlerHttpDelivery.NewParticipationHandler(v1Router, authMiddleware, roomUsecase)
-		_applicationHandlerHttpDelivery.NewApplicationHandler(v1Router, authMiddleware, applicationUsecase, participationUsecase)
+		_applicationHandlerHttpDelivery.NewApplicationHandler(v1Router, authMiddleware, applicationUsecase, participationUsecase, roomUsecase)
 	}
 
 	_scheduler.NewScheduler(roomUsecase, timeoutContext, rabbitMQHandler)
