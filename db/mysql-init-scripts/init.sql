@@ -154,43 +154,38 @@ INSERT INTO plans (service_id, plan_name, cost, max_count) VALUES
 ('3', 'Family', 240, 6);
 
 INSERT INTO rounds (round_id, starting_time, ending_time, round_interval, payment_deadline, is_add_calendar) VALUES
-(2,	'2020-08-05 00:00:00',	'2021-08-05 00:00:00',	12,	'2020-07-29 00:00:00',	1);
+(1,	'2020-05-15 00:00:00',	'2021-05-15 00:00:00',	12,	'2020-05-08 00:00:00',	1);
 
 INSERT INTO rooms (room_id, announcement, is_public, room_status, round_id, matching_deadline, public_message, max_count, admin_id, service_id, plan_name) VALUES
-(1, '',	1, 'created',	NULL,	'2021-06-17 00:00:00',	'Welcome!!!',	4,	1,	2,	'Family'),
+(1, '',	1, 'created',	NULL,	'2021-06-17 00:00:00',	'Welcome!!!',	5,	1,	2,	'Family'),
 (2, '',	1, 'created',	NULL,	'2021-06-17 00:00:00',	'Hi! This is Franks Netflix Premium group!',	4,	2,	1,	'Premium'),
-(3, '',	1, 'created',	NULL,	'2021-09-07 00:00:00',	'Hello, this is Pauls Spotify Family room.',	4,	3,	3,	'Family'),
-(5, '',	0, 'start',	2,	NULL,	'',	2,	1,	3,	'Duo'),
+(3, '',	1, 'created',	NULL,	'2021-09-07 00:00:00',	'Hello, this is Pauls Spotify Family room.',	6,	3,	3,	'Family'),
+(5,	'',	0, 'start',	   1,	NULL,	'',	4,	1,	1,	'Premium'),
+(4, '',	0, 'start',	NULL,	NULL,	'',	2,	4,	3,	'Duo'),
 (6, '',	1, 'created',	NULL,	'2021-08-23 00:00:00',	'Hi! This is Franks Spotify Duo group!',	2,	2,	3,	'Duo');
-
-INSERT INTO invitation_codes (room_id, invitation_code, is_valid) VALUES
-(1,	'11207cc',	0),
-(1,	'6fbace8',	0),
-(1,	'85441b6',	1),
-(1,	'88e521e',	1),
-(2,	'2d54915',	0),
-(2,	'4a64f39',	0),
-(2,	'5aae122',	0),
-(5,	'ba17ab9',	0),
-(5,	'e50fa73',	1),
-(6,	'21a6e2b',	1),
-(6,	'34153e7',	0);
 
 INSERT INTO participation (user_id, room_id, payment_status, is_host) VALUES
 (1,	1,	'confirmed',	1),
-(1,	2,	'unpaid',	0),
+(1,	3,	   'unpaid',	0),
 (1,	5,	'confirmed',	1),
-(2,	1,	'unpaid',	0),
 (2,	2,	'confirmed',	1),
+(2,	5,	   'unpaid',	0),
 (2,	6,	'confirmed',	1),
-(3,	1,	'unpaid',	0),
-(3,	2,	'unpaid',	0),
 (3,	3,	'confirmed',	1),
-(3,	6,	'unpaid',	0),
-(4,	2,	'unpaid',	0),
-(4,	5,	'unpaid',	0);
+(3,	5,	   'unpaid',	0),
+(3,	6,	   'unpaid',	0),
+(4,	3,	   'unpaid',	0),
+(4,	4,	'confirmed',	1),
+(4,	5,	   'unpaid',	0);
 
 INSERT INTO applications (user_id, room_id, application_message, is_accepted) VALUES
-(1,	3,	'let me in plz',	0),
-(2,	3,	'yo',	0),
-(4,	3,	'',	0);
+(1,	3, 'let me in plz', 1),
+(2,	3, 'yo', 0),
+(3,	6, 'hello', 1),
+(4,	3, '', 1);
+(4,	6, 'whats up', 0),
+
+INSERT INTO invitation_codes (room_id, invitation_code, is_valid) VALUES
+(5,	'5567403',	0),
+(5,	'6338389',	0),
+(5,	'c6d60c9',	0);
