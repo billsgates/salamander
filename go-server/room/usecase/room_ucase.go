@@ -61,6 +61,7 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 	if *room.IsPublic {
 		room.PublicMessage = roomRequest.PublicMessage
 		room.MatchingDeadline = sql.NullString{String: roomRequest.MatchingDeadline, Valid: true}
+		room.RoomStatus = domain.CREATED
 	} else {
 		room.RoomStatus = domain.START
 	}
