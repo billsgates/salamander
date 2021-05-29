@@ -1,6 +1,7 @@
 package http
 
 import (
+	"go-server/application"
 	"go-server/domain"
 	"go-server/participation"
 	"go-server/room"
@@ -59,6 +60,10 @@ func (a *ApplicationHandler) AcceptApplication(c *gin.Context) {
 	err = a.ApplicationUsecase.AcceptApplication(c, body.RoomId, body.UserId)
 	if err != nil {
 		logrus.Error(err)
+		if err == application.ErrApplicationNotFound {
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+			return
+		}
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}

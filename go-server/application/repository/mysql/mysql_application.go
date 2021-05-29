@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"context"
+	"go-server/application"
 	"go-server/domain"
 
 	"gorm.io/gorm"
@@ -44,8 +45,9 @@ func (m *mysqlApplicationRepository) IsApplied(ctx context.Context, roomId int32
 }
 
 func (m *mysqlApplicationRepository) AcceptApplication(ctx context.Context, roomId int32, userId int32) (err error) {
-	if err := m.Conn.Table("applications").Where("room_id = ? AND user_id = ?", roomId, userId).Update("is_accepted", true).Error; err != nil {
-		return err
+	res := m.Conn.Table("applications").Where("room_id = ? AND user_id = ?", roomId, userId).Update("is_accepted", true)
+	if res.RowsAffected != 1 {
+		return application.ErrApplicationNotFound
 	}
 	return nil
 }
