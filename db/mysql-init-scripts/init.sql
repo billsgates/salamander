@@ -182,8 +182,8 @@ INSERT INTO applications (user_id, room_id, application_message, is_accepted) VA
 (1,	3, 'let me in plz', 1),
 (2,	3, 'yo', 0),
 (3,	6, 'hello', 1),
-(4,	3, '', 1);
-(4,	6, 'whats up', 0),
+(4,	3, '', 1),
+(4,	6, 'whats up', 0);
 
 INSERT INTO invitation_codes (room_id, invitation_code, is_valid) VALUES
 (5,	'5567403',	0),
