@@ -76,6 +76,16 @@ func (u *RoomHandler) GetPublicRooms(c *gin.Context) {
 		return
 	}
 
+	for i, room := range rooms {
+		isApplied, err := u.ApplicationUsecase.IsApplied(c, room.RoomId)
+		if err != nil {
+			logrus.Error(err)
+			c.AbortWithStatus(http.StatusBadRequest)
+			return
+		}
+		rooms[i].IsApplied = isApplied
+	}
+
 	c.JSON(http.StatusOK, gin.H{"data": rooms})
 }
 
