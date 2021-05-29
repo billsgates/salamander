@@ -56,6 +56,7 @@ $ make stop
 |             | /rooms/{room_id}            | GET    | Complete    | Get room detail by room_id                |
 |             | /rooms/{room_id}            | PATCH  | Complete    | Update room by room_id                    |
 |             | /rooms/{room_id}            | DELETE | Complete    | Delete room by room_id                    |
+|             | /rooms/{room_id}/start      | POST   | Complete    | Start room by room_id                     |
 |             | /rooms/{room_id}/members    | GET    | Complete    | Get all members                           |
 |             | /rooms/{room_id}/round      | POST   | Complete    | Add new round of the room                 |
 |             | /rooms/{room_id}/round      | DELETE | Complete    | Remove current round of the room          |
@@ -69,4 +70,4 @@ $ make stop
 | participant | /participant                | DELETE | Complete    | Delete participant from room              |
 |             | /participant/status         | PATCH  | Complete    | Change participant payment status         |
 | application | /application/accept         | POST   | Complete    | Accept join room application              |
-| application | /application/delete         | DELETE | Complete    | Delete join room application              |
+|             | /application/delete         | DELETE | Complete    | Delete join room application              |

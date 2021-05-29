@@ -13,4 +13,6 @@ var (
 	ErrRoundAlreadyCreated   = errors.New("already created round")
 	ErrNoRound               = errors.New("no round created")
 	ErrNotPublic             = errors.New("room not public")
+	ErrNotStarted            = errors.New("room not started yet")
+	ErrAlreadyStarted        = errors.New("room already started")
 )

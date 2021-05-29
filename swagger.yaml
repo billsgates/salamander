@@ -282,6 +282,25 @@ paths:
       responses:
         "200":
           description: OK
+  /rooms/{id}/start:
+    post:
+      tags:
+        - rooms
+      summary: start room 
+      description: ''
+      operationId: startRoom
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: Room ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "201":
+          description: successfully start room
   /rooms/{id}/members:
     get:
       tags:

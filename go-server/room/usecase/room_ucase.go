@@ -61,6 +61,8 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 	if *room.IsPublic {
 		room.PublicMessage = roomRequest.PublicMessage
 		room.MatchingDeadline = sql.NullString{String: roomRequest.MatchingDeadline, Valid: true}
+	} else {
+		room.RoomStatus = domain.START
 	}
 
 	roomId, err := r.roomRepo.Create(ctx, room)
@@ -79,6 +81,33 @@ func (r *roomUsecase) Create(c context.Context, roomRequest *domain.RoomRequest)
 	}
 
 	return roomId, nil
+}
+
+func (r *roomUsecase) Start(c context.Context, roomId int32) (err error) {
+	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
+	defer cancel()
+
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	isAdmin, err := r.participationRepo.IsAdmin(ctx, roomId, user.Id)
+	if !isAdmin || err != nil {
+		return room.ErrNotHost
+	}
+
+	roomInfo, err := r.GetRoomInfo(ctx, roomId)
+	if err != nil {
+		return err
+	}
+	if *roomInfo.RoomStatus != domain.CREATED {
+		return room.ErrAlreadyStarted
+	}
+
+	err = r.roomRepo.Start(ctx, roomId)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (r *roomUsecase) GetPublicRooms(c context.Context) (res []domain.RoomPublic, err error) {
@@ -405,6 +434,11 @@ func (r *roomUsecase) AddRound(c context.Context, roomId int32, roundRequest *do
 	isAdmin, err := r.participationRepo.IsAdmin(ctx, roomId, user.Id)
 	if !isAdmin || err != nil {
 		return room.ErrNotHost
+	}
+
+	roomInfo, err := r.GetRoomInfo(ctx, roomId)
+	if *roomInfo.RoomStatus == domain.CREATED {
+		return room.ErrNotStarted
 	}
 
 	roundInfo, err := r.GetRound(ctx, roomId)

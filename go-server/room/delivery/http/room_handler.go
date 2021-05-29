@@ -32,6 +32,7 @@ func NewRoomHandler(e *gin.RouterGroup, authMiddleware gin.HandlerFunc, roomUsec
 		roomEndpoints.GET("/:roomID", handler.GetRoomInfo)
 		roomEndpoints.PATCH("/:roomID", handler.UpdateRoomInfo)
 		roomEndpoints.DELETE("/:roomID", handler.DeleteRoom)
+		roomEndpoints.POST("/:roomID/start", handler.StartRoom)
 		roomEndpoints.GET("/:roomID/members", handler.GetRoomMembers)
 		roomEndpoints.POST("/:roomID/round", handler.AddRound)
 		roomEndpoints.DELETE("/:roomID/round", handler.DeleteRound)
@@ -90,6 +91,32 @@ func (u *RoomHandler) DeleteRoom(c *gin.Context) {
 	if err != nil {
 		logrus.Error(err)
 		if err == room.ErrNotHost {
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+			return
+		}
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	c.Status(http.StatusOK)
+}
+
+func (u *RoomHandler) StartRoom(c *gin.Context) {
+	roomID, err := strconv.ParseInt(c.Param("roomID"), 10, 32)
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	err = u.RoomUsecase.Start(c, int32(roomID))
+	if err != nil {
+		logrus.Error(err)
+		if err == room.ErrNotHost {
+			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+			return
+		}
+		if err == room.ErrAlreadyStarted {
 			c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 			return
 		}
@@ -372,6 +399,10 @@ func (u *RoomHandler) AddRound(c *gin.Context) {
 	if err != nil {
 		logrus.Error(err)
 		if err == room.ErrNotHost {
+			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
+			return
+		}
+		if err == room.ErrNotStarted {
 			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
 			return
 		}
