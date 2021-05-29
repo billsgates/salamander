@@ -57,20 +57,21 @@ type RoomItem struct {
 }
 
 type RoomInfoResponse struct {
-	RoomId       int32           `json:"room_id,omitempty"`
-	IsPublic     *bool           `json:"is_public"`
-	Announcement string          `json:"announcement"`
-	MaxCount     int32           `json:"max_count,omitempty"`
-	RoomStatus   *RoomStatus     `json:"room_status,omitempty"`
-	RoundId      int32           `json:"round_id"`
-	ServiceId    int32           `json:"service_id,omitempty"`
-	ServiceName  string          `json:"service_name,omitempty"`
-	PlanName     string          `json:"plan_name,omitempty"`
-	Role         string          `json:"role,omitempty"`
-	PaymentFee   int32           `json:"payment_fee,omitempty"`
-	Round        *RoundInfo      `json:"round" gorm:"-"`
-	Admin        *User           `json:"admin,omitempty" gorm:"-"`
-	Members      []Participation `json:"members,omitempty" gorm:"-"`
+	RoomId           int32           `json:"room_id,omitempty"`
+	IsPublic         *bool           `json:"is_public"`
+	Announcement     string          `json:"announcement"`
+	MatchingDeadline string          `json:"matching_deadline"`
+	MaxCount         int32           `json:"max_count,omitempty"`
+	RoomStatus       *RoomStatus     `json:"room_status,omitempty"`
+	RoundId          int32           `json:"round_id"`
+	ServiceId        int32           `json:"service_id,omitempty"`
+	ServiceName      string          `json:"service_name,omitempty"`
+	PlanName         string          `json:"plan_name,omitempty"`
+	Role             string          `json:"role,omitempty"`
+	PaymentFee       int32           `json:"payment_fee,omitempty"`
+	Round            *RoundInfo      `json:"round" gorm:"-"`
+	Admin            *User           `json:"admin,omitempty" gorm:"-"`
+	Members          []Participation `json:"members,omitempty" gorm:"-"`
 }
 
 type RoomPublic struct {

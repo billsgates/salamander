@@ -262,6 +262,11 @@ func (r *roomUsecase) GetRoomInfo(c context.Context, roomId int32) (res *domain.
 		return nil, err
 	}
 
+	if res.MatchingDeadline != "" {
+		matchingDeadline, _ := time.Parse(time.RFC3339, res.MatchingDeadline)
+		res.MatchingDeadline = fmt.Sprintf("%d/%02d/%02d", matchingDeadline.Year(), matchingDeadline.Month(), matchingDeadline.Day())
+	}
+
 	return res, nil
 }
 
