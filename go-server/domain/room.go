@@ -84,6 +84,7 @@ type RoomPublic struct {
 	Cost             int32  `json:"cost,omitempty"`
 	MatchingDeadline string `json:"matching_deadline,omitempty"`
 	PublicMessage    string `json:"public_message,omitempty"`
+	IsApplied        bool   `json:"is_applied"`
 }
 
 type RoomFeeInfo struct {

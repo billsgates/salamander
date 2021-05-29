@@ -55,6 +55,19 @@ func (a *applicationUsecase) FetchAll(c context.Context, roomId int32) (res []do
 	return res, nil
 }
 
+func (a *applicationUsecase) IsApplied(c context.Context, roomId int32) (res bool, err error) {
+	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
+	defer cancel()
+
+	user := c.Value(domain.CtxUserKey).(*domain.User)
+
+	res, err = a.applicationRepo.IsApplied(ctx, roomId, user.Id)
+	if err != nil {
+		return false, nil
+	}
+	return true, nil
+}
+
 func (a *applicationUsecase) AcceptApplication(c context.Context, roomId int32, userId int32) (err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()

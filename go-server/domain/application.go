@@ -23,6 +23,7 @@ type ApplicationRequest struct {
 type ApplicationUsecase interface {
 	Create(ctx context.Context, roomId int32, message string) error
 	FetchAll(ctx context.Context, roomId int32) (res []Application, err error)
+	IsApplied(ctx context.Context, roomId int32) (res bool, err error)
 	AcceptApplication(ctx context.Context, roomId int32, userId int32) (err error)
 	DeleteApplication(ctx context.Context, roomId int32, userId int32) (err error)
 }
@@ -30,6 +31,7 @@ type ApplicationUsecase interface {
 type ApplicationRepository interface {
 	Create(ctx context.Context, applicationRequest *ApplicationRequest) error
 	FetchAll(ctx context.Context, roomId int32) (res []Application, err error)
+	IsApplied(ctx context.Context, roomId int32, userId int32) (res bool, err error)
 	AcceptApplication(ctx context.Context, roomId int32, userId int32) (err error)
 	DeleteApplication(ctx context.Context, roomId int32, userId int32) (err error)
 }
