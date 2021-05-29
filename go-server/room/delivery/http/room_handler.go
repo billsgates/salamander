@@ -477,10 +477,10 @@ func (u *RoomHandler) GetApplications(c *gin.Context) {
 		return
 	}
 
-	isAdmin, err := u.ParticipationUsecase.IsAdmin(c, int32(roomID))
-	if !isAdmin || err != nil {
+	isMember, err := u.ParticipationUsecase.IsMember(c, int32(roomID))
+	if !isMember || err != nil {
 		logrus.Error(err)
-		if err == participation.ErrNotHost {
+		if err == participation.ErrNotMember {
 			c.AbortWithStatusJSON(http.StatusForbidden, err.Error())
 			return
 		}
