@@ -50,6 +50,9 @@ func (p *participationUsecase) IsMember(c context.Context, roomId int32) (res bo
 
 	user := c.Value(domain.CtxUserKey).(*domain.User)
 
-	res, err = p.participationRepo.IsMember(ctx, roomId, user.Id)
-	return res, err
+	isMember, err := p.participationRepo.IsMember(ctx, roomId, user.Id)
+	if !isMember || err != nil {
+		return false, participation.ErrNotMember
+	}
+	return true, nil
 }
