@@ -65,6 +65,14 @@ func (m *mysqlRoomRepository) Delete(ctx context.Context, roomId int32) (err err
 	return nil
 }
 
+func (m *mysqlRoomRepository) Start(ctx context.Context, roomId int32) (err error) {
+	if err := m.Conn.Table("rooms").Where("room_id = ?", roomId).Update("room_status", domain.START).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *mysqlRoomRepository) IsPublic(ctx context.Context, roomId int32) (res bool, err error) {
 	if err := m.Conn.Table("rooms").Select("is_public").Where("room_id = ?", roomId).Find(&res).Error; err != nil {
 		return res, err

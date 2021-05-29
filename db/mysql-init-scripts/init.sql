@@ -156,12 +156,12 @@ INSERT INTO plans (service_id, plan_name, cost, max_count) VALUES
 INSERT INTO rounds (round_id, starting_time, ending_time, round_interval, payment_deadline, is_add_calendar) VALUES
 (2,	'2020-08-05 00:00:00',	'2021-08-05 00:00:00',	12,	'2020-07-29 00:00:00',	1);
 
-INSERT INTO rooms (room_id, is_public, round_id, matching_deadline, public_message, max_count, admin_id, service_id, plan_name) VALUES
-(1,	1,	NULL,	'2021-06-17 00:00:00',	'Welcome!!!',	4,	1,	2,	'Family'),
-(2,	1,	NULL,	'2021-06-17 00:00:00',	'Hi! This is Franks Netflix Premium group!',	4,	2,	1,	'Premium'),
-(3,	1,	NULL,	'2021-09-07 00:00:00',	'Hello, this is Pauls Spotify Family room.',	4,	3,	3,	'Family'),
-(5,	0,	2,	NULL,	'',	2,	1,	3,	'Duo'),
-(6,	1,	NULL,	'2021-08-23 00:00:00',	'Hi! This is Franks Spotify Duo group!',	2,	2,	3,	'Duo');
+INSERT INTO rooms (room_id, announcement, is_public, room_status, round_id, matching_deadline, public_message, max_count, admin_id, service_id, plan_name) VALUES
+(1, '',	1, 'created',	NULL,	'2021-06-17 00:00:00',	'Welcome!!!',	4,	1,	2,	'Family'),
+(2, '',	1, 'created',	NULL,	'2021-06-17 00:00:00',	'Hi! This is Franks Netflix Premium group!',	4,	2,	1,	'Premium'),
+(3, '',	1, 'created',	NULL,	'2021-09-07 00:00:00',	'Hello, this is Pauls Spotify Family room.',	4,	3,	3,	'Family'),
+(5, '',	0, 'start',	2,	NULL,	'',	2,	1,	3,	'Duo'),
+(6, '',	1, 'created',	NULL,	'2021-08-23 00:00:00',	'Hi! This is Franks Spotify Duo group!',	2,	2,	3,	'Duo');
 
 INSERT INTO invitation_codes (room_id, invitation_code, is_valid) VALUES
 (1,	'11207cc',	0),

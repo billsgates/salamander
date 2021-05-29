@@ -382,6 +382,20 @@ func (_m *RoomUsecase) LeaveRoom(ctx context.Context, roomId int32, userId int32
 	return r0
 }
 
+// Start provides a mock function with given fields: ctx, roomId
+func (_m *RoomUsecase) Start(ctx context.Context, roomId int32) error {
+	ret := _m.Called(ctx, roomId)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, int32) error); ok {
+		r0 = rf(ctx, roomId)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // UpdatePaymentStatus provides a mock function with given fields: ctx, userId, roomId, status
 func (_m *RoomUsecase) UpdatePaymentStatus(ctx context.Context, userId int32, roomId int32, status domain.PaymentStatus) error {
 	ret := _m.Called(ctx, userId, roomId, status)
