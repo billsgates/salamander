@@ -143,6 +143,21 @@ func (m *mysqlParticipationRepository) GetRoomMemberByDueTime(c context.Context,
 	return members, nil
 }
 
+func (m *mysqlParticipationRepository) GetRoomMemberById(c context.Context, roomId int32) (res []domain.ParticipationInfo, err error) {
+	var members []domain.ParticipationInfo
+	if err := m.Conn.Table("participation").Select("users.id AS user_id, users.name AS user_name, users.email AS user_email, service_providers.name as service_provider, rooms.plan_name, rooms.room_id, rooms.admin_id").
+		Joins("JOIN users ON users.id = participation.user_id").
+		Joins("JOIN rooms ON rooms.room_id = participation.room_id").
+		Joins("JOIN rounds ON rounds.round_id = rooms.round_id").
+		Joins("JOIN service_providers ON service_providers.id = rooms.service_id").
+		Where("rooms.room_id = ?", roomId).
+		Scan(&members).Error; err != nil {
+		return nil, err
+	}
+
+	return members, nil
+}
+
 func (m *mysqlParticipationRepository) UpdatePaymentStatus(ctx context.Context, roomId int32, userId int32, paymentStatus domain.PaymentStatus) (err error) {
 	if err := m.Conn.Table("participation").Where("room_id = ? AND user_id = ?", roomId, userId).Update("payment_status", paymentStatus).Error; err != nil {
 		return err

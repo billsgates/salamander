@@ -8,6 +8,9 @@ import (
 	"time"
 
 	"go-server/domain"
+	adapterqueue "go-server/internal/adapter/queue"
+	helper "go-server/internal/common"
+	"go-server/internal/infrastructure/queue"
 	"go-server/room"
 
 	"github.com/sirupsen/logrus"
@@ -20,9 +23,10 @@ type roomUsecase struct {
 	invitationRepo    domain.InvitationRepository
 	roundRepo         domain.RoundRepository
 	contextTimeout    time.Duration
+	producer          adapterqueue.Producer
 }
 
-func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.ParticipationRepository, serviceRepo domain.ServiceRepository, invitationRepo domain.InvitationRepository, roundRepo domain.RoundRepository, timeout time.Duration) domain.RoomUsecase {
+func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.ParticipationRepository, serviceRepo domain.ServiceRepository, invitationRepo domain.InvitationRepository, roundRepo domain.RoundRepository, timeout time.Duration, queue *queue.RabbitMQHandler) domain.RoomUsecase {
 	return &roomUsecase{
 		roomRepo:          roomRepo,
 		participationRepo: participationRepo,
@@ -30,6 +34,7 @@ func NewRoomUsecase(roomRepo domain.RoomRepository, participationRepo domain.Par
 		invitationRepo:    invitationRepo,
 		roundRepo:         roundRepo,
 		contextTimeout:    timeout,
+		producer:          adapterqueue.NewProducer(queue.Channel(), "paymentCheck"),
 	}
 }
 
@@ -431,6 +436,31 @@ func (r *roomUsecase) GetTodayPaymentDueMember(c context.Context) (res []domain.
 	return res, nil
 }
 
+func (r *roomUsecase) GetParticipationInfoByRoomId(c context.Context, roomId int32) (res []domain.ParticipationInfo, err error) {
+	res, err = r.participationRepo.GetRoomMemberById(c, roomId)
+	if err != nil {
+		return nil, err
+	}
+	logrus.Info(res)
+
+	for i, participantInfo := range res {
+		// get average fee of the room
+		owed_fee, err := r.GetRoomSplitFee(c, participantInfo.RoomId)
+		if err != nil {
+			return nil, err
+		}
+		res[i].OwedFee = owed_fee
+		// get admin Info
+		adminRes, err := r.participationRepo.GetRoomAdmin(c, participantInfo.RoomId)
+		if err != nil {
+			return nil, err
+		}
+		res[i].AdminName = adminRes.Name
+		res[i].AdminEmail = adminRes.Email
+	}
+	return res, nil
+}
+
 func (r *roomUsecase) AddRound(c context.Context, roomId int32, roundRequest *domain.RoundRequest) (err error) {
 	ctx, cancel := context.WithTimeout(c, r.contextTimeout)
 	defer cancel()
@@ -476,6 +506,13 @@ func (r *roomUsecase) AddRound(c context.Context, roomId int32, roundRequest *do
 		return err
 	}
 
+	// send email to user in rooms to inform start new round
+	participationInfos, err := r.GetParticipationInfoByRoomId(c, roomId)
+	for _, info := range participationInfos {
+		message := helper.EncodeToBytes(&info)
+		message = helper.Compress(message)
+		r.producer.Publish(message)
+	}
 	return nil
 }
 

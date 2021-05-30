@@ -129,7 +129,7 @@ func main() {
 	applicationRepo := _applicationRepo.NewmysqlApplicationRepository(db)
 
 	userUsecase := _userUsecase.NewUserUsecase(userRepo, timeoutContext)
-	roomUsecase := _roomUsecase.NewRoomUsecase(roomRepo, participationRepo, serviceRepo, invitationRepo, roundRepo, timeoutContext)
+	roomUsecase := _roomUsecase.NewRoomUsecase(roomRepo, participationRepo, serviceRepo, invitationRepo, roundRepo, timeoutContext, rabbitMQHandler)
 	serviceUsecase := _serviceUsecase.NewServiceUsecase(serviceRepo, timeoutContext)
 	applicationUsecase := _applicationUsecase.NewApplicationUsecase(applicationRepo, timeoutContext)
 	participationUsecase := _participationUsecase.NewParticipationUsecase(participationRepo, timeoutContext)
