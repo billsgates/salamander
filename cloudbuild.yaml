@@ -1,0 +1,9 @@
+steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: Update salamander server
+  entrypoint: /bin/sh
+  args:
+  - '-c'
+  - |
+    set -x && \
+    gcloud compute ssh billsgate-backend --zone=asia-east1-a --command='/bin/sh /home/kevinyu05062006/deploy.sh'
