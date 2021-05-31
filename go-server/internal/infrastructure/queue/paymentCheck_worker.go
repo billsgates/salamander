@@ -73,7 +73,7 @@ func (w *PaymentCheckWorker) SendEmail(info *domain.ParticipationInfo) {
 		AdminEmail:      info.AdminEmail,
 		OwedFee:         info.OwedFee,
 	}
-	status, err := w.GmailHandler.SendEmailOAUTH2("frankchen93011@gmail.com", data, "payment_due_template.txt")
+	status, err := w.GmailHandler.SendEmailOAUTH2(info.UserEmail, data, "payment_due_template.txt")
 	if err != nil {
 		logrus.Info(err)
 	}

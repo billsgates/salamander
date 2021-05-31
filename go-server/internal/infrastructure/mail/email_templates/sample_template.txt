@@ -1,2 +1,5 @@
 Hi {{.ReceiverName}},
-This is a sample test email sent using golang by {{.SenderName}}
+
+Welcome and thank you for submitting you BillsGate account application!
+
+The BillsGate Team

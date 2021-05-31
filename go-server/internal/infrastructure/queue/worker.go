@@ -71,7 +71,7 @@ func (w *Worker) SendEmail(user *domain.User) {
 		ReceiverName: user.Name,
 		SenderName:   "Bills Gate",
 	}
-	status, err := w.GmailHandler.SendEmailOAUTH2("kevinyu05062006@gmail.com", data, "sample_template.txt")
+	status, err := w.GmailHandler.SendEmailOAUTH2(user.Email, data, "sample_template.txt")
 	if err != nil {
 		logrus.Info(err)
 	}
