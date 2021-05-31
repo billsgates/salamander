@@ -60,6 +60,7 @@ type ParticipationRepository interface {
 	GetRoomFeeInfo(ctx context.Context, roomId int32) (res *RoomFeeInfo, err error)
 	GetRoomMemberByStartingTime(ctx context.Context, starting_time time.Time) (res []ParticipationInfo, err error)
 	GetRoomMemberByDueTime(ctx context.Context, due_time time.Time) (res []ParticipationInfo, err error)
+	GetRoomMemberById(ctx context.Context, roomId int32) (res []ParticipationInfo, err error)
 	UpdatePaymentStatus(ctx context.Context, userId int32, roomId int32, status PaymentStatus) error
 	IsAdmin(ctx context.Context, roomId int32, userId int32) (bool, error)
 	IsMember(ctx context.Context, roomId int32, userId int32) (bool, error)
