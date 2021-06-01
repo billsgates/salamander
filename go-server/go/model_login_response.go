@@ -10,5 +10,7 @@ package swagger
 
 type LoginResponse struct {
 
+	Id int32 `json:"id,omitempty"`
+
 	Token string `json:"token,omitempty"`
 }

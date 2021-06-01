@@ -38,7 +38,7 @@ func NewAuthUseCase(
 	}
 }
 
-func (a *authUsecase) SignUp(ctx context.Context, name string, email string, password string) (res string, err error) {
+func (a *authUsecase) SignUp(ctx context.Context, name string, email string, password string) (res *domain.LoginResponse, err error) {
 	pwd := sha1.New()
 	pwd.Write([]byte(password))
 	pwd.Write([]byte(a.hashSalt))
@@ -51,7 +51,7 @@ func (a *authUsecase) SignUp(ctx context.Context, name string, email string, pas
 
 	err = a.userRepo.Create(ctx, user)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	message := helper.EncodeToBytes(user)
@@ -60,7 +60,7 @@ func (a *authUsecase) SignUp(ctx context.Context, name string, email string, pas
 	return a.SignIn(ctx, email, password)
 }
 
-func (a *authUsecase) SignIn(ctx context.Context, email string, password string) (string, error) {
+func (a *authUsecase) SignIn(ctx context.Context, email string, password string) (res *domain.LoginResponse, err error) {
 	pwd := sha1.New()
 	pwd.Write([]byte(password))
 	pwd.Write([]byte(a.hashSalt))
@@ -68,7 +68,7 @@ func (a *authUsecase) SignIn(ctx context.Context, email string, password string)
 
 	user, err := a.userRepo.GetByEmailPassword(ctx, email, password)
 	if err != nil {
-		return "", auth.ErrUserNotFound
+		return nil, auth.ErrUserNotFound
 	}
 
 	claims := domain.AuthClaims{
@@ -80,7 +80,12 @@ func (a *authUsecase) SignIn(ctx context.Context, email string, password string)
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	return token.SignedString(a.signingKey)
+	signed_token, err := token.SignedString(a.signingKey)
+	res = &domain.LoginResponse{
+		Token: signed_token,
+		Id:    user.Id,
+	}
+	return res, err
 }
 
 func (a *authUsecase) ParseToken(ctx context.Context, accessToken string) (*domain.User, error) {

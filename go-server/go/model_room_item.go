@@ -20,6 +20,8 @@ type RoomItem struct {
 
 	Cost int32 `json:"cost,omitempty"`
 
+	IsPublic bool `json:"is_public,omitempty"`
+
 	PaymentStatus *PaymentStatus `json:"payment_status,omitempty"`
 
 	RoomStatus *RoomStatus `json:"room_status,omitempty"`

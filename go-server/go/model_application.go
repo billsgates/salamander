@@ -13,4 +13,6 @@ type Application struct {
 	UserId int32 `json:"user_id,omitempty"`
 
 	Name string `json:"name,omitempty"`
+
+	ApplicationMessage string `json:"application_message,omitempty"`
 }

@@ -24,8 +24,13 @@ type LoginRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
+type LoginResponse struct {
+	Id    int32  `json:"id"`
+	Token string `json:"token"`
+}
+
 type AuthUsecase interface {
-	SignUp(ctx context.Context, name string, email string, password string) (string, error)
-	SignIn(ctx context.Context, email string, password string) (string, error)
+	SignUp(ctx context.Context, name string, email string, password string) (res *LoginResponse, err error)
+	SignIn(ctx context.Context, email string, password string) (res *LoginResponse, err error)
 	ParseToken(ctx context.Context, accessToken string) (*User, error)
 }

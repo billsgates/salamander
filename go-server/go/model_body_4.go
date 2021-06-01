@@ -13,6 +13,4 @@ type Body4 struct {
 	UserId int32 `json:"user_id,omitempty"`
 
 	RoomId int32 `json:"room_id,omitempty"`
-
-	PaymentStatus *PaymentStatus `json:"payment_status,omitempty"`
 }
