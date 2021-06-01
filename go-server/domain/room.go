@@ -77,7 +77,7 @@ type RoomInfoResponse struct {
 type RoomPublic struct {
 	RoomId           int32  `json:"room_id,omitempty"`
 	AdminName        string `json:"admin_name,omitempty"`
-	AdminRating      int32  `json:"admin_rating"`
+	AdminRating      float32  `json:"admin_rating"`
 	ServiceName      string `json:"service_name,omitempty"`
 	PlanName         string `json:"plan_name,omitempty"`
 	MaxCount         int32  `json:"max_count,omitempty"`
