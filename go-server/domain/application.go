@@ -7,7 +7,7 @@ import (
 type Application struct {
 	UserId             int32  `json:"user_id,omitempty"`
 	UserName           string `json:"user_name,omitempty"`
-	UserRating         int32  `json:"user_rating"`
+	UserRating         float32  `json:"user_rating"`
 	ApplicationMessage string `json:"application_message"`
 	ApplicationDate    string `json:"application_date,omitempty"`
 	RoomId             int32  `json:"room_id,omitempty"`
