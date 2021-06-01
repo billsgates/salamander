@@ -166,16 +166,16 @@ INSERT INTO rooms (room_id, announcement, is_public, room_status, round_id, matc
 (1,	'spotify55688/angela',	0,	'start',	1,	NULL,	'',	6,	5,	3,	'Family'),
 (2,	'',	1,	'created',	NULL,	'2021-06-17 00:00:00',	'Welcome! This is Kevins Netflix Premium room!',	4,	1,	1,	'Premium'),
 (3,	'',	1,	'created',	NULL,	'2021-07-05 00:00:00',	'Franks Youtube Premium room',	6,	2,	2,	'Family'),
-(4,	'',	1,	'created',	NULL,	'2021-07-01 00:00:00',	'Hi! welcome to Carolyns Spotify Family room',	6,	5,	3,	'Family');
+(4,	'',	1,	'created',	NULL,	'2021-07-01 00:00:00',	'Hi! welcome to Carolyns Spotify Family room',	6,	4,	3,	'Family');
 
 INSERT INTO participation (user_id, room_id, payment_status, is_host) VALUES
 (1,	1,	'unpaid',	0),
 (1,	2,	'confirmed',	1),
 (2,	1,	'unpaid',	0),
 (2,	3,	'confirmed',	1),
-(5,	1,	'unpaid',	0),
-(5,	4,	'confirmed',	1),
-(6,	1,	'confirmed',	1);
+(5,	1,	'confirmed',	1),
+(4,	4,	'confirmed',	1),
+(6,	1,	'unpaid',	0);
 
 INSERT INTO invitation_codes (room_id, invitation_code, is_valid) VALUES
 (1,	'5ad0ce4',	0),
