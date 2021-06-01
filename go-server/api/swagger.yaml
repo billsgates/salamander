@@ -257,6 +257,26 @@ paths:
           description: successfully update room
       security:
       - BearerAuth: []
+  /rooms/{id}/start:
+    post:
+      tags:
+      - rooms
+      summary: start room
+      operationId: startRoom
+      parameters:
+      - name: id
+        in: path
+        description: Room ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "201":
+          description: successfully start room
+      security:
+      - BearerAuth: []
   /rooms/{id}/members:
     get:
       tags:
@@ -417,6 +437,12 @@ paths:
         explode: false
         schema:
           type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_3'
+        required: true
       responses:
         "200":
           description: OK
@@ -493,7 +519,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/body_3'
+              $ref: '#/components/schemas/body_4'
         required: true
       responses:
         "204":
@@ -510,7 +536,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/body_4'
+              $ref: '#/components/schemas/body_5'
         required: true
       responses:
         "201":
@@ -527,7 +553,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/body_5'
+              $ref: '#/components/schemas/body_6'
+        required: true
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+  /application/delete:
+    delete:
+      tags:
+      - applications
+      summary: delete room application
+      operationId: deleteApplication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_7'
         required: true
       responses:
         "200":
@@ -612,10 +655,14 @@ components:
     LoginResponse:
       type: object
       properties:
+        id:
+          type: integer
+          example: 1
         token:
           type: string
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzEwMzgyMjQuNzQ0MzI0MiwidXNlciI6eyJJRCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIlVzZXJuYW1lIjoiemhhc2hrZXZ5Y2giLCJQYXNzd29yZCI6IjQyODYwMTc5ZmFiMTQ2YzZiZDAyNjlkMDViZTM0ZWNmYmY5Zjk3YjUifX0.3dsyKJQ-HZJxdvBMui0Mzgw6yb6If9aB8imGhxMOjsk
       example:
+        id: 1
         token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzEwMzgyMjQuNzQ0MzI0MiwidXNlciI6eyJJRCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsIlVzZXJuYW1lIjoiemhhc2hrZXZ5Y2giLCJQYXNzd29yZCI6IjQyODYwMTc5ZmFiMTQ2YzZiZDAyNjlkMDViZTM0ZWNmYmY5Zjk3YjUifX0.3dsyKJQ-HZJxdvBMui0Mzgw6yb6If9aB8imGhxMOjsk
     Room:
       type: object
@@ -770,9 +817,12 @@ components:
           type: integer
         name:
           type: string
+        application_message:
+          type: string
       example:
         user_id: 1
         name: Kevin Yu
+        application_message: let me in plz
     Member:
       type: object
       properties:
@@ -848,6 +898,9 @@ components:
         cost:
           type: integer
           example: 720
+        is_public:
+          type: boolean
+          example: true
         payment_status:
           $ref: '#/components/schemas/PaymentStatus'
         room_status:
@@ -857,6 +910,7 @@ components:
         cost: 720
         service_name: Netflix
         payment_status: unpaid
+        is_public: true
         is_host: true
         plan_name: Premium
         room_status: created
@@ -1032,13 +1086,19 @@ components:
     body_3:
       type: object
       properties:
+        application_message:
+          type: string
+          example: let me in plz
+    body_4:
+      type: object
+      properties:
         user_id:
           type: integer
           example: 1
         room_id:
           type: integer
           example: 2
-    body_4:
+    body_5:
       type: object
       properties:
         user_id:
@@ -1049,10 +1109,22 @@ components:
           example: 2
         payment_status:
           $ref: '#/components/schemas/PaymentStatus'
-    body_5:
+    body_6:
       type: object
       properties:
-        application_id:
+        room_id:
+          type: integer
+          example: 3
+        user_id:
+          type: integer
+          example: 1
+    body_7:
+      type: object
+      properties:
+        room_id:
+          type: integer
+          example: 3
+        user_id:
           type: integer
           example: 1
   securitySchemes:

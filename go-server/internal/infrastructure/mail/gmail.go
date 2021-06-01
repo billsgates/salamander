@@ -58,7 +58,7 @@ func (g *GmailHandler) SendEmailOAUTH2(to string, data interface{}, template str
 	var message gmail.Message
 
 	emailTo := "To: " + to + "\r\n"
-	subject := "Subject: " + "Test Email form Gmail API using OAuth" + "\n"
+	subject := "Subject: " + "Notification Email from Bills Gate" + "\n"
 	mime := "MIME-version: 1.0;\nContent-Type: text/plain; charset=\"UTF-8\";\n\n"
 	msg := []byte(emailTo + subject + mime + "\n" + emailBody)
 

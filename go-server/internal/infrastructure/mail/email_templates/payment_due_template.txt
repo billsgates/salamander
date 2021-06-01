@@ -1,8 +1,8 @@
 Hi {{.ReceiverName}},
 
 You Recently Joined the {{.ServiceProvider}} - {{.Plan}} plan with other members in Bills Gates.
-We've noticed that you haven't finished the payment process to the room Administrator.
-Your plan fee should be - NT.{{.OwedFee}}.
+
+We've noticed that you haven't finished the payment process to the room Administrator. Your plan fee should be - NT.{{.OwedFee}}.
 
 Please contact the Room Admin {{.AdminName}} - {{.AdminEmail}} for more information.
 

@@ -62,6 +62,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"DeleteApplication",
+		strings.ToUpper("Delete"),
+		"/api/v1/application/delete",
+		DeleteApplication,
+	},
+
+	Route{
 		"SignIn",
 		strings.ToUpper("Post"),
 		"/api/v1/auth/signin",
@@ -185,6 +192,13 @@ var routes = Routes{
 		strings.ToUpper("Delete"),
 		"/api/v1/rooms/{id}/round",
 		RemoveRoomRound,
+	},
+
+	Route{
+		"StartRoom",
+		strings.ToUpper("Post"),
+		"/api/v1/rooms/{id}/start",
+		StartRoom,
 	},
 
 	Route{

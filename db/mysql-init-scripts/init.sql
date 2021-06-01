@@ -124,15 +124,21 @@ CREATE TABLE invitation_codes (
 );
 
 
-INSERT INTO users (name, email, password_digest) VALUES
+INSERT INTO users (name, email, password_digest, rating, rating_count) VALUES
 -- password = 'kevin'
-('Kevin Yu', 'kevin@ntu.im', '61d1f2b7264c447dcdb110f233551e5c51520d5f'),
+('Kevin Yu', 'kevin.ct.yu@ntu.im', '61d1f2b7264c447dcdb110f233551e5c51520d5f', 0, 0),
 -- password = 'frank'
-('Frank Chen', 'frank@ntu.im', '9fe148e76ff638747e0e5ca03c28b1391f7597fe'),
+('Frank Chen', 'frankchen93011@gmail.com', '9fe148e76ff638747e0e5ca03c28b1391f7597fe', 0, 0),
 -- password = 'paul'
-('Paul Liu', 'paul@ntu.im', 'c955b83937bb4c3f875e093ae14038867ac35493'),
+('Paul Liu', 'ee91941387ee@gmail.com', 'c955b83937bb4c3f875e093ae14038867ac35493', 0, 0),
 -- password = 'jason'
-('Jason Wang', 'jason@ntu.im', 'e1d20ac5d01c96892298f5f92539d41ebdd28a18');
+-- ('Jason Wang', 'jason@ntu.im', 'e1d20ac5d01c96892298f5f92539d41ebdd28a18', 0, 0),
+-- password = 'carolyn'
+('Carolyn Chen', 'cinnacinna130@ntu.im', 'bc0323299a3f5ad96fd10392a39881a5d3b63ba5', 0, 0),
+-- password = 'angela'
+('Angela Lee', 'Angyeahyeah6@gmail.com', '957a28d0ff00dce48cfa8187d49df4a1bc71539c', 4.5, 2),
+-- password = 'zhen'
+('Zhen', 'battle1631@ntu.im', 'd6fcf6ca364a054f2cbdcb008fe9337412a4c2b3', 0, 0);
 
 INSERT INTO service_providers (name) VALUES
 ('Netflix'),
@@ -154,38 +160,25 @@ INSERT INTO plans (service_id, plan_name, cost, max_count) VALUES
 ('3', 'Family', 240, 6);
 
 INSERT INTO rounds (round_id, starting_time, ending_time, round_interval, payment_deadline, is_add_calendar) VALUES
-(1,	'2020-05-15 00:00:00',	'2021-05-15 00:00:00',	12,	'2020-05-08 00:00:00',	1);
+(1,	'2020-08-01 00:00:00',	'2021-08-01 00:00:00',	12,	'2020-07-25 00:00:00',	1);
 
 INSERT INTO rooms (room_id, announcement, is_public, room_status, round_id, matching_deadline, public_message, max_count, admin_id, service_id, plan_name) VALUES
-(1, '',	1, 'created',	NULL,	'2021-06-17 00:00:00',	'Welcome!!!',	5,	1,	2,	'Family'),
-(2, '',	1, 'created',	NULL,	'2021-06-17 00:00:00',	'Hi! This is Franks Netflix Premium group!',	4,	2,	1,	'Premium'),
-(3, '',	1, 'created',	NULL,	'2021-09-07 00:00:00',	'Hello, this is Pauls Spotify Family room.',	6,	3,	3,	'Family'),
-(5,	'',	0, 'start',	   1,	NULL,	'',	4,	1,	1,	'Premium'),
-(4, '',	0, 'start',	NULL,	NULL,	'',	2,	4,	3,	'Duo'),
-(6, '',	1, 'created',	NULL,	'2021-08-23 00:00:00',	'Hi! This is Franks Spotify Duo group!',	2,	2,	3,	'Duo');
+(1,	'spotify55688/angela',	0,	'start',	1,	NULL,	'',	6,	6,	3,	'Family'),
+(2,	'',	1,	'created',	NULL,	'2021-06-17 00:00:00',	'Welcome! This is Kevins Netflix Premium room!',	4,	1,	1,	'Premium'),
+(3,	'',	1,	'created',	NULL,	'2021-07-05 00:00:00',	'Franks Youtube Premium room',	6,	2,	2,	'Family'),
+(4,	'',	1,	'created',	NULL,	'2021-07-01 00:00:00',	'Hi! welcome to Carolyns Spotify Family room',	6,	5,	3,	'Family');
 
 INSERT INTO participation (user_id, room_id, payment_status, is_host) VALUES
-(1,	1,	'confirmed',	1),
-(1,	3,	   'unpaid',	0),
-(1,	5,	'confirmed',	1),
-(2,	2,	'confirmed',	1),
-(2,	5,	   'unpaid',	0),
-(2,	6,	'confirmed',	1),
-(3,	3,	'confirmed',	1),
-(3,	5,	   'unpaid',	0),
-(3,	6,	   'unpaid',	0),
-(4,	3,	   'unpaid',	0),
-(4,	4,	'confirmed',	1),
-(4,	5,	   'unpaid',	0);
-
-INSERT INTO applications (user_id, room_id, application_message, is_accepted) VALUES
-(1,	3, 'let me in plz', 1),
-(2,	3, 'yo', 0),
-(3,	6, 'hello', 1),
-(4,	3, '', 1),
-(4,	6, 'whats up', 0);
+(1,	1,	'unpaid',	0),
+(1,	2,	'confirmed',	1),
+(2,	1,	'unpaid',	0),
+(2,	3,	'confirmed',	1),
+(5,	1,	'unpaid',	0),
+(5,	4,	'confirmed',	1),
+(6,	1,	'confirmed',	1);
 
 INSERT INTO invitation_codes (room_id, invitation_code, is_valid) VALUES
-(5,	'5567403',	0),
-(5,	'6338389',	0),
-(5,	'c6d60c9',	0);
+(1,	'5ad0ce4',	0),
+(1,	'75ddb97',	0),
+(1,	'9bfb3b9',	0);
+

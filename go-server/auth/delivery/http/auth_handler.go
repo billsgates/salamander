@@ -5,7 +5,6 @@ import (
 
 	"go-server/auth"
 	"go-server/domain"
-	swagger "go-server/go"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -35,13 +34,13 @@ func (h *AuthHandler) SignUp(c *gin.Context) {
 		return
 	}
 
-	token, err := h.AuthUsecase.SignUp(c.Request.Context(), body.Name, body.Email, body.Password)
+	res, err := h.AuthUsecase.SignUp(c.Request.Context(), body.Name, body.Email, body.Password)
 	if err != nil {
 		logrus.Error(err)
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
-	c.JSON(http.StatusCreated, swagger.LoginResponse{Token: token})
+	c.JSON(http.StatusCreated, res)
 }
 
 func (h *AuthHandler) SignIn(c *gin.Context) {
@@ -52,7 +51,7 @@ func (h *AuthHandler) SignIn(c *gin.Context) {
 		return
 	}
 
-	token, err := h.AuthUsecase.SignIn(c.Request.Context(), body.Email, body.Password)
+	res, err := h.AuthUsecase.SignIn(c.Request.Context(), body.Email, body.Password)
 	if err != nil {
 		if err == auth.ErrUserNotFound {
 			c.AbortWithStatus(http.StatusUnauthorized)
@@ -63,5 +62,5 @@ func (h *AuthHandler) SignIn(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, swagger.LoginResponse{Token: token})
+	c.JSON(http.StatusOK, res)
 }
