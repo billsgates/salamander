@@ -1,5 +1,7 @@
 Hi {{.ReceiverName}},
 
-Welcome and thank you for submitting you BillsGate account application!
+Welcome and thank you for joining us in BillsGate! We hope you have a wonderful time. Visit https://my.billsgate.club/ for more.
+
+Best Regards,
 
 The BillsGate Team
